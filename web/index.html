@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wiki Base Tester</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Wiki Base Tester</h1>
+        <p>A small test client for the Wiki Base API.</p>
+      </header>
+
+      <section>
+        <h2>Wiki bases</h2>
+
+        <form id="wiki-base-form">
+          <label>
+            Name
+            <input id="wiki-base-name" name="name" type="text" required maxlength="200" />
+          </label>
+
+          <label>
+            Documents
+            <input
+              id="wiki-base-documents"
+              name="documents"
+              type="file"
+              accept=".pdf,.docx,.pptx"
+              required
+              multiple
+            />
+          </label>
+
+          <button id="add-button" type="submit">Add</button>
+        </form>
+
+        <div class="table-actions">
+          <p id="wiki-base-message" class="message" aria-live="polite"></p>
+          <button id="refresh-button" type="button" class="secondary">Refresh</button>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Docs</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="wiki-base-table-body">
+              <tr>
+                <td colspan="4" class="empty">No wiki bases created in this browser yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2>Chat</h2>
+
+        <label class="wiki-select">
+          Wiki base
+          <select id="wiki-base-select">
+            <option value="">Select a wiki base</option>
+          </select>
+        </label>
+
+        <div id="chat-messages" class="chat-messages" aria-live="polite">
+          <p class="empty">Select a ready wiki base to start chatting.</p>
+        </div>
+
+        <form id="chat-form" class="chat-form">
+          <input
+            id="chat-question"
+            type="text"
+            placeholder="Ask a question…"
+            autocomplete="off"
+            required
+          />
+          <button id="send-button" type="submit">Send</button>
+        </form>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

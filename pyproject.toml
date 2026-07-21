@@ -1,0 +1,47 @@
+[project]
+name = "wiki-base"
+version = "0.1.0"
+description = "A self-hosted service for immutable, cited RAG knowledge bases"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "asyncpg>=0.30",
+    "docling>=2",
+    "fastapi>=0.115",
+    "httpx>=0.28",
+    "pgvector>=0.3",
+    "pydantic-settings>=2.7",
+    "python-multipart>=0.0.20",
+    "uvicorn[standard]>=0.34",
+]
+
+[project.scripts]
+wiki-base = "wiki_base.main:run"
+wiki-base-init-db = "wiki_base.database.setup:run"
+wiki-base-worker = "wiki_base.workers.main:run"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.25",
+    "ruff>=0.9",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/wiki_base"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC"]

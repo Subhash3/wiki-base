@@ -1,0 +1,20 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Local configuration and runtime state
+.env
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.wiki-base-staging/
+
+docs-for-testing/

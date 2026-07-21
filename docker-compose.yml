@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_DB: wiki_base
+      POSTGRES_USER: wiki_base
+      POSTGRES_PASSWORD: wiki_base
+    ports:
+      - "5432:5432"
+    volumes:
+      - wiki-base-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U wiki_base -d wiki_base"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  wiki-base-postgres:

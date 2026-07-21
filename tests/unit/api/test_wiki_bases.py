@@ -1,0 +1,109 @@
+from datetime import UTC, datetime
+from io import BytesIO
+from uuid import UUID
+
+from fastapi import UploadFile
+from starlette.datastructures import Headers
+
+from wiki_base.api.routes.wiki_bases import create_wiki_base, get_wiki_base_status
+from wiki_base.database.records import IngestionStatus
+from wiki_base.services.wiki_bases import (
+    DocumentStatus,
+    QueuedDocument,
+    QueuedWikiBase,
+    WikiBaseStatus,
+)
+
+
+class StubWikiBaseService:
+    async def create(self, *, name: str, uploads: list[UploadFile]) -> QueuedWikiBase:
+        assert len(uploads) == 2
+        return QueuedWikiBase(
+            id=UUID("0190f3a0-7d83-7a41-a27c-b7314f5ae705"),
+            name=name,
+            created_at=datetime(2026, 7, 21, tzinfo=UTC),
+            documents=[
+                QueuedDocument(
+                    id=UUID("0190f3a0-b096-7af5-8392-cc61de46f6de"),
+                    name="policy.pdf",
+                    media_type="application/pdf",
+                ),
+                QueuedDocument(
+                    id=UUID("0190f3a0-b096-7af5-8392-cc61de46f6df"),
+                    name="handbook.docx",
+                    media_type=(
+                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    ),
+                ),
+            ],
+        )
+
+    async def get_status(self, wiki_base_id: UUID) -> WikiBaseStatus:
+        return WikiBaseStatus(
+            id=wiki_base_id,
+            name="Engineering Handbook",
+            status=IngestionStatus.PROCESSING,
+            document_count=1,
+            created_at=datetime(2026, 7, 21, tzinfo=UTC),
+            started_at=datetime(2026, 7, 21, 0, 1, tzinfo=UTC),
+            completed_at=None,
+            documents=[
+                DocumentStatus(
+                    id=UUID("0190f3a0-b096-7af5-8392-cc61de46f6de"),
+                    name="policy.pdf",
+                    media_type="application/pdf",
+                    status=IngestionStatus.PROCESSING,
+                    error_code=None,
+                    error_message=None,
+                )
+            ],
+        )
+
+
+async def test_create_wiki_base_returns_queued_manifest() -> None:
+    uploads = [
+        UploadFile(
+            file=BytesIO(b"%PDF-test"),
+            filename="policy.pdf",
+            headers=Headers({"content-type": "application/pdf"}),
+        ),
+        UploadFile(
+            file=BytesIO(b"test"),
+            filename="handbook.docx",
+            headers=Headers(
+                {
+                    "content-type": (
+                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    )
+                }
+            ),
+        ),
+    ]
+
+    response = await create_wiki_base(
+        service=StubWikiBaseService(),
+        name="Engineering Handbook",
+        documents=uploads,
+    )
+
+    assert response.name == "Engineering Handbook"
+    assert response.status == "queued"
+    assert [document.name for document in response.documents] == [
+        "policy.pdf",
+        "handbook.docx",
+    ]
+
+
+async def test_get_wiki_base_status_returns_document_progress() -> None:
+    wiki_base_id = UUID("0190f3a0-7d83-7a41-a27c-b7314f5ae705")
+
+    response = await get_wiki_base_status(
+        wiki_base_id=wiki_base_id,
+        service=StubWikiBaseService(),
+    )
+
+    assert response.id == wiki_base_id
+    assert response.status == "processing"
+    assert response.document_count == 1
+    assert response.documents[0].name == "policy.pdf"
+    assert response.documents[0].status == "processing"
