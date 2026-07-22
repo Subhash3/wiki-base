@@ -34,6 +34,7 @@ The API is then available at `http://localhost:8000`. Useful initial endpoints a
 - `GET /health`
 - `GET /ready`
 - `GET /capabilities`
+- `GET /wiki-bases`
 - `GET /querychunks`
 - `POST /query`
 

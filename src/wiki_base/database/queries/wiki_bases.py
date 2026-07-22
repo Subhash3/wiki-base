@@ -78,3 +78,31 @@ async def get_wiki_base(connection: Connection, wiki_base_id: UUID) -> WikiBaseR
         started_at=row["started_at"],
         completed_at=row["completed_at"],
     )
+
+
+async def list_wiki_bases(connection: Connection) -> list[tuple[WikiBaseRecord, int]]:
+    rows = await connection.fetch(
+        """
+        SELECT wiki_base.id, wiki_base.name, wiki_base.status,
+               wiki_base.created_at, wiki_base.started_at, wiki_base.completed_at,
+               count(document.id) AS document_count
+        FROM wiki_bases AS wiki_base
+        LEFT JOIN documents AS document ON document.wiki_base_id = wiki_base.id
+        GROUP BY wiki_base.id
+        ORDER BY wiki_base.created_at DESC, wiki_base.id DESC
+        """
+    )
+    return [
+        (
+            WikiBaseRecord(
+                id=row["id"],
+                name=row["name"],
+                status=IngestionStatus(row["status"]),
+                created_at=row["created_at"],
+                started_at=row["started_at"],
+                completed_at=row["completed_at"],
+            ),
+            row["document_count"],
+        )
+        for row in rows
+    ]

@@ -12,18 +12,18 @@ python3 -m http.server 8080
 
 Then open `http://localhost:8080`.
 
-The API URL is defined at the top of `app.js` and defaults to `http://localhost:8000`.
+The client uses the web page's hostname and API port 8000. For example, a page loaded from
+`http://127.0.0.1:8080` calls `http://127.0.0.1:8000`.
 
-Created wiki-base IDs are retained in browser `localStorage` because the API does not yet
-provide a list endpoint. Chat history is sent with each question but is kept only in memory
-and is lost when the page is reloaded.
+Wiki bases are loaded from the API. Chat history is sent with each question but is kept only
+in memory and is lost when the page is reloaded.
 
 The client expects these API operations:
 
 - `POST /wiki-bases`
+- `GET /wiki-bases`
 - `GET /wiki-bases/{id}/status`
 - `POST /query`
 
-The default API configuration allows `http://localhost:8080` and
-`http://127.0.0.1:8080` through CORS. Change `WIKI_BASE_CORS_ORIGINS` when serving this
-client from a different origin.
+The development API accepts browser requests from localhost, `127.0.0.1`, and `0.0.0.0` on
+any port. Additional non-local origins can be configured with `WIKI_BASE_CORS_ORIGINS`.

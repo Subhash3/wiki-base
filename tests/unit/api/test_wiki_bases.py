@@ -5,13 +5,18 @@ from uuid import UUID
 from fastapi import UploadFile
 from starlette.datastructures import Headers
 
-from wiki_base.api.routes.wiki_bases import create_wiki_base, get_wiki_base_status
+from wiki_base.api.routes.wiki_bases import (
+    create_wiki_base,
+    get_wiki_base_status,
+    list_wiki_bases,
+)
 from wiki_base.database.records import IngestionStatus
 from wiki_base.services.wiki_bases import (
     DocumentStatus,
     QueuedDocument,
     QueuedWikiBase,
     WikiBaseStatus,
+    WikiBaseSummary,
 )
 
 
@@ -58,6 +63,19 @@ class StubWikiBaseService:
                 )
             ],
         )
+
+    async def list(self) -> list[WikiBaseSummary]:
+        return [
+            WikiBaseSummary(
+                id=UUID("0190f3a0-7d83-7a41-a27c-b7314f5ae705"),
+                name="Engineering Handbook",
+                status=IngestionStatus.READY,
+                document_count=2,
+                created_at=datetime(2026, 7, 21, tzinfo=UTC),
+                started_at=datetime(2026, 7, 21, 0, 1, tzinfo=UTC),
+                completed_at=datetime(2026, 7, 21, 0, 2, tzinfo=UTC),
+            )
+        ]
 
 
 async def test_create_wiki_base_returns_queued_manifest() -> None:
@@ -107,3 +125,12 @@ async def test_get_wiki_base_status_returns_document_progress() -> None:
     assert response.document_count == 1
     assert response.documents[0].name == "policy.pdf"
     assert response.documents[0].status == "processing"
+
+
+async def test_list_wiki_bases_returns_summaries() -> None:
+    response = await list_wiki_bases(service=StubWikiBaseService())
+
+    assert len(response) == 1
+    assert response[0].name == "Engineering Handbook"
+    assert response[0].status == "ready"
+    assert response[0].document_count == 2

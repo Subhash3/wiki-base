@@ -8,7 +8,11 @@ from fastapi import UploadFile
 from wiki_base.api.errors import ServiceError
 from wiki_base.database.connection import Database
 from wiki_base.database.queries.documents import list_wiki_base_documents
-from wiki_base.database.queries.wiki_bases import create_wiki_base_manifest, get_wiki_base
+from wiki_base.database.queries.wiki_bases import (
+    create_wiki_base_manifest,
+    get_wiki_base,
+    list_wiki_bases,
+)
 from wiki_base.database.records import IngestionStatus
 from wiki_base.ingestion.staging import DocumentStaging, StagedDocument
 
@@ -50,6 +54,17 @@ class WikiBaseStatus:
     started_at: datetime | None
     completed_at: datetime | None
     documents: list[DocumentStatus]
+
+
+@dataclass(frozen=True, slots=True)
+class WikiBaseSummary:
+    id: UUID
+    name: str
+    status: IngestionStatus
+    document_count: int
+    created_at: datetime
+    started_at: datetime | None
+    completed_at: datetime | None
 
 
 class WikiBaseService:
@@ -176,3 +191,27 @@ class WikiBaseService:
             completed_at=wiki_base.completed_at,
             documents=document_statuses,
         )
+
+    async def list(self) -> list[WikiBaseSummary]:
+        try:
+            async with self._database.connection() as connection:
+                records = await list_wiki_bases(connection)
+        except asyncpg.PostgresError as error:
+            raise ServiceError(
+                "database_unavailable",
+                "Wiki bases could not be listed right now.",
+                503,
+            ) from error
+
+        return [
+            WikiBaseSummary(
+                id=wiki_base.id,
+                name=wiki_base.name,
+                status=wiki_base.status,
+                document_count=document_count,
+                created_at=wiki_base.created_at,
+                started_at=wiki_base.started_at,
+                completed_at=wiki_base.completed_at,
+            )
+            for wiki_base, document_count in records
+        ]

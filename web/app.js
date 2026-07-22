@@ -1,6 +1,5 @@
-const API_BASE_URL = "http://localhost:8000";
-const STORAGE_KEY = "wiki-base-tester-items";
-
+const API_HOST = window.location.hostname || "localhost";
+const API_BASE_URL = `http://${API_HOST}:8000`;
 const wikiBaseForm = document.querySelector("#wiki-base-form");
 const nameInput = document.querySelector("#wiki-base-name");
 const documentsInput = document.querySelector("#wiki-base-documents");
@@ -14,20 +13,8 @@ const chatForm = document.querySelector("#chat-form");
 const questionInput = document.querySelector("#chat-question");
 const sendButton = document.querySelector("#send-button");
 
-let wikiBases = loadWikiBases();
+let wikiBases = [];
 const histories = new Map();
-
-function loadWikiBases() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) ?? [];
-  } catch {
-    return [];
-  }
-}
-
-function saveWikiBases() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(wikiBases));
-}
 
 function getDocumentCount(wikiBase) {
   if (Array.isArray(wikiBase.documents)) {
@@ -39,7 +26,7 @@ function getDocumentCount(wikiBase) {
 function renderWikiBases() {
   if (wikiBases.length === 0) {
     tableBody.innerHTML = `
-      <tr><td colspan="4" class="empty">No wiki bases created in this browser yet.</td></tr>
+      <tr><td colspan="4" class="empty">No wiki bases found.</td></tr>
     `;
   } else {
     tableBody.replaceChildren(
@@ -82,6 +69,15 @@ async function readError(response) {
   }
 }
 
+async function fetchWikiBases() {
+  const response = await fetch(`${API_BASE_URL}/wiki-bases`);
+  if (!response.ok) {
+    throw new Error(await readError(response));
+  }
+  wikiBases = await response.json();
+  renderWikiBases();
+}
+
 wikiBaseForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   addButton.disabled = true;
@@ -104,9 +100,7 @@ wikiBaseForm.addEventListener("submit", async (event) => {
     }
 
     const wikiBase = await response.json();
-    wikiBases = [wikiBase, ...wikiBases.filter((item) => item.id !== wikiBase.id)];
-    saveWikiBases();
-    renderWikiBases();
+    await fetchWikiBases();
     wikiBaseForm.reset();
     messageElement.textContent = `Queued “${wikiBase.name}” for ingestion.`;
   } catch (error) {
@@ -123,32 +117,11 @@ refreshButton.addEventListener("click", async () => {
   messageElement.textContent = "Refreshing…";
 
   try {
-    const results = await Promise.allSettled(
-      wikiBases.map(async (wikiBase) => {
-        const response = await fetch(`${API_BASE_URL}/wiki-bases/${wikiBase.id}/status`);
-        if (!response.ok) {
-          throw new Error(await readError(response));
-        }
-        return response.json();
-      }),
-    );
-
-    let failures = 0;
-    wikiBases = wikiBases.map((current, index) => {
-      const result = results[index];
-      if (result.status === "fulfilled") {
-        return { ...current, ...result.value };
-      }
-      failures += 1;
-      return current;
-    });
-
-    saveWikiBases();
-    renderWikiBases();
-    messageElement.textContent = failures
-      ? `Refresh completed with ${failures} failed request(s).`
-      : "Statuses refreshed.";
-    messageElement.classList.toggle("error", failures > 0);
+    await fetchWikiBases();
+    messageElement.textContent = "Wiki bases refreshed.";
+  } catch (error) {
+    messageElement.classList.add("error");
+    messageElement.textContent = error.message;
   } finally {
     refreshButton.disabled = false;
   }
@@ -248,3 +221,7 @@ chatForm.addEventListener("submit", async (event) => {
 
 renderWikiBases();
 renderChat();
+fetchWikiBases().catch((error) => {
+  messageElement.classList.add("error");
+  messageElement.textContent = `Could not load wiki bases from ${API_BASE_URL}: ${error.message}`;
+});

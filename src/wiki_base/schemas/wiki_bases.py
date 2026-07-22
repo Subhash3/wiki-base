@@ -49,3 +49,15 @@ class WikiBaseStatusResponse(BaseModel):
     started_at: datetime | None = None
     completed_at: datetime | None = None
     documents: list[DocumentStatusResponse]
+
+
+class WikiBaseSummaryResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    name: str
+    status: WikiBaseStatus
+    document_count: int
+    created_at: datetime
+    started_at: datetime | None = None
+    completed_at: datetime | None = None
