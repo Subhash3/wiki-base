@@ -84,12 +84,13 @@ async def complete_ingestion_job(
                 caption, metadata
             )
             VALUES (
-                gen_random_uuid(), $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12,
-                $13::jsonb
+                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,
+                $14::jsonb
             )
             """,
             [
                 (
+                    item.chunk.id,
                     job.wiki_base_id,
                     job.document_id,
                     item.chunk.content,
@@ -172,6 +173,9 @@ async def _update_wiki_base_status(connection: Connection, wiki_base_id: UUID) -
         """,
         wiki_base_id,
     )
+    if counts is None:
+        raise RuntimeError("Document status count query returned no row")
+
     if counts["pending"]:
         status = "processing"
         completed = False

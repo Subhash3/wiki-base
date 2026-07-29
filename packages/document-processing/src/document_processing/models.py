@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
+from uuid import UUID
 
 
 @dataclass(frozen=True, slots=True)
@@ -19,6 +20,7 @@ class ParsedDocument:
 
 @dataclass(frozen=True, slots=True)
 class DocumentChunk:
+    id: UUID
     ordinal: int
     content: str
     embedding_content: str

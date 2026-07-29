@@ -1,5 +1,6 @@
 import math
 from typing import Any
+from uuid import uuid4
 
 from docling.chunking import HybridChunker
 from docling_core.transforms.chunker.tokenizer.base import BaseTokenizer
@@ -50,6 +51,7 @@ class DoclingDocumentChunker:
 
             chunks.append(
                 DocumentChunk(
+                    id=uuid4(),
                     ordinal=len(chunks),
                     content=content,
                     embedding_content=embedding_content,

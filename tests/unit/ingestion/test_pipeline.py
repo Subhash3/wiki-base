@@ -1,4 +1,5 @@
 from pathlib import Path
+from uuid import uuid4
 
 from document_processing.models import DocumentChunk, DocumentSource, ParsedDocument
 
@@ -24,6 +25,7 @@ class StubChunker:
     def chunk(self, document: ParsedDocument, *, media_type: str) -> list[DocumentChunk]:
         return [
             DocumentChunk(
+                id=uuid4(),
                 ordinal=index,
                 content=f"chunk {index}",
                 embedding_content=f"context chunk {index}",
