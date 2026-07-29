@@ -4,14 +4,14 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from llm_providers.embeddings.ollama import OllamaEmbeddingProvider
+from llm_providers.generation.ollama import OllamaGenerationProvider
 
 from wiki_base.api.errors import ServiceError, service_error_handler
 from wiki_base.api.routes import router
 from wiki_base.config.logging import configure_logging
 from wiki_base.config.settings import get_settings
 from wiki_base.database.connection import Database
-from wiki_base.providers.embeddings.ollama import OllamaEmbeddingProvider
-from wiki_base.providers.generation.ollama import OllamaGenerationProvider
 
 
 @asynccontextmanager

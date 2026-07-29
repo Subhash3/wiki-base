@@ -1,13 +1,14 @@
 import asyncio
 import logging
 
+from document_processing.models import DocumentSource
+
 from wiki_base.database.connection import Database
 from wiki_base.database.queries.ingestion_jobs import (
     claim_next_ingestion_job,
     complete_ingestion_job,
     fail_ingestion_job,
 )
-from wiki_base.ingestion.models import DocumentSource
 from wiki_base.ingestion.pipeline import IngestionPipeline
 
 logger = logging.getLogger(__name__)

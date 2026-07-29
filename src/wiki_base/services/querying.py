@@ -2,9 +2,9 @@ from dataclasses import dataclass
 from uuid import UUID
 
 import httpx
+from llm_providers.generation.base import ChatMessage, GenerationProvider
 
 from wiki_base.api.errors import ServiceError
-from wiki_base.providers.generation.base import ChatMessage, GenerationProvider
 from wiki_base.services.query_chunks import QueryChunksService, RetrievedChunk
 
 

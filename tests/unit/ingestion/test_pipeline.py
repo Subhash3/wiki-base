@@ -1,6 +1,7 @@
 from pathlib import Path
 
-from wiki_base.ingestion.models import DocumentSource, IngestionChunk, ParsedDocument
+from document_processing.models import DocumentChunk, DocumentSource, ParsedDocument
+
 from wiki_base.ingestion.pipeline import IngestionPipeline
 
 
@@ -20,9 +21,9 @@ class StubRegistry:
 
 
 class StubChunker:
-    def chunk(self, document: ParsedDocument, *, media_type: str) -> list[IngestionChunk]:
+    def chunk(self, document: ParsedDocument, *, media_type: str) -> list[DocumentChunk]:
         return [
-            IngestionChunk(
+            DocumentChunk(
                 ordinal=index,
                 content=f"chunk {index}",
                 embedding_content=f"context chunk {index}",

@@ -44,3 +44,9 @@ Run checks with:
 uv run ruff check .
 uv run pytest
 ```
+
+## Workspace projects
+
+- [`document-processing`](packages/document-processing/README.md) — reusable document parsing and chunking
+- [`graph-rag`](packages/graph-rag/README.md) — graph-based retrieval-augmented generation
+- [`llm-providers`](packages/llm-providers/README.md) — shared model provider interfaces and implementations

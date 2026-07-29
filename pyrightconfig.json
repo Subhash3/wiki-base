@@ -1,0 +1,10 @@
+{
+  "venvPath": ".",
+  "venv": ".venv",
+  "extraPaths": [
+    "src",
+    "packages/document-processing/src",
+    "packages/graph-rag/src",
+    "packages/llm-providers/src",
+  ]
+}

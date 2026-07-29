@@ -1,12 +1,12 @@
 from typing import Annotated
 
 from fastapi import Depends, Request
+from llm_providers.embeddings.base import EmbeddingProvider
+from llm_providers.generation.base import GenerationProvider
 
 from wiki_base.config.settings import Settings, get_settings
 from wiki_base.database.connection import Database
 from wiki_base.ingestion.staging import DocumentStaging
-from wiki_base.providers.embeddings.base import EmbeddingProvider
-from wiki_base.providers.generation.base import GenerationProvider
 from wiki_base.services.query_chunks import QueryChunksService
 from wiki_base.services.querying import QueryService
 from wiki_base.services.wiki_bases import WikiBaseService

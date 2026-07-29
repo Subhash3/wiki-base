@@ -4,9 +4,9 @@ from pathlib import Path
 from uuid import UUID
 
 from asyncpg import Connection
+from document_processing.models import EmbeddedChunk
 
 from wiki_base.database.records import IngestionJobRecord
-from wiki_base.ingestion.models import EmbeddedChunk
 
 
 async def claim_next_ingestion_job(connection: Connection) -> IngestionJobRecord | None:

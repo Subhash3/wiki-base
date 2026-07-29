@@ -3,13 +3,13 @@ from uuid import UUID
 
 import asyncpg
 import httpx
+from llm_providers.embeddings.base import EmbeddingProvider
 
 from wiki_base.api.errors import ServiceError
 from wiki_base.database.connection import Database
 from wiki_base.database.queries.chunks import search_chunks
 from wiki_base.database.queries.wiki_bases import get_wiki_base
 from wiki_base.database.records import IngestionStatus
-from wiki_base.providers.embeddings.base import EmbeddingProvider
 
 
 @dataclass(frozen=True, slots=True)

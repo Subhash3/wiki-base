@@ -370,6 +370,12 @@ Example response:
 }
 ```
 
+### `GET /wiki-bases`
+
+List wiki bases newest first with ID, name, aggregate ingestion status, document count, and
+timestamps. The response intentionally omits document details; use the status endpoint when
+per-document progress or errors are needed.
+
 ### `GET /wiki-bases/{wiki_base_id}`
 
 Return wiki-base metadata, aggregate ingestion status, progress counts, and any summary failure information.

@@ -6,9 +6,10 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "asyncpg>=0.30",
-    "docling>=2",
+    "document-processing",
     "fastapi>=0.115",
     "httpx>=0.28",
+    "llm-providers",
     "pgvector>=0.3",
     "pydantic-settings>=2.7",
     "python-multipart>=0.0.20",
@@ -37,7 +38,7 @@ packages = ["src/wiki_base"]
 [tool.pytest.ini_options]
 addopts = "-q"
 asyncio_mode = "auto"
-testpaths = ["tests"]
+testpaths = ["tests", "packages"]
 
 [tool.ruff]
 line-length = 100
@@ -45,3 +46,10 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "ASYNC"]
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.uv.sources]
+document-processing = { workspace = true }
+llm-providers = { workspace = true }

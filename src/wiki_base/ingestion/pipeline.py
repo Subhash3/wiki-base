@@ -1,7 +1,7 @@
-from wiki_base.ingestion.chunking.base import DocumentChunker
-from wiki_base.ingestion.models import DocumentSource, EmbeddedChunk
-from wiki_base.ingestion.parsers.registry import ParserRegistry
-from wiki_base.providers.embeddings.base import EmbeddingProvider
+from document_processing.chunking.base import DocumentChunker
+from document_processing.models import DocumentSource, EmbeddedChunk
+from document_processing.parsing.registry import ParserRegistry
+from llm_providers.embeddings.base import EmbeddingProvider
 
 
 class IngestionPipeline:

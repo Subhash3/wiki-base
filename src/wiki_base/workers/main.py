@@ -1,14 +1,15 @@
 import asyncio
 
+from document_processing.chunking.docling import DoclingDocumentChunker
+from document_processing.parsing import DocxDocumentParser, PdfDocumentParser, PptxDocumentParser
+from document_processing.parsing.docling_converter import DoclingConverter
+from document_processing.parsing.registry import ParserRegistry
+from llm_providers.embeddings.ollama import OllamaEmbeddingProvider
+
 from wiki_base.config.logging import configure_logging
 from wiki_base.config.settings import get_settings
 from wiki_base.database.connection import Database
-from wiki_base.ingestion.chunking.docling import DoclingDocumentChunker
-from wiki_base.ingestion.parsers import DocxDocumentParser, PdfDocumentParser, PptxDocumentParser
-from wiki_base.ingestion.parsers.docling_converter import DoclingConverter
-from wiki_base.ingestion.parsers.registry import ParserRegistry
 from wiki_base.ingestion.pipeline import IngestionPipeline
-from wiki_base.providers.embeddings.ollama import OllamaEmbeddingProvider
 from wiki_base.workers.ingestion import IngestionWorker
 
 

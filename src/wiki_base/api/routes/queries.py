@@ -1,7 +1,7 @@
 from fastapi import APIRouter
+from llm_providers.generation.base import ChatMessage
 
 from wiki_base.api.dependencies import QueryServiceDependency
-from wiki_base.providers.generation.base import ChatMessage
 from wiki_base.schemas.queries import QueryRequest, QueryResponse
 
 router = APIRouter(tags=["retrieval"])
