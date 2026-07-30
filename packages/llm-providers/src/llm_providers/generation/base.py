@@ -27,4 +27,6 @@ class StructuredGenerationProvider(Protocol):
         self,
         messages: list[ChatMessage],
         schema: dict[str, Any],
+        *,
+        max_tokens: int = 4096,
     ) -> dict[str, Any]: ...

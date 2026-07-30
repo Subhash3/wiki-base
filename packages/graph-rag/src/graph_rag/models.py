@@ -30,6 +30,15 @@ class TripleProvenance:
 
 
 @dataclass(frozen=True, slots=True)
+class RankedChunk:
+    """A document chunk ranked by graph relevance."""
+
+    document_id: UUID
+    chunk_id: UUID
+    score: float
+
+
+@dataclass(frozen=True, slots=True)
 class GraphEdge:
     """A normalized graph edge and the chunks that support it."""
 

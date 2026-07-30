@@ -101,7 +101,7 @@ def find_documents(directory: Path) -> list[Path]:
     return documents
 
 
-def save_visualization(
+def save_graph(
     graph: KnowledgeGraph,
     *,
     name: str,
@@ -113,7 +113,7 @@ def save_visualization(
     visualizer = GraphVisualizer(graph)
     network = visualizer.build(document_id=document_id)
     (output_dir / f"{name}.json").write_text(
-        visualizer.to_json(network),
+        graph.to_json(),
         encoding="utf-8",
     )
     (output_dir / f"{name}.html").write_text(
@@ -154,7 +154,7 @@ async def main(directory: Path, *, max_tokens: int, output_dir: Path) -> None:
         await generation.close()
 
     for document_id, document_graph in document_graphs:
-        save_visualization(
+        save_graph(
             document_graph,
             name=str(document_id),
             title=f"Graph RAG · {document_id}",
@@ -165,7 +165,7 @@ async def main(directory: Path, *, max_tokens: int, output_dir: Path) -> None:
     graph = document_graphs[0][1]
     for _document_id, document_graph in document_graphs[1:]:
         graph = KnowledgeGraph.merge(graph, document_graph)
-    save_visualization(
+    save_graph(
         graph,
         name="merged",
         title="Graph RAG · Merged",

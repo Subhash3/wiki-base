@@ -1,16 +1,22 @@
 from pathlib import Path
+from uuid import UUID
 
-import networkx as nx
-
-from graph_rag.visualization import GraphVisualizer
+from graph_rag.graph import KnowledgeGraph
+from graph_rag.models import Triple, TripleProvenance
 from graph_rag.visualization_cli import visualize_file
 
 
 def test_visualize_file_writes_html_next_to_json(tmp_path: Path) -> None:
     json_file = tmp_path / "document-id.json"
-    network = nx.MultiDiGraph()
-    network.add_edge("alice", "acme", label="works at", arrows="to")
-    json_file.write_text(GraphVisualizer.to_json(network), encoding="utf-8")
+    graph = KnowledgeGraph()
+    graph.add_triple(
+        Triple(subject="alice", relation="works at", object="acme"),
+        provenance=TripleProvenance(
+            document_id=UUID("10000000-0000-0000-0000-000000000001"),
+            chunk_id=UUID("00000000-0000-0000-0000-000000000001"),
+        ),
+    )
+    json_file.write_text(graph.to_json(), encoding="utf-8")
 
     html_file = visualize_file(json_file)
 

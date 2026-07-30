@@ -1,6 +1,7 @@
 import argparse
 from pathlib import Path
 
+from graph_rag.graph import KnowledgeGraph
 from graph_rag.visualization import GraphVisualizer
 
 
@@ -46,20 +47,24 @@ def merge_files(inputs: list[Path], *, output: Path | None = None) -> tuple[Path
     if output_json.suffix.lower() != ".json":
         raise ValueError(f"Output must be a .json file: {output_json}")
 
-    networks = [
-        GraphVisualizer.from_json(path.read_text(encoding="utf-8"))
+    graphs = [
+        KnowledgeGraph.from_json(path.read_text(encoding="utf-8"))
         for path in json_files
         if path.resolve() != output_json.resolve()
     ]
-    if not networks:
+    if not graphs:
         raise ValueError("No source graph JSON files remain after excluding the output")
 
-    merged = GraphVisualizer.merge(networks)
+    merged = graphs[0]
+    for graph in graphs[1:]:
+        merged = KnowledgeGraph.merge(merged, graph)
     output_json.parent.mkdir(parents=True, exist_ok=True)
-    output_json.write_text(GraphVisualizer.to_json(merged), encoding="utf-8")
+    output_json.write_text(merged.to_json(), encoding="utf-8")
+    visualizer = GraphVisualizer(merged)
+    network = visualizer.build()
     output_html = output_json.with_suffix(".html")
     output_html.write_text(
-        GraphVisualizer.to_html(merged, title="Graph RAG · Merged"),
+        visualizer.to_html(network, title="Graph RAG · Merged"),
         encoding="utf-8",
     )
     return output_json, output_html

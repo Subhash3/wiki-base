@@ -16,5 +16,6 @@ wheels/
 .coverage
 htmlcov/
 .wiki-base-staging/
+.wiki-base-graphs/
 
 docs-for-testing/

@@ -34,6 +34,8 @@ class StubStructuredGeneration:
         self,
         messages: list[ChatMessage],
         schema: dict[str, Any],
+        *,
+        max_tokens: int = 4096,
     ) -> dict[str, Any]:
         self.messages = messages
         self.schema = schema

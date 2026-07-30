@@ -1,4 +1,3 @@
-import json
 from uuid import UUID
 
 import networkx as nx
@@ -52,50 +51,6 @@ def test_builds_network_for_one_document() -> None:
         for source, target, data in network.edges(data=True)
         if source == document_node and data.get("visualization_only")
     } == {"alice", "acme"}
-
-
-def test_serializes_and_loads_networkx_node_link_json() -> None:
-    network = GraphVisualizer(make_graph()).build()
-
-    content = GraphVisualizer.to_json(network)
-    payload = json.loads(content)
-    loaded = GraphVisualizer.from_json(content)
-
-    assert len(payload["nodes"]) == 5
-    assert len(payload["edges"]) == 6
-    assert isinstance(loaded, nx.MultiDiGraph)
-    assert {"alice", "acme", "paris"}.issubset(loaded.nodes)
-    assert loaded.number_of_edges() == 6
-
-
-def test_loading_older_json_adds_document_nodes_from_provenance() -> None:
-    network = nx.MultiDiGraph()
-    network.add_node(
-        "alice",
-        label="alice",
-        provenance=[
-            {
-                "document_id": str(DOCUMENT_ONE),
-                "chunk_id": str(CHUNK_ONE),
-            }
-        ],
-    )
-
-    loaded = GraphVisualizer.from_json(GraphVisualizer.to_json(network))
-
-    document_node = f"document:{DOCUMENT_ONE}"
-    assert document_node in loaded
-    assert loaded.has_edge(document_node, "alice")
-
-
-def test_loads_canonical_knowledge_graph_json() -> None:
-    graph = make_graph()
-
-    network = GraphVisualizer.from_json(graph.to_json())
-
-    assert {"alice", "acme", "paris"}.issubset(network.nodes)
-    assert f"document:{DOCUMENT_ONE}" in network.nodes
-    assert f"document:{DOCUMENT_TWO}" in network.nodes
 
 
 def test_renders_interactive_pyvis_html() -> None:

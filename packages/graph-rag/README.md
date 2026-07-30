@@ -31,10 +31,10 @@ a new corpus graph without mutating either input. Duplicate facts and provenance
 deduplicated.
 
 `GraphVisualizer` converts an indexed `KnowledgeGraph` into a NetworkX `MultiDiGraph`. It
-can filter the shared graph by document provenance, serialize NetworkX node-link JSON, and
-render interactive HTML with PyVis. The visual projection adds document nodes and dashed
-`contains` edges for provenance; these visualization-only edges are not added to the
-`KnowledgeGraph` used for retrieval.
+can filter the shared graph by document provenance and render interactive HTML with PyVis.
+The NetworkX graph exists only in memory. The visual projection adds document nodes and
+dashed `contains` edges for provenance; these visualization-only edges are not stored in
+canonical graph JSON.
 
 Render an existing graph JSON file beside the source file:
 
@@ -48,8 +48,9 @@ Merge all document graphs in a directory and render the combined graph:
 uv run --package graph-rag graph-rag-visualize-merge path/to/graph-directory
 ```
 
-The command writes `merged.json` and `merged.html` beside the source files. It also accepts
-an explicit list of JSON files and an optional `--output path/to/name.json`.
+The command writes canonical `merged.json` and its `merged.html` visualization beside the
+source files. It also accepts an explicit list of canonical JSON files and an optional
+`--output path/to/name.json`.
 
 ## Retrieval
 
@@ -68,6 +69,29 @@ flowchart LR
 4. **Personalized PageRank:** Spread relevance from the matched nodes through their graph connections.
 5. **Rank passages:** Score and select passages associated with the most relevant graph nodes.
 6. **Generate answer:** Ask an LLM to answer the question using the selected passages as evidence.
+
+`LLMQueryEntityExtractor` implements the query-entity extraction step through the shared
+structured generation provider. It returns a small, validated list of named entities and
+key noun phrases without answering the question.
+
+`ExactEntityLinker` links extracted entities to graph nodes through the same normalization
+used during indexing. Unmatched entities are ignored; embedding-based linking can be added
+later through the `EntityLinker` protocol.
+
+`build_ranking_graph` projects the knowledge graph into an undirected, unweighted NetworkX
+entity graph. It excludes visualization-only document nodes and collapses repeated
+relations between the same entity pair into one associative connection.
+
+`personalized_page_rank` distributes restart probability equally across linked query
+nodes and ranks their connected entity neighborhoods. It returns no scores when the query
+has no valid graph seeds.
+
+`aggregate_chunk_scores` sums positive entity scores over document/chunk provenance and
+returns deterministic `RankedChunk` results ordered by graph relevance.
+
+`HippoRAGRetriever` composes query extraction, entity linking, the ranking projection,
+Personalized PageRank, and chunk aggregation. It returns ranked document/chunk IDs and
+does not depend on a database or chunk-content store.
 
 ## Development
 
