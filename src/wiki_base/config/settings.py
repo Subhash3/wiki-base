@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     embedding_batch_size: int = Field(default=16, ge=1)
     ollama_url: str = "http://127.0.0.1:11434"
     ollama_timeout_seconds: float = Field(default=120, gt=0)
-    generation_model: str = "qwen3.5:0.8b"
+    generation_model: str = "gemma3:270m"
     chunk_max_tokens: int = Field(default=700, ge=50)
     worker_poll_interval_seconds: float = Field(default=1, gt=0)
     graph_directory: Path = Path(".wiki-base-graphs")

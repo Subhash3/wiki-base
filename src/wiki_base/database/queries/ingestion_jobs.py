@@ -39,17 +39,8 @@ async def claim_next_ingestion_job(connection: Connection) -> IngestionJobRecord
         )
         await connection.execute(
             """
-            UPDATE documents
-            SET status = 'processing', started_at = COALESCE(started_at, $2)
-            WHERE id = $1
-            """,
-            row["document_id"],
-            now,
-        )
-        await connection.execute(
-            """
             UPDATE wiki_bases
-            SET status = 'processing', started_at = COALESCE(started_at, $2)
+            SET started_at = COALESCE(started_at, $2)
             WHERE id = $1
             """,
             row["wiki_base_id"],
@@ -110,15 +101,6 @@ async def complete_ingestion_job(
         )
         await connection.execute(
             """
-            UPDATE documents
-            SET status = 'ready', completed_at = now(), error_code = NULL,
-                error_message = NULL
-            WHERE id = $1
-            """,
-            job.document_id,
-        )
-        await connection.execute(
-            """
             UPDATE ingestion_jobs
             SET status = 'ready', completed_at = now(), staging_reference = NULL,
                 error_code = NULL, error_message = NULL
@@ -134,7 +116,7 @@ async def complete_ingestion_job(
             """,
             job.document_id,
         )
-        await _update_wiki_base_status(connection, job.wiki_base_id)
+        await _update_wiki_base_completion(connection, job.wiki_base_id)
 
 
 async def fail_ingestion_job(
@@ -147,17 +129,6 @@ async def fail_ingestion_job(
     async with connection.transaction():
         await connection.execute(
             """
-            UPDATE documents
-            SET status = 'failed', completed_at = now(), error_code = $2,
-                error_message = $3
-            WHERE id = $1
-            """,
-            job.document_id,
-            error_code,
-            error_message,
-        )
-        await connection.execute(
-            """
             UPDATE ingestion_jobs
             SET status = 'failed', completed_at = now(), staging_reference = NULL,
                 error_code = $2, error_message = $3
@@ -167,44 +138,31 @@ async def fail_ingestion_job(
             error_code,
             error_message,
         )
-        await _update_wiki_base_status(connection, job.wiki_base_id)
+        await _update_wiki_base_completion(connection, job.wiki_base_id)
 
 
-async def _update_wiki_base_status(connection: Connection, wiki_base_id: UUID) -> None:
-    counts = await connection.fetchrow(
+async def _update_wiki_base_completion(
+    connection: Connection,
+    wiki_base_id: UUID,
+) -> None:
+    """Update the completion timestamp after an ingestion job finishes."""
+
+    pending = await connection.fetchval(
         """
-        SELECT count(*) FILTER (WHERE status IN ('queued', 'processing')) AS pending,
-               count(*) FILTER (WHERE status = 'ready') AS ready,
-               count(*) FILTER (WHERE status = 'failed') AS failed
-        FROM documents
+        SELECT count(*)
+        FROM ingestion_jobs
         WHERE wiki_base_id = $1
+          AND status IN ('queued', 'processing')
         """,
         wiki_base_id,
     )
-    if counts is None:
-        raise RuntimeError("Document status count query returned no row")
-
-    if counts["pending"]:
-        status = "processing"
-        completed = False
-    elif counts["ready"] and counts["failed"]:
-        status = "partially_failed"
-        completed = True
-    elif counts["ready"]:
-        status = "ready"
-        completed = True
-    else:
-        status = "failed"
-        completed = True
 
     await connection.execute(
         """
         UPDATE wiki_bases
-        SET status = $2,
-            completed_at = CASE WHEN $3 THEN now() ELSE NULL END
+        SET completed_at = CASE WHEN $2 = 0 THEN now() ELSE NULL END
         WHERE id = $1
         """,
         wiki_base_id,
-        status,
-        completed,
+        pending,
     )

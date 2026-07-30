@@ -1,14 +1,16 @@
 from uuid import UUID
 
 from wiki_base.api.routes.query_chunks import query_chunks
+from wiki_base.retrieval import RetrievalMode
 from wiki_base.services.query_chunks import QueryChunksResult, RetrievedChunk
 
 
 class StubQueryChunksService:
     async def query(
-        self, *, wiki_base_id: UUID, question: str, limit: int
+        self, *, wiki_base_id: UUID, question: str, limit: int, mode: RetrievalMode
     ) -> QueryChunksResult:
         assert limit == 3
+        assert mode == RetrievalMode.PRO
         return QueryChunksResult(
             wiki_base_id=wiki_base_id,
             question=question,
@@ -25,6 +27,7 @@ class StubQueryChunksService:
                     heading="Who is eligible",
                 )
             ],
+            mode=mode,
         )
 
 
@@ -36,9 +39,11 @@ async def test_query_chunks_returns_ranked_content_and_citation_metadata() -> No
         wiki_base_id=wiki_base_id,
         question="Does this apply to contractors?",
         limit=3,
+        mode=RetrievalMode.PRO,
     )
 
     assert response.wiki_base_id == wiki_base_id
     assert response.chunks[0].score == 0.8472
     assert response.chunks[0].document_name == "policy.pdf"
     assert response.chunks[0].page == 7
+    assert response.mode == RetrievalMode.PRO

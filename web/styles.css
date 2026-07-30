@@ -144,9 +144,12 @@ td:first-child {
   font-weight: 600;
 }
 
-.wiki-select {
-  max-width: 420px;
+.chat-options {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(180px, 1fr);
+  max-width: 680px;
   margin-bottom: 16px;
+  gap: 16px;
 }
 
 .chat-messages {
@@ -179,6 +182,24 @@ td:first-child {
   background: white;
 }
 
+.retrieval-mode {
+  display: block;
+  width: fit-content;
+  margin-bottom: 7px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  color: #555;
+  background: #eee;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+}
+
+.retrieval-mode.pro {
+  color: #5c3b00;
+  background: #fff0c2;
+}
+
 .citations {
   margin-top: 8px;
   color: #555;
@@ -205,5 +226,9 @@ td:first-child {
   form {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .chat-options {
+    grid-template-columns: 1fr;
   }
 }

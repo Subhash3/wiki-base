@@ -11,10 +11,12 @@ from wiki_base.database.queries.documents import list_wiki_base_documents
 from wiki_base.database.queries.wiki_bases import (
     create_wiki_base_manifest,
     get_wiki_base,
+    list_wiki_base_retrieval_statuses,
     list_wiki_bases,
 )
 from wiki_base.database.records import IngestionStatus
 from wiki_base.ingestion.staging import DocumentStaging, StagedDocument
+from wiki_base.retrieval import RetrievalMode
 
 
 @dataclass(frozen=True, slots=True)
@@ -31,7 +33,7 @@ class QueuedWikiBase:
     name: str
     created_at: datetime
     documents: list[QueuedDocument]
-    status: str = "queued"
+    retrieval_statuses: dict[RetrievalMode, IngestionStatus]
 
 
 @dataclass(frozen=True, slots=True)
@@ -48,7 +50,7 @@ class DocumentStatus:
 class WikiBaseStatus:
     id: UUID
     name: str
-    status: IngestionStatus
+    retrieval_statuses: dict[RetrievalMode, IngestionStatus]
     document_count: int
     created_at: datetime
     started_at: datetime | None
@@ -60,7 +62,7 @@ class WikiBaseStatus:
 class WikiBaseSummary:
     id: UUID
     name: str
-    status: IngestionStatus
+    retrieval_statuses: dict[RetrievalMode, IngestionStatus]
     document_count: int
     created_at: datetime
     started_at: datetime | None
@@ -132,6 +134,10 @@ class WikiBaseService:
                 id=wiki_base_id,
                 name=normalized_name,
                 created_at=created_at,
+                retrieval_statuses={
+                    RetrievalMode.LITE: IngestionStatus.QUEUED,
+                    RetrievalMode.PRO: IngestionStatus.QUEUED,
+                },
                 documents=[
                     QueuedDocument(
                         id=document_id,
@@ -169,6 +175,10 @@ class WikiBaseService:
                     404,
                 )
             documents = await list_wiki_base_documents(connection, wiki_base_id)
+            retrieval_statuses = await list_wiki_base_retrieval_statuses(
+                connection,
+                wiki_base_id,
+            )
 
         document_statuses = [
             DocumentStatus(
@@ -184,7 +194,10 @@ class WikiBaseService:
         return WikiBaseStatus(
             id=wiki_base.id,
             name=wiki_base.name,
-            status=wiki_base.status,
+            retrieval_statuses=retrieval_statuses.get(
+                wiki_base.id,
+                self._queued_retrieval_statuses(),
+            ),
             document_count=len(document_statuses),
             created_at=wiki_base.created_at,
             started_at=wiki_base.started_at,
@@ -196,6 +209,7 @@ class WikiBaseService:
         try:
             async with self._database.connection() as connection:
                 records = await list_wiki_bases(connection)
+                retrieval_statuses = await list_wiki_base_retrieval_statuses(connection)
         except asyncpg.PostgresError as error:
             raise ServiceError(
                 "database_unavailable",
@@ -207,7 +221,10 @@ class WikiBaseService:
             WikiBaseSummary(
                 id=wiki_base.id,
                 name=wiki_base.name,
-                status=wiki_base.status,
+                retrieval_statuses=retrieval_statuses.get(
+                    wiki_base.id,
+                    self._queued_retrieval_statuses(),
+                ),
                 document_count=document_count,
                 created_at=wiki_base.created_at,
                 started_at=wiki_base.started_at,
@@ -215,3 +232,12 @@ class WikiBaseService:
             )
             for wiki_base, document_count in records
         ]
+
+    @staticmethod
+    def _queued_retrieval_statuses() -> dict[RetrievalMode, IngestionStatus]:
+        """Return default readiness for a wiki base without job rows."""
+
+        return {
+            RetrievalMode.LITE: IngestionStatus.QUEUED,
+            RetrievalMode.PRO: IngestionStatus.QUEUED,
+        }

@@ -1,8 +1,9 @@
 from typing import Annotated
 
 from fastapi import Depends, Request
+from graph_rag import ExactEntityLinker, HippoRAGRetriever, LLMQueryEntityExtractor
 from llm_providers.embeddings.base import EmbeddingProvider
-from llm_providers.generation.base import GenerationProvider
+from llm_providers.generation.base import GenerationProvider, StructuredGenerationProvider
 
 from wiki_base.config.settings import Settings, get_settings
 from wiki_base.database.connection import Database
@@ -32,6 +33,18 @@ def get_generation_provider(request: Request) -> GenerationProvider:
 
 
 GenerationProviderDependency = Annotated[GenerationProvider, Depends(get_generation_provider)]
+
+
+def get_structured_generation_provider(request: Request) -> StructuredGenerationProvider:
+    """Return the application's structured generation provider."""
+
+    return request.app.state.generation_provider
+
+
+StructuredGenerationProviderDependency = Annotated[
+    StructuredGenerationProvider,
+    Depends(get_structured_generation_provider),
+]
 
 
 def get_create_document_staging(settings: SettingsDependency) -> DocumentStaging:
@@ -66,8 +79,16 @@ WikiBaseServiceDependency = Annotated[
 def get_query_chunks_service(
     database: DatabaseDependency,
     embeddings: EmbeddingProviderDependency,
+    generation: StructuredGenerationProviderDependency,
 ) -> QueryChunksService:
-    return QueryChunksService(database=database, embeddings=embeddings)
+    return QueryChunksService(
+        database=database,
+        embeddings=embeddings,
+        graph_retriever=HippoRAGRetriever(
+            entity_extractor=LLMQueryEntityExtractor(generation=generation),
+            entity_linker=ExactEntityLinker(),
+        ),
+    )
 
 
 QueryChunksServiceDependency = Annotated[

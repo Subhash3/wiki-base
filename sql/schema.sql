@@ -3,8 +3,6 @@ CREATE EXTENSION IF NOT EXISTS vector;
 CREATE TABLE IF NOT EXISTS wiki_bases (
     id uuid PRIMARY KEY,
     name text NOT NULL CHECK (length(trim(name)) > 0),
-    status text NOT NULL DEFAULT 'queued'
-        CHECK (status IN ('queued', 'processing', 'ready', 'partially_failed', 'failed')),
     embedding_model text,
     embedding_dimensions integer CHECK (embedding_dimensions > 0),
     created_at timestamptz NOT NULL DEFAULT now(),
@@ -12,24 +10,27 @@ CREATE TABLE IF NOT EXISTS wiki_bases (
     completed_at timestamptz
 );
 
+ALTER TABLE wiki_bases DROP COLUMN IF EXISTS status;
+
 CREATE TABLE IF NOT EXISTS documents (
     id uuid PRIMARY KEY,
     wiki_base_id uuid NOT NULL REFERENCES wiki_bases(id) ON DELETE CASCADE,
     name text NOT NULL CHECK (length(trim(name)) > 0),
     media_type text NOT NULL,
     content_checksum text NOT NULL,
-    status text NOT NULL DEFAULT 'queued'
-        CHECK (status IN ('queued', 'processing', 'ready', 'failed')),
     parser_type text,
     parser_version text,
     page_count integer CHECK (page_count >= 0),
-    error_code text,
-    error_message text,
     created_at timestamptz NOT NULL DEFAULT now(),
-    started_at timestamptz,
-    completed_at timestamptz,
     UNIQUE (wiki_base_id, content_checksum)
 );
+
+ALTER TABLE documents
+    DROP COLUMN IF EXISTS status,
+    DROP COLUMN IF EXISTS started_at,
+    DROP COLUMN IF EXISTS completed_at,
+    DROP COLUMN IF EXISTS error_code,
+    DROP COLUMN IF EXISTS error_message;
 
 CREATE TABLE IF NOT EXISTS ingestion_jobs (
     id uuid PRIMARY KEY,
@@ -89,9 +90,10 @@ ALTER TABLE chunks
     USING embedding::vector(1024);
 
 INSERT INTO graph_indexing_jobs (document_id)
-SELECT id
-FROM documents
-WHERE status = 'ready'
+SELECT document.id
+FROM documents AS document
+JOIN ingestion_jobs AS job ON job.document_id = document.id
+WHERE job.status = 'ready'
 ON CONFLICT (document_id) DO NOTHING;
 
 CREATE INDEX IF NOT EXISTS documents_wiki_base_id_idx ON documents (wiki_base_id);

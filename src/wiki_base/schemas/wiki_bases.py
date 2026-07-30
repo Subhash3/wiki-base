@@ -4,7 +4,9 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 
-WikiBaseStatus = Literal["queued", "processing", "ready", "partially_failed", "failed"]
+from wiki_base.retrieval import RetrievalMode
+
+RetrievalStatus = Literal["queued", "processing", "ready", "partially_failed", "failed"]
 DocumentStatus = Literal["queued", "processing", "ready", "failed"]
 
 
@@ -22,7 +24,7 @@ class WikiBaseQueuedResponse(BaseModel):
 
     id: UUID
     name: str
-    status: Literal["queued"] = "queued"
+    retrieval_statuses: dict[RetrievalMode, RetrievalStatus]
     created_at: datetime
     documents: list[QueuedDocumentResponse]
 
@@ -43,7 +45,7 @@ class WikiBaseStatusResponse(BaseModel):
 
     id: UUID
     name: str
-    status: WikiBaseStatus
+    retrieval_statuses: dict[RetrievalMode, RetrievalStatus]
     document_count: int
     created_at: datetime
     started_at: datetime | None = None
@@ -56,7 +58,7 @@ class WikiBaseSummaryResponse(BaseModel):
 
     id: UUID
     name: str
-    status: WikiBaseStatus
+    retrieval_statuses: dict[RetrievalMode, RetrievalStatus]
     document_count: int
     created_at: datetime
     started_at: datetime | None = None

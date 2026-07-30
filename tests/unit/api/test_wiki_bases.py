@@ -2,6 +2,7 @@ from datetime import UTC, datetime
 from io import BytesIO
 from uuid import UUID
 
+import pytest
 from fastapi import UploadFile
 from starlette.datastructures import Headers
 
@@ -10,7 +11,9 @@ from wiki_base.api.routes.wiki_bases import (
     get_wiki_base_status,
     list_wiki_bases,
 )
+from wiki_base.database.queries.wiki_bases import _aggregate_status
 from wiki_base.database.records import IngestionStatus
+from wiki_base.retrieval import RetrievalMode
 from wiki_base.services.wiki_bases import (
     DocumentStatus,
     QueuedDocument,
@@ -27,6 +30,10 @@ class StubWikiBaseService:
             id=UUID("0190f3a0-7d83-7a41-a27c-b7314f5ae705"),
             name=name,
             created_at=datetime(2026, 7, 21, tzinfo=UTC),
+            retrieval_statuses={
+                RetrievalMode.LITE: IngestionStatus.QUEUED,
+                RetrievalMode.PRO: IngestionStatus.QUEUED,
+            },
             documents=[
                 QueuedDocument(
                     id=UUID("0190f3a0-b096-7af5-8392-cc61de46f6de"),
@@ -47,7 +54,10 @@ class StubWikiBaseService:
         return WikiBaseStatus(
             id=wiki_base_id,
             name="Engineering Handbook",
-            status=IngestionStatus.PROCESSING,
+            retrieval_statuses={
+                RetrievalMode.LITE: IngestionStatus.PROCESSING,
+                RetrievalMode.PRO: IngestionStatus.QUEUED,
+            },
             document_count=1,
             created_at=datetime(2026, 7, 21, tzinfo=UTC),
             started_at=datetime(2026, 7, 21, 0, 1, tzinfo=UTC),
@@ -69,7 +79,10 @@ class StubWikiBaseService:
             WikiBaseSummary(
                 id=UUID("0190f3a0-7d83-7a41-a27c-b7314f5ae705"),
                 name="Engineering Handbook",
-                status=IngestionStatus.READY,
+                retrieval_statuses={
+                    RetrievalMode.LITE: IngestionStatus.READY,
+                    RetrievalMode.PRO: IngestionStatus.PROCESSING,
+                },
                 document_count=2,
                 created_at=datetime(2026, 7, 21, tzinfo=UTC),
                 started_at=datetime(2026, 7, 21, 0, 1, tzinfo=UTC),
@@ -105,7 +118,10 @@ async def test_create_wiki_base_returns_queued_manifest() -> None:
     )
 
     assert response.name == "Engineering Handbook"
-    assert response.status == "queued"
+    assert response.retrieval_statuses == {
+        RetrievalMode.LITE: "queued",
+        RetrievalMode.PRO: "queued",
+    }
     assert [document.name for document in response.documents] == [
         "policy.pdf",
         "handbook.docx",
@@ -121,7 +137,8 @@ async def test_get_wiki_base_status_returns_document_progress() -> None:
     )
 
     assert response.id == wiki_base_id
-    assert response.status == "processing"
+    assert response.retrieval_statuses[RetrievalMode.LITE] == "processing"
+    assert response.retrieval_statuses[RetrievalMode.PRO] == "queued"
     assert response.document_count == 1
     assert response.documents[0].name == "policy.pdf"
     assert response.documents[0].status == "processing"
@@ -132,5 +149,33 @@ async def test_list_wiki_bases_returns_summaries() -> None:
 
     assert len(response) == 1
     assert response[0].name == "Engineering Handbook"
-    assert response[0].status == "ready"
+    assert response[0].retrieval_statuses[RetrievalMode.LITE] == "ready"
+    assert response[0].retrieval_statuses[RetrievalMode.PRO] == "processing"
     assert response[0].document_count == 2
+
+
+@pytest.mark.parametrize(
+    ("statuses", "expected"),
+    [
+        ([IngestionStatus.QUEUED], IngestionStatus.QUEUED),
+        (
+            [IngestionStatus.READY, IngestionStatus.QUEUED],
+            IngestionStatus.PROCESSING,
+        ),
+        (
+            [IngestionStatus.READY, IngestionStatus.PROCESSING],
+            IngestionStatus.PROCESSING,
+        ),
+        ([IngestionStatus.READY, IngestionStatus.READY], IngestionStatus.READY),
+        ([IngestionStatus.FAILED, IngestionStatus.FAILED], IngestionStatus.FAILED),
+        (
+            [IngestionStatus.READY, IngestionStatus.FAILED],
+            IngestionStatus.PARTIALLY_FAILED,
+        ),
+    ],
+)
+def test_aggregates_retrieval_statuses(
+    statuses: list[IngestionStatus],
+    expected: IngestionStatus,
+) -> None:
+    assert _aggregate_status(statuses) == expected

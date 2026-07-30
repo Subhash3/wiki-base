@@ -17,6 +17,20 @@ class ChunkSearchResult:
     heading: str | None
 
 
+@dataclass(frozen=True, slots=True)
+class StoredChunk:
+    """A stored chunk with document and citation metadata."""
+
+    id: UUID
+    document_id: UUID
+    document_name: str
+    content: str
+    page_number: int | None
+    slide_number: int | None
+    section: str | None
+    heading: str | None
+
+
 async def search_chunks(
     connection: Connection,
     *,
@@ -48,6 +62,44 @@ async def search_chunks(
             document_name=row["document_name"],
             content=row["content"],
             score=float(row["score"]),
+            page_number=row["page_number"],
+            slide_number=row["slide_number"],
+            section=row["section"],
+            heading=row["heading"],
+        )
+        for row in rows
+    ]
+
+
+async def load_chunks_by_ids(
+    connection: Connection,
+    *,
+    wiki_base_id: UUID,
+    chunk_ids: list[UUID],
+) -> list[StoredChunk]:
+    """Load selected chunks belonging to a wiki base."""
+
+    if not chunk_ids:
+        return []
+    rows = await connection.fetch(
+        """
+        SELECT chunk.id, chunk.document_id, document.name AS document_name,
+               chunk.content, chunk.page_number, chunk.slide_number,
+               chunk.section, chunk.heading
+        FROM chunks AS chunk
+        JOIN documents AS document ON document.id = chunk.document_id
+        WHERE chunk.wiki_base_id = $1
+          AND chunk.id = ANY($2::uuid[])
+        """,
+        wiki_base_id,
+        chunk_ids,
+    )
+    return [
+        StoredChunk(
+            id=row["id"],
+            document_id=row["document_id"],
+            document_name=row["document_name"],
+            content=row["content"],
             page_number=row["page_number"],
             slide_number=row["slide_number"],
             section=row["section"],

@@ -2,6 +2,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 
+from wiki_base.retrieval import RetrievalMode
+
 
 class RetrievedChunkResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -23,3 +25,4 @@ class QueryChunksResponse(BaseModel):
     wiki_base_id: UUID
     question: str
     chunks: list[RetrievedChunkResponse]
+    mode: RetrievalMode

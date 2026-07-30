@@ -17,5 +17,6 @@ async def query(request: QueryRequest, service: QueryServiceDependency) -> Query
             for message in request.history
         ],
         limit=request.limit,
+        mode=request.mode,
     )
     return QueryResponse.model_validate(result)

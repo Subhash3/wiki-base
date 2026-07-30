@@ -8,12 +8,14 @@ const refreshButton = document.querySelector("#refresh-button");
 const messageElement = document.querySelector("#wiki-base-message");
 const tableBody = document.querySelector("#wiki-base-table-body");
 const wikiBaseSelect = document.querySelector("#wiki-base-select");
+const retrievalModeSelect = document.querySelector("#retrieval-mode");
 const chatMessages = document.querySelector("#chat-messages");
 const chatForm = document.querySelector("#chat-form");
 const questionInput = document.querySelector("#chat-question");
 const sendButton = document.querySelector("#send-button");
 
 let wikiBases = [];
+let isQuerying = false;
 const histories = new Map();
 
 function getDocumentCount(wikiBase) {
@@ -26,7 +28,7 @@ function getDocumentCount(wikiBase) {
 function renderWikiBases() {
   if (wikiBases.length === 0) {
     tableBody.innerHTML = `
-      <tr><td colspan="4" class="empty">No wiki bases found.</td></tr>
+      <tr><td colspan="5" class="empty">No wiki bases found.</td></tr>
     `;
   } else {
     tableBody.replaceChildren(
@@ -36,7 +38,8 @@ function renderWikiBases() {
           <td>${escapeHtml(wikiBase.id)}</td>
           <td>${escapeHtml(wikiBase.name)}</td>
           <td>${escapeHtml(String(getDocumentCount(wikiBase)))}</td>
-          <td class="status">${escapeHtml(wikiBase.status ?? "unknown")}</td>
+          <td class="status">${escapeHtml(getRetrievalStatus(wikiBase, "lite"))}</td>
+          <td class="status">${escapeHtml(getRetrievalStatus(wikiBase, "pro"))}</td>
         `;
         return row;
       }),
@@ -48,10 +51,40 @@ function renderWikiBases() {
   for (const wikiBase of wikiBases) {
     const option = document.createElement("option");
     option.value = wikiBase.id;
-    option.textContent = `${wikiBase.name} (${wikiBase.status ?? "unknown"})`;
+    option.textContent = `${wikiBase.name} (Lite: ${getRetrievalStatus(wikiBase, "lite")}, Pro: ${getRetrievalStatus(wikiBase, "pro")})`;
     wikiBaseSelect.append(option);
   }
   wikiBaseSelect.value = wikiBases.some((item) => item.id === selectedId) ? selectedId : "";
+  updateRetrievalModeAvailability();
+}
+
+function getRetrievalStatus(wikiBase, mode) {
+  return wikiBase.retrieval_statuses?.[mode] ?? "unknown";
+}
+
+function isRetrievalReady(status) {
+  return status === "ready" || status === "partially_failed";
+}
+
+function updateRetrievalModeAvailability() {
+  const wikiBase = wikiBases.find((item) => item.id === wikiBaseSelect.value);
+  for (const option of retrievalModeSelect.options) {
+    const status = wikiBase ? getRetrievalStatus(wikiBase, option.value) : "unknown";
+    option.disabled = Boolean(wikiBase) && !isRetrievalReady(status);
+  }
+
+  if (retrievalModeSelect.selectedOptions[0]?.disabled) {
+    const available = [...retrievalModeSelect.options].find((option) => !option.disabled);
+    if (available) {
+      retrievalModeSelect.value = available.value;
+    }
+  }
+
+  const selectedStatus = wikiBase
+    ? getRetrievalStatus(wikiBase, retrievalModeSelect.value)
+    : "unknown";
+  sendButton.disabled =
+    isQuerying || !wikiBase || !isRetrievalReady(selectedStatus);
 }
 
 function escapeHtml(value) {
@@ -127,7 +160,11 @@ refreshButton.addEventListener("click", async () => {
   }
 });
 
-wikiBaseSelect.addEventListener("change", renderChat);
+wikiBaseSelect.addEventListener("change", () => {
+  updateRetrievalModeAvailability();
+  renderChat();
+});
+retrievalModeSelect.addEventListener("change", updateRetrievalModeAvailability);
 
 function renderChat() {
   const wikiBaseId = wikiBaseSelect.value;
@@ -148,6 +185,13 @@ function renderChat() {
     const element = document.createElement("div");
     element.className = `chat-message ${message.role}`;
     element.textContent = message.content;
+
+    if (message.role === "assistant" && message.mode) {
+      const mode = document.createElement("span");
+      mode.className = `retrieval-mode ${message.mode}`;
+      mode.textContent = message.mode === "pro" ? "Pro · GraphRAG" : "Lite";
+      element.prepend(mode);
+    }
 
     if (message.citations?.length) {
       const citations = document.createElement("div");
@@ -174,6 +218,7 @@ chatForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const wikiBaseId = wikiBaseSelect.value;
   const question = questionInput.value.trim();
+  const mode = retrievalModeSelect.value;
   if (!wikiBaseId || !question) {
     return;
   }
@@ -183,6 +228,7 @@ chatForm.addEventListener("submit", async (event) => {
   history.push({ role: "user", content: question });
   histories.set(wikiBaseId, history);
   questionInput.value = "";
+  isQuerying = true;
   sendButton.disabled = true;
   renderChat();
 
@@ -195,6 +241,7 @@ chatForm.addEventListener("submit", async (event) => {
         question,
         history: requestHistory,
         limit: 5,
+        mode,
       }),
     });
     if (!response.ok) {
@@ -206,6 +253,7 @@ chatForm.addEventListener("submit", async (event) => {
       role: "assistant",
       content: result.answer,
       citations: result.citations ?? [],
+      mode: result.mode ?? mode,
     });
   } catch (error) {
     history.push({
@@ -213,7 +261,8 @@ chatForm.addEventListener("submit", async (event) => {
       content: `Error: ${error.message}`,
     });
   } finally {
-    sendButton.disabled = false;
+    isQuerying = false;
+    updateRetrievalModeAvailability();
     questionInput.focus();
     renderChat();
   }

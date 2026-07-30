@@ -5,6 +5,7 @@ import httpx
 from llm_providers.generation.base import ChatMessage, GenerationProvider
 
 from wiki_base.api.errors import ServiceError
+from wiki_base.retrieval import RetrievalMode
 from wiki_base.services.query_chunks import QueryChunksService, RetrievedChunk
 
 
@@ -27,6 +28,7 @@ class QueryAnswer:
     question: str
     answer: str
     citations: list[AnswerCitation]
+    mode: RetrievalMode = RetrievalMode.LITE
 
 
 class QueryService:
@@ -46,11 +48,15 @@ class QueryService:
         question: str,
         history: list[ChatMessage],
         limit: int,
+        mode: RetrievalMode = RetrievalMode.LITE,
     ) -> QueryAnswer:
+        """Retrieve evidence and generate an answer."""
+
         retrieval = await self._chunks.query(
             wiki_base_id=wiki_base_id,
             question=question,
             limit=limit,
+            mode=mode,
         )
         if not retrieval.chunks:
             return QueryAnswer(
@@ -58,6 +64,7 @@ class QueryService:
                 question=retrieval.question,
                 answer="The available documents do not provide enough information.",
                 citations=[],
+                mode=retrieval.mode,
             )
 
         source_map = {
@@ -85,6 +92,7 @@ class QueryService:
             question=retrieval.question,
             answer=generated.text,
             citations=[self._citation(chunk) for chunk in cited_chunks],
+            mode=retrieval.mode,
         )
 
     @staticmethod

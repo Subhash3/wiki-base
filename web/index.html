@@ -49,12 +49,13 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Docs</th>
-                <th>Status</th>
+                <th>Lite</th>
+                <th>Pro</th>
               </tr>
             </thead>
             <tbody id="wiki-base-table-body">
               <tr>
-                <td colspan="4" class="empty">No wiki bases created in this browser yet.</td>
+                <td colspan="5" class="empty">No wiki bases created in this browser yet.</td>
               </tr>
             </tbody>
           </table>
@@ -64,12 +65,22 @@
       <section>
         <h2>Chat</h2>
 
-        <label class="wiki-select">
-          Wiki base
-          <select id="wiki-base-select">
-            <option value="">Select a wiki base</option>
-          </select>
-        </label>
+        <div class="chat-options">
+          <label>
+            Wiki base
+            <select id="wiki-base-select">
+              <option value="">Select a wiki base</option>
+            </select>
+          </label>
+
+          <label>
+            Answering mode
+            <select id="retrieval-mode">
+              <option value="lite">Lite — faster</option>
+              <option value="pro">Pro — GraphRAG</option>
+            </select>
+          </label>
+        </div>
 
         <div id="chat-messages" class="chat-messages" aria-live="polite">
           <p class="empty">Select a ready wiki base to start chatting.</p>
@@ -88,6 +99,6 @@
       </section>
     </main>
 
-    <script src="app.js?v=2"></script>
+    <script src="app.js?v=4"></script>
   </body>
 </html>

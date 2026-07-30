@@ -17,7 +17,6 @@ class IngestionStatus(StrEnum):
 class WikiBaseRecord:
     id: UUID
     name: str
-    status: IngestionStatus
     created_at: datetime
     started_at: datetime | None
     completed_at: datetime | None
