@@ -1,36 +1,38 @@
-import math
-from typing import Any
 from uuid import uuid4
 
 from docling.chunking import HybridChunker
 from docling_core.transforms.chunker.tokenizer.base import BaseTokenizer
+from docling_core.transforms.chunker.tokenizer.huggingface import (
+    HuggingFaceTokenizer,
+)
 
 from document_processing.models import DocumentChunk, ParsedDocument
 
 _PPTX_MEDIA_TYPE = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-
-
-class ApproximateTokenizer(BaseTokenizer):
-    """Small offline token estimator used only to keep chunks reasonably bounded."""
-
-    max_tokens: int = 700
-
-    def count_tokens(self, text: str) -> int:
-        return max(1, math.ceil(len(text) / 4))
-
-    def get_max_tokens(self) -> int:
-        return self.max_tokens
-
-    def get_tokenizer(self) -> Any:
-        return self.count_tokens
+_DEFAULT_TOKENIZER_MODEL = "BAAI/bge-m3"
 
 
 class DoclingDocumentChunker:
-    def __init__(self, *, max_tokens: int) -> None:
-        self._tokenizer = ApproximateTokenizer(max_tokens=max_tokens)
+    """Chunk Docling documents with an embedding-compatible tokenizer."""
+
+    def __init__(
+        self,
+        *,
+        max_tokens: int,
+        tokenizer_model: str = _DEFAULT_TOKENIZER_MODEL,
+        tokenizer: BaseTokenizer | None = None,
+    ) -> None:
+        """Configure chunk size and tokenizer."""
+
+        self._tokenizer = tokenizer or HuggingFaceTokenizer.from_pretrained(
+            tokenizer_model,
+            max_tokens=max_tokens,
+        )
         self._chunker = HybridChunker(tokenizer=self._tokenizer)
 
     def chunk(self, document: ParsedDocument, *, media_type: str) -> list[DocumentChunk]:
+        """Create contextualized chunks from a parsed Docling document."""
+
         chunks: list[DocumentChunk] = []
         for chunk in self._chunker.chunk(document.native_document):
             content = chunk.text.strip()

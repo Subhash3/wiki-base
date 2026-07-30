@@ -33,6 +33,7 @@ class Settings(BaseSettings):
     ollama_timeout_seconds: float = Field(default=120, gt=0)
     generation_model: str = "gemma3:270m"
     chunk_max_tokens: int = Field(default=700, ge=50)
+    chunk_tokenizer_model: str = "BAAI/bge-m3"
     worker_poll_interval_seconds: float = Field(default=1, gt=0)
     graph_directory: Path = Path(".wiki-base-graphs")
     graph_index_version: str = "1"

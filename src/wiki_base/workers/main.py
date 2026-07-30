@@ -34,7 +34,10 @@ async def run_worker() -> None:
     )
     pipeline = IngestionPipeline(
         parser_registry=parser_registry,
-        chunker=DoclingDocumentChunker(max_tokens=settings.chunk_max_tokens),
+        chunker=DoclingDocumentChunker(
+            max_tokens=settings.chunk_max_tokens,
+            tokenizer_model=settings.chunk_tokenizer_model,
+        ),
         embedding_provider=provider,
         embedding_batch_size=settings.embedding_batch_size,
     )

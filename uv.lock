@@ -520,6 +520,7 @@ version = "0.1.0"
 source = { editable = "packages/document-processing" }
 dependencies = [
     { name = "docling" },
+    { name = "transformers" },
 ]
 
 [package.dev-dependencies]
@@ -529,7 +530,10 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "docling", specifier = ">=2" }]
+requires-dist = [
+    { name = "docling", specifier = ">=2" },
+    { name = "transformers", specifier = ">=5" },
+]
 
 [package.metadata.requires-dev]
 dev = [
