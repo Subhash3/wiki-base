@@ -1,0 +1,38 @@
+{
+  "nodes": [
+    {
+      "id": "explicit factual relationships",
+      "label": "explicit factual relationships",
+      "provenance": [
+        {
+          "document_id": "97d5afad-e19a-48fa-bedc-597d530089ca",
+          "chunk_id": "b673432e-4fe2-4c8a-8d59-4949ce874398"
+        }
+      ]
+    },
+    {
+      "id": "triple",
+      "label": "triple",
+      "provenance": [
+        {
+          "document_id": "97d5afad-e19a-48fa-bedc-597d530089ca",
+          "chunk_id": "b673432e-4fe2-4c8a-8d59-4949ce874398"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e17",
+      "source": "explicit factual relationships",
+      "target": "triple",
+      "label": "is",
+      "provenance": [
+        {
+          "document_id": "97d5afad-e19a-48fa-bedc-597d530089ca",
+          "chunk_id": "b673432e-4fe2-4c8a-8d59-4949ce874398"
+        }
+      ]
+    }
+  ]
+}

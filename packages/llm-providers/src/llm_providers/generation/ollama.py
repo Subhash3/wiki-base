@@ -1,4 +1,5 @@
 import json
+from typing import Any
 
 import httpx
 
@@ -31,38 +32,24 @@ class OllamaGenerationProvider:
             "concise answer and list only the source IDs that support it.\n\n"
             f"SOURCES\n{context}"
         )
-        response = await self._client.post(
-            f"{self._base_url}/api/chat",
-            json={
-                "model": self._model,
-                "stream": False,
-                "messages": [
-                    {"role": "system", "content": system_message},
-                    *[
-                        {"role": message.role, "content": message.content}
-                        for message in messages
-                    ],
-                ],
-                "format": {
-                    "type": "object",
-                    "properties": {
-                        "answer": {"type": "string"},
-                        "source_ids": {
-                            "type": "array",
-                            "items": {"type": "string"},
-                        },
+        result = await self.generate_structured(
+            [
+                ChatMessage(role="system", content=system_message),
+                *messages,
+            ],
+            {
+                "type": "object",
+                "properties": {
+                    "answer": {"type": "string"},
+                    "source_ids": {
+                        "type": "array",
+                        "items": {"type": "string"},
                     },
-                    "required": ["answer", "source_ids"],
                 },
-                "options": {"temperature": 0},
+                "required": ["answer", "source_ids"],
+                "additionalProperties": False,
             },
         )
-        response.raise_for_status()
-        content = response.json().get("message", {}).get("content")
-        if not isinstance(content, str):
-            raise ValueError("Ollama returned no answer content")
-
-        result = json.loads(content)
         answer = result.get("answer")
         source_ids = result.get("source_ids")
         if not isinstance(answer, str) or not answer.strip():
@@ -72,6 +59,34 @@ class OllamaGenerationProvider:
         ):
             raise ValueError("Ollama returned invalid source IDs")
         return GeneratedAnswer(text=answer.strip(), source_ids=tuple(source_ids))
+
+    async def generate_structured(
+        self,
+        messages: list[ChatMessage],
+        schema: dict[str, Any],
+    ) -> dict[str, Any]:
+        response = await self._client.post(
+            f"{self._base_url}/api/chat",
+            json={
+                "model": self._model,
+                "stream": False,
+                "messages": [
+                    {"role": message.role, "content": message.content}
+                    for message in messages
+                ],
+                "format": schema,
+                "options": {"temperature": 0},
+            },
+        )
+        response.raise_for_status()
+        content = response.json().get("message", {}).get("content")
+        if not isinstance(content, str):
+            raise ValueError("Ollama returned no structured content")
+
+        result = json.loads(content)
+        if not isinstance(result, dict):
+            raise ValueError("Ollama returned invalid structured content")
+        return result
 
     async def close(self) -> None:
         if self._owns_client:

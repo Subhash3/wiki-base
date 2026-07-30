@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Any, Protocol
 
 
 @dataclass(frozen=True, slots=True)
@@ -20,3 +20,11 @@ class GenerationProvider(Protocol):
         messages: list[ChatMessage],
         context: str,
     ) -> GeneratedAnswer: ...
+
+
+class StructuredGenerationProvider(Protocol):
+    async def generate_structured(
+        self,
+        messages: list[ChatMessage],
+        schema: dict[str, Any],
+    ) -> dict[str, Any]: ...

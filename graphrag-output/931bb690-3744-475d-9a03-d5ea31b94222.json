@@ -1,0 +1,942 @@
+{
+  "nodes": [
+    {
+      "id": "0",
+      "label": "0",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "966d3183-3cec-4995-b402-7efb724939da"
+        }
+      ]
+    },
+    {
+      "id": "100,000 km",
+      "label": "100,000 km",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "1b3df23d-f635-4a4d-ba0c-c7c8b23bfa5f"
+        }
+      ]
+    },
+    {
+      "id": "4 years or",
+      "label": "4 years or",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "1b3df23d-f635-4a4d-ba0c-c7c8b23bfa5f"
+        }
+      ]
+    },
+    {
+      "id": "6-speed",
+      "label": "6-speed",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "e4bb1dba-a1c6-483b-b35c-bd464b4ca3c1"
+        }
+      ]
+    },
+    {
+      "id": "a",
+      "label": "a",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "9b54124e-9029-4df4-9f65-5743e7526be4"
+        }
+      ]
+    },
+    {
+      "id": "advanced technology",
+      "label": "advanced technology",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "942cbee2-e63c-486a-863f-897553bd5fdf"
+        }
+      ]
+    },
+    {
+      "id": "all about connectivity",
+      "label": "all about connectivity",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "d64beafd-bc41-4a4f-9e46-9dd04e1c3aed"
+        }
+      ]
+    },
+    {
+      "id": "book a",
+      "label": "book a",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "ca427eae-1081-48ba-b59a-62b00906e069"
+        }
+      ]
+    },
+    {
+      "id": "boot",
+      "label": "boot",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "83235d14-a0de-43d4-82fc-5b01317854de"
+        }
+      ]
+    },
+    {
+      "id": "car",
+      "label": "car",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "521c58e6-9df0-434b-9885-1b43dbbb2edb"
+        },
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "f194e5ce-2613-4f81-a6b6-b2baae4d78c9"
+        }
+      ]
+    },
+    {
+      "id": "car & bike",
+      "label": "car & bike",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "8b7a60f6-9999-47cc-9cfb-d184d6e7c8ae"
+        }
+      ]
+    },
+    {
+      "id": "classic",
+      "label": "classic",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "966d3183-3cec-4995-b402-7efb724939da"
+        }
+      ]
+    },
+    {
+      "id": "confi dent handling",
+      "label": "confi dent handling",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "8b7a60f6-9999-47cc-9cfb-d184d6e7c8ae"
+        }
+      ]
+    },
+    {
+      "id": "connectivity",
+      "label": "connectivity",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "d64beafd-bc41-4a4f-9e46-9dd04e1c3aed"
+        }
+      ]
+    },
+    {
+      "id": "customer stories",
+      "label": "customer stories",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "e4bb1dba-a1c6-483b-b35c-bd464b4ca3c1"
+        }
+      ]
+    },
+    {
+      "id": "degs shifts",
+      "label": "degs shifts",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "8b7a60f6-9999-47cc-9cfb-d184d6e7c8ae"
+        }
+      ]
+    },
+    {
+      "id": "details",
+      "label": "details",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "f2e6cea1-fa0c-4c44-b39e-8ad016f92ebb"
+        }
+      ]
+    },
+    {
+      "id": "engine",
+      "label": "engine",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "a54c3008-1b67-4304-8f77-ba8ab851e746"
+        }
+      ]
+    },
+    {
+      "id": "engineered for your safety",
+      "label": "engineered for your safety",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "942cbee2-e63c-486a-863f-897553bd5fdf"
+        }
+      ]
+    },
+    {
+      "id": "enjoy beauty and generous space with the widest sedan in its segment",
+      "label": "enjoy beauty and generous space with the widest sedan in its segment",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "e4bb1dba-a1c6-483b-b35c-bd464b4ca3c1"
+        }
+      ]
+    },
+    {
+      "id": "explicit factual relationships",
+      "label": "explicit factual relationships",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "8fe6a8a7-0fdd-41d0-90d3-26757c9c0052"
+        }
+      ]
+    },
+    {
+      "id": "fuel type",
+      "label": "fuel type",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "e4bb1dba-a1c6-483b-b35c-bd464b4ca3c1"
+        }
+      ]
+    },
+    {
+      "id": "information",
+      "label": "information",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "ca427eae-1081-48ba-b59a-62b00906e069"
+        },
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "f2e6cea1-fa0c-4c44-b39e-8ad016f92ebb"
+        }
+      ]
+    },
+    {
+      "id": "intelligent safety features",
+      "label": "intelligent safety features",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "942cbee2-e63c-486a-863f-897553bd5fdf"
+        }
+      ]
+    },
+    {
+      "id": "parts",
+      "label": "parts",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "f2e6cea1-fa0c-4c44-b39e-8ad016f92ebb"
+        }
+      ]
+    },
+    {
+      "id": "petrol",
+      "label": "petrol",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "e4bb1dba-a1c6-483b-b35c-bd464b4ca3c1"
+        }
+      ]
+    },
+    {
+      "id": "premium features",
+      "label": "premium features",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "8b7a60f6-9999-47cc-9cfb-d184d6e7c8ae"
+        }
+      ]
+    },
+    {
+      "id": "rear seat",
+      "label": "rear seat",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "83235d14-a0de-43d4-82fc-5b01317854de"
+        }
+      ]
+    },
+    {
+      "id": "responsive 1.5 tsi engine",
+      "label": "responsive 1.5 tsi engine",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "8b7a60f6-9999-47cc-9cfb-d184d6e7c8ae"
+        }
+      ]
+    },
+    {
+      "id": "ride comfort",
+      "label": "ride comfort",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "83235d14-a0de-43d4-82fc-5b01317854de"
+        }
+      ]
+    },
+    {
+      "id": "schenken",
+      "label": "schenken",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "e4bb1dba-a1c6-483b-b35c-bd464b4ca3c1"
+        }
+      ]
+    },
+    {
+      "id": "service",
+      "label": "service",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "f2e6cea1-fa0c-4c44-b39e-8ad016f92ebb"
+        }
+      ]
+    },
+    {
+      "id": "skoda slavia book a test drive",
+      "label": "skoda slavia book a test drive",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "ca427eae-1081-48ba-b59a-62b00906e069"
+        }
+      ]
+    },
+    {
+      "id": "skoda super care owner's information",
+      "label": "skoda super care owner's information",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "ca427eae-1081-48ba-b59a-62b00906e069"
+        }
+      ]
+    },
+    {
+      "id": "skoda-auto-auto.co.in/models/slavia/slavia-connectivity",
+      "label": "skoda-auto-auto.co.in/models/slavia/slavia-connectivity",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "d64beafd-bc41-4a4f-9e46-9dd04e1c3aed"
+        }
+      ]
+    },
+    {
+      "id": "slavia",
+      "label": "slavia",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "83235d14-a0de-43d4-82fc-5b01317854de"
+        },
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "a54c3008-1b67-4304-8f77-ba8ab851e746"
+        }
+      ]
+    },
+    {
+      "id": "slavia a driver's delight",
+      "label": "slavia a driver's delight",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "8b7a60f6-9999-47cc-9cfb-d184d6e7c8ae"
+        }
+      ]
+    },
+    {
+      "id": "standard warranty coverage",
+      "label": "standard warranty coverage",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "1b3df23d-f635-4a4d-ba0c-c7c8b23bfa5f"
+        }
+      ]
+    },
+    {
+      "id": "the",
+      "label": "the",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "9b54124e-9029-4df4-9f65-5743e7526be4"
+        }
+      ]
+    },
+    {
+      "id": "the passage explicitly states that the subject is 'the teacher",
+      "label": "the passage explicitly states that the subject is 'the teacher",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "8fe6a8a7-0fdd-41d0-90d3-26757c9c0052"
+        }
+      ]
+    },
+    {
+      "id": "transmission",
+      "label": "transmission",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "e4bb1dba-a1c6-483b-b35c-bd464b4ca3c1"
+        }
+      ]
+    },
+    {
+      "id": "turbocharged",
+      "label": "turbocharged",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "a54c3008-1b67-4304-8f77-ba8ab851e746"
+        }
+      ]
+    },
+    {
+      "id": "turn heads wherever you go in a car that epitomises elegance",
+      "label": "turn heads wherever you go in a car that epitomises elegance",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "f194e5ce-2613-4f81-a6b6-b2baae4d78c9"
+        }
+      ]
+    },
+    {
+      "id": "\u0161koda customer stories skip to main content",
+      "label": "\u0161koda customer stories skip to main content",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "e4bb1dba-a1c6-483b-b35c-bd464b4ca3c1"
+        }
+      ]
+    },
+    {
+      "id": "\u0161koda slavia",
+      "label": "\u0161koda slavia",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "942cbee2-e63c-486a-863f-897553bd5fdf"
+        }
+      ]
+    },
+    {
+      "id": "\u0161koda slavia e ff ortlessly blends the old-school charm of a sedan with a contemporary design language",
+      "label": "\u0161koda slavia e ff ortlessly blends the old-school charm of a sedan with a contemporary design language",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "f194e5ce-2613-4f81-a6b6-b2baae4d78c9"
+        }
+      ]
+    },
+    {
+      "id": "\u0161koda super care owner's information",
+      "label": "\u0161koda super care owner's information",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "83235d14-a0de-43d4-82fc-5b01317854de"
+        }
+      ]
+    },
+    {
+      "id": "\u0161kodas super care owner's information",
+      "label": "\u0161kodas super care owner's information",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "942cbee2-e63c-486a-863f-897553bd5fdf"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "source": "100,000 km",
+      "target": "100,000 km",
+      "label": "distance",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "1b3df23d-f635-4a4d-ba0c-c7c8b23bfa5f"
+        }
+      ]
+    },
+    {
+      "id": "e1",
+      "source": "4 years or",
+      "target": "standard warranty coverage",
+      "label": "warranty coverage",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "1b3df23d-f635-4a4d-ba0c-c7c8b23bfa5f"
+        }
+      ]
+    },
+    {
+      "id": "e2",
+      "source": "advanced technology",
+      "target": "\u0161koda slavia",
+      "label": "technology",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "942cbee2-e63c-486a-863f-897553bd5fdf"
+        }
+      ]
+    },
+    {
+      "id": "e3",
+      "source": "car",
+      "target": "car",
+      "label": "city",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "521c58e6-9df0-434b-9885-1b43dbbb2edb"
+        }
+      ]
+    },
+    {
+      "id": "e4",
+      "source": "car",
+      "target": "car",
+      "label": "road",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "521c58e6-9df0-434b-9885-1b43dbbb2edb"
+        }
+      ]
+    },
+    {
+      "id": "e5",
+      "source": "car",
+      "target": "car",
+      "label": "vehicle",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "521c58e6-9df0-434b-9885-1b43dbbb2edb"
+        }
+      ]
+    },
+    {
+      "id": "e6",
+      "source": "car & bike",
+      "target": "responsive 1.5 tsi engine",
+      "label": "blend",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "8b7a60f6-9999-47cc-9cfb-d184d6e7c8ae"
+        }
+      ]
+    },
+    {
+      "id": "e7",
+      "source": "car & bike",
+      "target": "confi dent handling",
+      "label": "confi dent handling",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "8b7a60f6-9999-47cc-9cfb-d184d6e7c8ae"
+        }
+      ]
+    },
+    {
+      "id": "e8",
+      "source": "car & bike",
+      "target": "degs shifts",
+      "label": "dsg shifts",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "8b7a60f6-9999-47cc-9cfb-d184d6e7c8ae"
+        }
+      ]
+    },
+    {
+      "id": "e9",
+      "source": "car & bike",
+      "target": "slavia a driver's delight",
+      "label": "fi nds",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "8b7a60f6-9999-47cc-9cfb-d184d6e7c8ae"
+        }
+      ]
+    },
+    {
+      "id": "e10",
+      "source": "car & bike",
+      "target": "premium features",
+      "label": "premium features",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "8b7a60f6-9999-47cc-9cfb-d184d6e7c8ae"
+        }
+      ]
+    },
+    {
+      "id": "e11",
+      "source": "classic",
+      "target": "0",
+      "label": "0",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "966d3183-3cec-4995-b402-7efb724939da"
+        }
+      ]
+    },
+    {
+      "id": "e12",
+      "source": "classic",
+      "target": "0",
+      "label": "1",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "966d3183-3cec-4995-b402-7efb724939da"
+        }
+      ]
+    },
+    {
+      "id": "e13",
+      "source": "connectivity",
+      "target": "all about connectivity",
+      "label": "makes everyday use of the car easier",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "d64beafd-bc41-4a4f-9e46-9dd04e1c3aed"
+        }
+      ]
+    },
+    {
+      "id": "e14",
+      "source": "connectivity",
+      "target": "skoda-auto-auto.co.in/models/slavia/slavia-connectivity",
+      "label": "provides all the support you need to make it to your destination in time and in comfort",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "d64beafd-bc41-4a4f-9e46-9dd04e1c3aed"
+        }
+      ]
+    },
+    {
+      "id": "e15",
+      "source": "engineered for your safety",
+      "target": "\u0161kodas super care owner's information",
+      "label": "designed",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "942cbee2-e63c-486a-863f-897553bd5fdf"
+        }
+      ]
+    },
+    {
+      "id": "e16",
+      "source": "enjoy beauty and generous space with the widest sedan in its segment",
+      "target": "schenken",
+      "label": "stylish statement",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "e4bb1dba-a1c6-483b-b35c-bd464b4ca3c1"
+        }
+      ]
+    },
+    {
+      "id": "e18",
+      "source": "explicit factual relationships",
+      "target": "the passage explicitly states that the subject is 'the teacher",
+      "label": "is a direct and explicit statement of facts",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "8fe6a8a7-0fdd-41d0-90d3-26757c9c0052"
+        }
+      ]
+    },
+    {
+      "id": "e19",
+      "source": "fuel type",
+      "target": "petrol",
+      "label": "petrol",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "e4bb1dba-a1c6-483b-b35c-bd464b4ca3c1"
+        }
+      ]
+    },
+    {
+      "id": "e20",
+      "source": "intelligent safety features",
+      "target": "\u0161kodas super care owner's information",
+      "label": "safety features",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "942cbee2-e63c-486a-863f-897553bd5fdf"
+        }
+      ]
+    },
+    {
+      "id": "e21",
+      "source": "parts",
+      "target": "details",
+      "label": "contains",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "f2e6cea1-fa0c-4c44-b39e-8ad016f92ebb"
+        }
+      ]
+    },
+    {
+      "id": "e22",
+      "source": "service",
+      "target": "information",
+      "label": "provides",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "f2e6cea1-fa0c-4c44-b39e-8ad016f92ebb"
+        }
+      ]
+    },
+    {
+      "id": "e23",
+      "source": "skoda slavia book a test drive",
+      "target": "book a",
+      "label": "test drive",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "ca427eae-1081-48ba-b59a-62b00906e069"
+        }
+      ]
+    },
+    {
+      "id": "e24",
+      "source": "skoda super care owner's information",
+      "target": "information",
+      "label": "owner's information",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "ca427eae-1081-48ba-b59a-62b00906e069"
+        }
+      ]
+    },
+    {
+      "id": "e25",
+      "source": "slavia",
+      "target": "engine",
+      "label": "delivers",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "a54c3008-1b67-4304-8f77-ba8ab851e746"
+        }
+      ]
+    },
+    {
+      "id": "e26",
+      "source": "slavia",
+      "target": "boot",
+      "label": "premium cabin",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "83235d14-a0de-43d4-82fc-5b01317854de"
+        }
+      ]
+    },
+    {
+      "id": "e27",
+      "source": "slavia",
+      "target": "ride comfort",
+      "label": "ride comfort",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "83235d14-a0de-43d4-82fc-5b01317854de"
+        }
+      ]
+    },
+    {
+      "id": "e28",
+      "source": "slavia",
+      "target": "rear seat",
+      "label": "roomy rear seat",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "83235d14-a0de-43d4-82fc-5b01317854de"
+        }
+      ]
+    },
+    {
+      "id": "e29",
+      "source": "slavia",
+      "target": "\u0161koda super care owner's information",
+      "label": "winner",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "83235d14-a0de-43d4-82fc-5b01317854de"
+        }
+      ]
+    },
+    {
+      "id": "e30",
+      "source": "the",
+      "target": "a",
+      "label": "is",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "9b54124e-9029-4df4-9f65-5743e7526be4"
+        }
+      ]
+    },
+    {
+      "id": "e31",
+      "source": "the",
+      "target": "a",
+      "label": "of",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "9b54124e-9029-4df4-9f65-5743e7526be4"
+        }
+      ]
+    },
+    {
+      "id": "e32",
+      "source": "the",
+      "target": "a",
+      "label": "to",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "9b54124e-9029-4df4-9f65-5743e7526be4"
+        }
+      ]
+    },
+    {
+      "id": "e33",
+      "source": "transmission",
+      "target": "6-speed",
+      "label": "manual",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "e4bb1dba-a1c6-483b-b35c-bd464b4ca3c1"
+        }
+      ]
+    },
+    {
+      "id": "e34",
+      "source": "turbocharged",
+      "target": "slavia",
+      "label": "delivered",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "a54c3008-1b67-4304-8f77-ba8ab851e746"
+        }
+      ]
+    },
+    {
+      "id": "e35",
+      "source": "turn heads wherever you go in a car that epitomises elegance",
+      "target": "car",
+      "label": "turn",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "f194e5ce-2613-4f81-a6b6-b2baae4d78c9"
+        }
+      ]
+    },
+    {
+      "id": "e36",
+      "source": "\u0161koda customer stories skip to main content",
+      "target": "customer stories",
+      "label": "manual",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "e4bb1dba-a1c6-483b-b35c-bd464b4ca3c1"
+        }
+      ]
+    },
+    {
+      "id": "e37",
+      "source": "\u0161koda slavia e ff ortlessly blends the old-school charm of a sedan with a contemporary design language",
+      "target": "car",
+      "label": "sedan",
+      "provenance": [
+        {
+          "document_id": "931bb690-3744-475d-9a03-d5ea31b94222",
+          "chunk_id": "f194e5ce-2613-4f81-a6b6-b2baae4d78c9"
+        }
+      ]
+    }
+  ]
+}
