@@ -75,15 +75,22 @@ class OllamaGenerationProvider:
                     for message in messages
                 ],
                 "format": schema,
-                "options": {"temperature": 0},
+                "options": {"temperature": 0, "num_predict": 4096},
             },
         )
         response.raise_for_status()
-        content = response.json().get("message", {}).get("content")
+        payload = response.json()
+        content = payload.get("message", {}).get("content")
         if not isinstance(content, str):
             raise ValueError("Ollama returned no structured content")
 
-        result = json.loads(content)
+        try:
+            result = json.loads(content)
+        except json.JSONDecodeError as error:
+            done_reason = payload.get("done_reason", "unknown")
+            raise ValueError(
+                f"Ollama returned invalid JSON (reason={done_reason}, characters={len(content)})"
+            ) from error
         if not isinstance(result, dict):
             raise ValueError("Ollama returned invalid structured content")
         return result

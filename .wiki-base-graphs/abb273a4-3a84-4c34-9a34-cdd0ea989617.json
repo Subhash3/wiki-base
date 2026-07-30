@@ -1,0 +1,148 @@
+{
+  "version": 1,
+  "edges": [
+    {
+      "subject": "engine type",
+      "relation": "based on third party testing reports",
+      "object": "engine type, with e20 fuel. actual suspension = . displacement, based on third party testing reports wheels & tyres = . displacement, with e20 fuel. actual suspension = . displacement, figures may vary as chassis = . displacement, riding conditions",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "65d33d84-10b0-40f5-a3e9-ecd68603205a"
+        }
+      ]
+    },
+    {
+      "subject": "engine type",
+      "relation": "based on third party testing reports",
+      "object": "max. power, based on third party testing reports wheels & tyres = . max. power, with e20 fuel. actual suspension = . max. power, figures may vary as chassis = . max. power, riding conditions",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "65d33d84-10b0-40f5-a3e9-ecd68603205a"
+        }
+      ]
+    },
+    {
+      "subject": "engine type",
+      "relation": "based on third party testing reports",
+      "object": "max. torque, based on third party testing reports wheels & tyres = . max. torque, with e20 fuel. actual suspension = . max. power, figures may vary as chassis = . max. power, riding conditions",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "65d33d84-10b0-40f5-a3e9-ecd68603205a"
+        }
+      ]
+    },
+    {
+      "subject": "engine type",
+      "relation": "based on third party testing reports",
+      "object": "max. torque, based on third party testing reports wheels & tyres = . max. torque, with e20 fuel. actual suspension = . max. torque, figures may vary as chassis = . max. torque, riding conditions",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "65d33d84-10b0-40f5-a3e9-ecd68603205a"
+        }
+      ]
+    },
+    {
+      "subject": "engine type",
+      "relation": "based on third party testing reports",
+      "object": "wheel & tyre",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "65d33d84-10b0-40f5-a3e9-ecd68603205a"
+        }
+      ]
+    },
+    {
+      "subject": "engine type",
+      "relation": "is",
+      "object": "3 engine type, wheels & tyres = submit documents simplify your paperwork -. 3 engine type, suspension = submit documents at the. 3 engine type, chassis = dealership.. 3 engine type, dimensions = air cooled, 4s |. 3 engine type, electricals = . day displacement, wheels & tyres = 8-12. day displacement, suspension = . day displacement, chassis = . day displacement, dimensions = 124.7 cc |. day displacement, electricals = . pick 4 max. power, wheels & tyres = your vehicle. pick 4 max. power, suspension = . pick 4 max. power, chassis = . pick 4 max. power, dimensions = 8.5 kw @ 8250 |. pick 4 max. power, electricals = rpm. it ' s max. torque, wheels & tyres = time to ride ! pick up your. it ' s max. torque, suspension = vehicle from the dealership.. it ' s max. torque, chassis = . it ' s max. torque, dimensions = 10.5 nm @ 6500 |. it ' s max. torque, electricals = rpm. bore x stroke ( mm, wheels & tyres = ). bore x stroke ( mm, suspension = . bore x stroke ( mm, chassis = . bore x stroke ( mm, dimensions = 52.4 x 57.8 |. bore x stroke ( mm, electricals = . fuel system, wheels & tyres = . fuel system, suspension = . fuel system, chassis = . fuel system, dimensions = buy now fi |. fuel system, electricals = . starting method, wheels & tyres = . starting method, suspension = . starting method, chassis = . starting method, dimensions = kick / self |. starting method, electricals = 2.5 kva power, wheels & tyres = . starting method, suspension = . starting method, chassis = . starting method, dimensions = kick / self |. starting method, electricals = 2.5 kva power, wheels & tyres = . starting device, suspension = . starting device, chassis = . starting device, dimensions = 10.5 nm @ 6500 |. it ' s max. torque, wheels & tyres = time to ride ! pick up your. it ' s max. torque, suspension = vehicle from the dealership.. it ' s max. torque, chassis = . it ' s max. torque, dimensions = 10.5 nm @ 6500 |. it ' s max. torque, electricals = rpm. bore x stroke ( mm, wheels & tyres = ). bore x stroke ( mm, suspension = . bore x stroke ( mm, chassis = . bore x stroke ( mm, dimensions = 52.4 x 57.8 |. bore x stroke ( mm, electricals = . fuel system, wheels & tyres = . fuel system, suspension = . fuel system, chassis = . fuel system, dimensions = buy now fi |. fuel system, electricals = . starting method, wheels & tyres = . starting method, suspension = . starting method, chassis = . starting method, dimensions = kick / self |. starting method, electricals = 2.5 kva power, wheels & tyres = . starting device, suspension = . starting device, chassis = . starting device, dimensions = kick / self |. starting device, electricals = 2.5 kva power, wheels & tyres = . starting device, suspension = . starting device, chassis = . starting device, dimensions = kick + 10.5 nm @ 6500 |. it ' s important to be careful with the power and torque! it's important to choose a vehicle that is suitable for your needs. the engine type, wheels & tyres are not specified in this passage. if you have any questions about the information provided, please contact us. we are happy to help!</h2>",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "4288ff74-cf67-4fc6-8f2d-2e2234aaf898"
+        }
+      ]
+    },
+    {
+      "subject": "explicit factual relationships",
+      "relation": "is stated",
+      "object": "triple",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "6956be29-e8ff-4b46-9fd5-f0883acf9c2b"
+        }
+      ]
+    },
+    {
+      "subject": "glamour x",
+      "relation": "highlights",
+      "object": "motorcycle",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "7920fb1c-c544-4fbb-95bc-a8bd339dbde4"
+        }
+      ]
+    },
+    {
+      "subject": "motorcycles",
+      "relation": "compare",
+      "object": "accessories",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "ac57b99d-5786-40ed-89e5-c45e9f02125e"
+        }
+      ]
+    },
+    {
+      "subject": "motorcycles",
+      "relation": "glamour x",
+      "object": "colors & specification",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "ac57b99d-5786-40ed-89e5-c45e9f02125e"
+        }
+      ]
+    },
+    {
+      "subject": "motorcycles",
+      "relation": "glamour x",
+      "object": "emi calculator",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "ac57b99d-5786-40ed-89e5-c45e9f02125e"
+        }
+      ]
+    },
+    {
+      "subject": "show more features",
+      "relation": "colors",
+      "object": "features",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "7920fb1c-c544-4fbb-95bc-a8bd339dbde4"
+        }
+      ]
+    },
+    {
+      "subject": "superior mileage of 65 km",
+      "relation": "fuel",
+      "object": "mileage",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "7920fb1c-c544-4fbb-95bc-a8bd339dbde4"
+        }
+      ]
+    }
+  ]
+}

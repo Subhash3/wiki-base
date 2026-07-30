@@ -1,0 +1,489 @@
+{
+  "version": 1,
+  "edges": [
+    {
+      "subject": "amit",
+      "relation": "amit",
+      "object": "driver",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "6e326f29-ba14-436f-ae6d-651a8b2aa536"
+        }
+      ]
+    },
+    {
+      "subject": "anti-lock braking sy (abs",
+      "relation": "take total control of the road",
+      "object": "body dimensions engine length: 2081 mm, width: sustainability, contact us products",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        }
+      ]
+    },
+    {
+      "subject": "body dimensions engine length",
+      "relation": "engine length: 2081 mm",
+      "object": "width: sustainability, 756 mm contact us products",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        }
+      ]
+    },
+    {
+      "subject": "chrome accents",
+      "relation": "chrome",
+      "object": "unicorn",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "ac42348a-c278-4d4f-afbb-fc2714e41fd8"
+        }
+      ]
+    },
+    {
+      "subject": "contact us",
+      "relation": "dealer network",
+      "object": "products",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        }
+      ]
+    },
+    {
+      "subject": "digital panel",
+      "relation": "led headlamp",
+      "object": "unicorn",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "ac42348a-c278-4d4f-afbb-fc2714e41fd8"
+        }
+      ]
+    },
+    {
+      "subject": "emi for 24 months",
+      "relation": "amount",
+      "object": "\u20b9 4712",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "547daf2e-233d-4cc7-90a4-f8afb34d29e3"
+        }
+      ]
+    },
+    {
+      "subject": "engine",
+      "relation": "augment",
+      "object": "obd2b maintenance free battery products dealer network services about honda sustainability resources contact us",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "dd1a7de0-6fba-400c-a7c4-8613368da2e8"
+        }
+      ]
+    },
+    {
+      "subject": "engine",
+      "relation": "super smooth",
+      "object": "ride",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "6e326f29-ba14-436f-ae6d-651a8b2aa536"
+        }
+      ]
+    },
+    {
+      "subject": "explore accessories",
+      "relation": "resources",
+      "object": "variants unicorn",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        }
+      ]
+    },
+    {
+      "subject": "ford f-150",
+      "relation": "vehicle",
+      "object": "car",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "8aa48097-29e0-4fca-ba34-2213efcb786f"
+        }
+      ]
+    },
+    {
+      "subject": "high ground clearance",
+      "relation": "easily",
+      "object": "engine cut off",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "69dcd4a8-96b9-45a0-a8ec-647b3db05b02"
+        }
+      ]
+    },
+    {
+      "subject": "honda",
+      "relation": "about honda",
+      "object": "sustainability",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "3bbf4b0b-c0fd-4d6b-b98c-786a631e7790"
+        }
+      ]
+    },
+    {
+      "subject": "honda",
+      "relation": "contact us",
+      "object": "contact us",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "3bbf4b0b-c0fd-4d6b-b98c-786a631e7790"
+        }
+      ]
+    },
+    {
+      "subject": "honda",
+      "relation": "dealer network",
+      "object": "services",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "3bbf4b0b-c0fd-4d6b-b98c-786a631e7790"
+        }
+      ]
+    },
+    {
+      "subject": "honda",
+      "relation": "resources",
+      "object": "resources",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "3bbf4b0b-c0fd-4d6b-b98c-786a631e7790"
+        }
+      ]
+    },
+    {
+      "subject": "honda civic",
+      "relation": "vehicle",
+      "object": "car",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "8aa48097-29e0-4fca-ba34-2213efcb786f"
+        }
+      ]
+    },
+    {
+      "subject": "honda unicorn",
+      "relation": "ravi products dealer network services",
+      "object": "about honda sustainability resources",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "52458c06-e83d-49b2-9620-c595db03b7ea"
+        }
+      ]
+    },
+    {
+      "subject": "interest",
+      "relation": "interest",
+      "object": "\u20b9 9947",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "547daf2e-233d-4cc7-90a4-f8afb34d29e3"
+        }
+      ]
+    },
+    {
+      "subject": "led headlamp",
+      "relation": "front cowl",
+      "object": "headlamp",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "7135d7a3-1ca4-4f09-9255-ed1f84aaee83"
+        }
+      ]
+    },
+    {
+      "subject": "loan amount",
+      "relation": "amount",
+      "object": "\u20b9 103145",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "547daf2e-233d-4cc7-90a4-f8afb34d29e3"
+        }
+      ]
+    },
+    {
+      "subject": "more on comfort",
+      "relation": "comfort",
+      "object": "stand engaged",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "69dcd4a8-96b9-45a0-a8ec-647b3db05b02"
+        }
+      ]
+    },
+    {
+      "subject": "more on design",
+      "relation": "peace of mind you are looking for",
+      "object": "design",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "7135d7a3-1ca4-4f09-9255-ed1f84aaee83"
+        }
+      ]
+    },
+    {
+      "subject": "power of dreams",
+      "relation": "create",
+      "object": "transcend",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "dd1a7de0-6fba-400c-a7c4-8613368da2e8"
+        }
+      ]
+    },
+    {
+      "subject": "premium front cowl",
+      "relation": "more on design",
+      "object": "cowl",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "7135d7a3-1ca4-4f09-9255-ed1f84aaee83"
+        }
+      ]
+    },
+    {
+      "subject": "products",
+      "relation": "dealer network",
+      "object": "honda",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "69dcd4a8-96b9-45a0-a8ec-647b3db05b02"
+        }
+      ]
+    },
+    {
+      "subject": "products",
+      "relation": "dealer network services about honda sustainability resources contact us",
+      "object": "sustainability resources",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        }
+      ]
+    },
+    {
+      "subject": "ravi products dealer network services",
+      "relation": "contact us",
+      "object": "contact us",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "52458c06-e83d-49b2-9620-c595db03b7ea"
+        }
+      ]
+    },
+    {
+      "subject": "riding experience",
+      "relation": "superior riding experience",
+      "object": "unmatchable smoothness",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "dd1a7de0-6fba-400c-a7c4-8613368da2e8"
+        }
+      ]
+    },
+    {
+      "subject": "standard warranty period",
+      "relation": "warranty",
+      "object": "standard",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ]
+    },
+    {
+      "subject": "sustainability",
+      "relation": "sustainability",
+      "object": "resources",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "69dcd4a8-96b9-45a0-a8ec-647b3db05b02"
+        }
+      ]
+    },
+    {
+      "subject": "the number of people in the room",
+      "relation": "number",
+      "object": "people",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c"
+        }
+      ]
+    },
+    {
+      "subject": "the time it takes to drive",
+      "relation": "time",
+      "object": "drive",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c"
+        }
+      ]
+    },
+    {
+      "subject": "the weather",
+      "relation": "weather",
+      "object": "rain",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c"
+        }
+      ]
+    },
+    {
+      "subject": "toyota corolla",
+      "relation": "vehicle",
+      "object": "car",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "8aa48097-29e0-4fca-ba34-2213efcb786f"
+        }
+      ]
+    },
+    {
+      "subject": "unicorn",
+      "relation": "unicorn",
+      "object": "unicorn",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "ac42348a-c278-4d4f-afbb-fc2714e41fd8"
+        }
+      ]
+    },
+    {
+      "subject": "what are common exclusion in warranty",
+      "relation": "warranty",
+      "object": "common",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ]
+    },
+    {
+      "subject": "what does standard warranty covers",
+      "relation": "warranty",
+      "object": "covers",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ]
+    },
+    {
+      "subject": "what is an extended warranty",
+      "relation": "warranty",
+      "object": "extended",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ]
+    },
+    {
+      "subject": "what is the free service schedule for the honda unicorn",
+      "relation": "service schedule",
+      "object": "free",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ]
+    },
+    {
+      "subject": "what is the idle rpm of the honda unicorn",
+      "relation": "rpm",
+      "object": "idle",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ]
+    },
+    {
+      "subject": "what is the oil capacity of the unicorn motorcycle",
+      "relation": "capacity",
+      "object": "capacity",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ]
+    },
+    {
+      "subject": "what is the paid service schedule for unicorn",
+      "relation": "service schedule",
+      "object": "paid",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ]
+    },
+    {
+      "subject": "which oil grade is right for my unicorn motorcycle",
+      "relation": "oil grade",
+      "object": "right",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ]
+    }
+  ]
+}

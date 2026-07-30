@@ -126,6 +126,14 @@ async def complete_ingestion_job(
             """,
             job.id,
         )
+        await connection.execute(
+            """
+            INSERT INTO graph_indexing_jobs (document_id)
+            VALUES ($1)
+            ON CONFLICT (document_id) DO NOTHING
+            """,
+            job.document_id,
+        )
         await _update_wiki_base_status(connection, job.wiki_base_id)
 
 

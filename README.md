@@ -29,6 +29,12 @@ In a second terminal, start the single ingestion worker:
 uv run wiki-base-worker
 ```
 
+Start the graph indexing worker in another terminal:
+
+```bash
+uv run wiki-base-graph-worker
+```
+
 The API is then available at `http://localhost:8000`. Useful initial endpoints are:
 
 - `GET /health`

@@ -46,3 +46,16 @@ def test_merge_returns_new_graph_with_deduplicated_provenance() -> None:
     assert merged.nodes == frozenset({"alice", "acme", "paris"})
     assert len(list(merged.edges())) == 2
     assert merged.provenance_for_node("alice") == frozenset({provenance_one})
+
+
+def test_canonical_json_round_trip_preserves_graph() -> None:
+    graph = KnowledgeGraph()
+    fact = Triple(subject="alice", relation="works at", object="acme")
+    provenance = TripleProvenance(document_id=DOCUMENT_ONE, chunk_id=CHUNK_ONE)
+    graph.add_triple(fact, provenance=provenance)
+
+    loaded = KnowledgeGraph.from_json(graph.to_json())
+
+    assert loaded.nodes == graph.nodes
+    assert list(loaded.edges()) == list(graph.edges())
+    assert "document:" not in graph.to_json()

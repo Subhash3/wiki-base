@@ -1,6 +1,7 @@
 import json
 
 import httpx
+import pytest
 
 from llm_providers.generation.base import ChatMessage
 from llm_providers.generation.ollama import OllamaGenerationProvider
@@ -50,7 +51,7 @@ async def test_generates_arbitrary_structured_content() -> None:
     async def respond(request: httpx.Request) -> httpx.Response:
         body = json.loads(request.content)
         assert body["format"] == schema
-        assert body["options"] == {"temperature": 0}
+        assert body["options"] == {"temperature": 0, "num_predict": 4096}
         assert body["messages"] == [{"role": "user", "content": "Find entities."}]
         return httpx.Response(
             200,
@@ -70,3 +71,31 @@ async def test_generates_arbitrary_structured_content() -> None:
         )
 
     assert result == {"entities": ["Acme"]}
+
+
+async def test_reports_invalid_structured_json() -> None:
+    async def respond(_request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200,
+            json={
+                "done_reason": "length",
+                "message": {"role": "assistant", "content": '{"triples": ["unfinished'},
+            },
+        )
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(respond)) as client:
+        provider = OllamaGenerationProvider(
+            base_url="http://ollama.test",
+            model="gemma3:270m",
+            timeout_seconds=10,
+            client=client,
+        )
+
+        with pytest.raises(
+            ValueError,
+            match=r"invalid JSON \(reason=length, characters=24\)",
+        ):
+            await provider.generate_structured(
+                [ChatMessage(role="user", content="Extract triples.")],
+                {"type": "object"},
+            )

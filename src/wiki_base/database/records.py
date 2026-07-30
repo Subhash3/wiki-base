@@ -43,3 +43,10 @@ class IngestionJobRecord:
     document_name: str
     media_type: str
     staging_path: Path
+
+
+@dataclass(frozen=True, slots=True)
+class GraphIndexingJobRecord:
+    """A document claimed for graph indexing."""
+
+    document_id: UUID

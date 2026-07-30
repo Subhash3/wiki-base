@@ -127,6 +127,8 @@ class GraphVisualizer:
     @staticmethod
     def from_json(content: str) -> nx.MultiDiGraph:
         payload = json.loads(content)
+        if isinstance(payload, dict) and payload.get("version") == 1:
+            return GraphVisualizer(KnowledgeGraph.from_json(content)).build()
         network = nx.node_link_graph(
             payload,
             directed=True,

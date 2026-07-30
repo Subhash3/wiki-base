@@ -1,0 +1,2857 @@
+{
+  "directed": true,
+  "multigraph": true,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "about honda sustainability resources",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 52458c06-e83d-49b2-9620-c595db03b7ea",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "52458c06-e83d-49b2-9620-c595db03b7ea"
+        }
+      ],
+      "group": "entity",
+      "id": "about honda sustainability resources"
+    },
+    {
+      "label": "Document 44d238b0",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a",
+      "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+      "group": "document",
+      "shape": "box",
+      "id": "document:44d238b0-60ec-428f-b780-1515b097c09a"
+    },
+    {
+      "label": "amit",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 6e326f29-ba14-436f-ae6d-651a8b2aa536",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "6e326f29-ba14-436f-ae6d-651a8b2aa536"
+        }
+      ],
+      "group": "entity",
+      "id": "amit"
+    },
+    {
+      "label": "anti-lock braking sy (abs",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 0af977cd-5263-4da4-98bb-5726b8d22f0e",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        }
+      ],
+      "group": "entity",
+      "id": "anti-lock braking sy (abs"
+    },
+    {
+      "label": "body dimensions engine length",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 0af977cd-5263-4da4-98bb-5726b8d22f0e",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        }
+      ],
+      "group": "entity",
+      "id": "body dimensions engine length"
+    },
+    {
+      "label": "body dimensions engine length: 2081 mm, width: sustainability, contact us products",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 0af977cd-5263-4da4-98bb-5726b8d22f0e",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        }
+      ],
+      "group": "entity",
+      "id": "body dimensions engine length: 2081 mm, width: sustainability, contact us products"
+    },
+    {
+      "label": "capacity",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "capacity"
+    },
+    {
+      "label": "car",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 8aa48097-29e0-4fca-ba34-2213efcb786f",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "8aa48097-29e0-4fca-ba34-2213efcb786f"
+        }
+      ],
+      "group": "entity",
+      "id": "car"
+    },
+    {
+      "label": "chrome accents",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: ac42348a-c278-4d4f-afbb-fc2714e41fd8",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "ac42348a-c278-4d4f-afbb-fc2714e41fd8"
+        }
+      ],
+      "group": "entity",
+      "id": "chrome accents"
+    },
+    {
+      "label": "common",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "common"
+    },
+    {
+      "label": "contact us",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 0af977cd-5263-4da4-98bb-5726b8d22f0e<br>Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 3bbf4b0b-c0fd-4d6b-b98c-786a631e7790<br>Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 52458c06-e83d-49b2-9620-c595db03b7ea",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        },
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "3bbf4b0b-c0fd-4d6b-b98c-786a631e7790"
+        },
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "52458c06-e83d-49b2-9620-c595db03b7ea"
+        }
+      ],
+      "group": "entity",
+      "id": "contact us"
+    },
+    {
+      "label": "covers",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "covers"
+    },
+    {
+      "label": "cowl",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 7135d7a3-1ca4-4f09-9255-ed1f84aaee83",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "7135d7a3-1ca4-4f09-9255-ed1f84aaee83"
+        }
+      ],
+      "group": "entity",
+      "id": "cowl"
+    },
+    {
+      "label": "design",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 7135d7a3-1ca4-4f09-9255-ed1f84aaee83",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "7135d7a3-1ca4-4f09-9255-ed1f84aaee83"
+        }
+      ],
+      "group": "entity",
+      "id": "design"
+    },
+    {
+      "label": "digital panel",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: ac42348a-c278-4d4f-afbb-fc2714e41fd8",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "ac42348a-c278-4d4f-afbb-fc2714e41fd8"
+        }
+      ],
+      "group": "entity",
+      "id": "digital panel"
+    },
+    {
+      "label": "drive",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c"
+        }
+      ],
+      "group": "entity",
+      "id": "drive"
+    },
+    {
+      "label": "driver",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 6e326f29-ba14-436f-ae6d-651a8b2aa536",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "6e326f29-ba14-436f-ae6d-651a8b2aa536"
+        }
+      ],
+      "group": "entity",
+      "id": "driver"
+    },
+    {
+      "label": "emi for 24 months",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 547daf2e-233d-4cc7-90a4-f8afb34d29e3",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "547daf2e-233d-4cc7-90a4-f8afb34d29e3"
+        }
+      ],
+      "group": "entity",
+      "id": "emi for 24 months"
+    },
+    {
+      "label": "engine",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 6e326f29-ba14-436f-ae6d-651a8b2aa536<br>Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: dd1a7de0-6fba-400c-a7c4-8613368da2e8",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "6e326f29-ba14-436f-ae6d-651a8b2aa536"
+        },
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "dd1a7de0-6fba-400c-a7c4-8613368da2e8"
+        }
+      ],
+      "group": "entity",
+      "id": "engine"
+    },
+    {
+      "label": "engine cut off",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 69dcd4a8-96b9-45a0-a8ec-647b3db05b02",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "69dcd4a8-96b9-45a0-a8ec-647b3db05b02"
+        }
+      ],
+      "group": "entity",
+      "id": "engine cut off"
+    },
+    {
+      "label": "explore accessories",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 0af977cd-5263-4da4-98bb-5726b8d22f0e",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        }
+      ],
+      "group": "entity",
+      "id": "explore accessories"
+    },
+    {
+      "label": "extended",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "extended"
+    },
+    {
+      "label": "ford f-150",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 8aa48097-29e0-4fca-ba34-2213efcb786f",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "8aa48097-29e0-4fca-ba34-2213efcb786f"
+        }
+      ],
+      "group": "entity",
+      "id": "ford f-150"
+    },
+    {
+      "label": "free",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "free"
+    },
+    {
+      "label": "headlamp",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 7135d7a3-1ca4-4f09-9255-ed1f84aaee83",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "7135d7a3-1ca4-4f09-9255-ed1f84aaee83"
+        }
+      ],
+      "group": "entity",
+      "id": "headlamp"
+    },
+    {
+      "label": "high ground clearance",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 69dcd4a8-96b9-45a0-a8ec-647b3db05b02",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "69dcd4a8-96b9-45a0-a8ec-647b3db05b02"
+        }
+      ],
+      "group": "entity",
+      "id": "high ground clearance"
+    },
+    {
+      "label": "honda",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 3bbf4b0b-c0fd-4d6b-b98c-786a631e7790<br>Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 69dcd4a8-96b9-45a0-a8ec-647b3db05b02",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "3bbf4b0b-c0fd-4d6b-b98c-786a631e7790"
+        },
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "69dcd4a8-96b9-45a0-a8ec-647b3db05b02"
+        }
+      ],
+      "group": "entity",
+      "id": "honda"
+    },
+    {
+      "label": "honda civic",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 8aa48097-29e0-4fca-ba34-2213efcb786f",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "8aa48097-29e0-4fca-ba34-2213efcb786f"
+        }
+      ],
+      "group": "entity",
+      "id": "honda civic"
+    },
+    {
+      "label": "honda unicorn",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 52458c06-e83d-49b2-9620-c595db03b7ea",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "52458c06-e83d-49b2-9620-c595db03b7ea"
+        }
+      ],
+      "group": "entity",
+      "id": "honda unicorn"
+    },
+    {
+      "label": "idle",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "idle"
+    },
+    {
+      "label": "interest",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 547daf2e-233d-4cc7-90a4-f8afb34d29e3",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "547daf2e-233d-4cc7-90a4-f8afb34d29e3"
+        }
+      ],
+      "group": "entity",
+      "id": "interest"
+    },
+    {
+      "label": "led headlamp",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 7135d7a3-1ca4-4f09-9255-ed1f84aaee83",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "7135d7a3-1ca4-4f09-9255-ed1f84aaee83"
+        }
+      ],
+      "group": "entity",
+      "id": "led headlamp"
+    },
+    {
+      "label": "loan amount",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 547daf2e-233d-4cc7-90a4-f8afb34d29e3",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "547daf2e-233d-4cc7-90a4-f8afb34d29e3"
+        }
+      ],
+      "group": "entity",
+      "id": "loan amount"
+    },
+    {
+      "label": "more on comfort",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 69dcd4a8-96b9-45a0-a8ec-647b3db05b02",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "69dcd4a8-96b9-45a0-a8ec-647b3db05b02"
+        }
+      ],
+      "group": "entity",
+      "id": "more on comfort"
+    },
+    {
+      "label": "more on design",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 7135d7a3-1ca4-4f09-9255-ed1f84aaee83",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "7135d7a3-1ca4-4f09-9255-ed1f84aaee83"
+        }
+      ],
+      "group": "entity",
+      "id": "more on design"
+    },
+    {
+      "label": "obd2b maintenance free battery products dealer network services about honda sustainability resources contact us",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: dd1a7de0-6fba-400c-a7c4-8613368da2e8",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "dd1a7de0-6fba-400c-a7c4-8613368da2e8"
+        }
+      ],
+      "group": "entity",
+      "id": "obd2b maintenance free battery products dealer network services about honda sustainability resources contact us"
+    },
+    {
+      "label": "paid",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "paid"
+    },
+    {
+      "label": "people",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c"
+        }
+      ],
+      "group": "entity",
+      "id": "people"
+    },
+    {
+      "label": "power of dreams",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: dd1a7de0-6fba-400c-a7c4-8613368da2e8",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "dd1a7de0-6fba-400c-a7c4-8613368da2e8"
+        }
+      ],
+      "group": "entity",
+      "id": "power of dreams"
+    },
+    {
+      "label": "premium front cowl",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 7135d7a3-1ca4-4f09-9255-ed1f84aaee83",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "7135d7a3-1ca4-4f09-9255-ed1f84aaee83"
+        }
+      ],
+      "group": "entity",
+      "id": "premium front cowl"
+    },
+    {
+      "label": "products",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 0af977cd-5263-4da4-98bb-5726b8d22f0e<br>Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 69dcd4a8-96b9-45a0-a8ec-647b3db05b02",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        },
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "69dcd4a8-96b9-45a0-a8ec-647b3db05b02"
+        }
+      ],
+      "group": "entity",
+      "id": "products"
+    },
+    {
+      "label": "rain",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c"
+        }
+      ],
+      "group": "entity",
+      "id": "rain"
+    },
+    {
+      "label": "ravi products dealer network services",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 52458c06-e83d-49b2-9620-c595db03b7ea",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "52458c06-e83d-49b2-9620-c595db03b7ea"
+        }
+      ],
+      "group": "entity",
+      "id": "ravi products dealer network services"
+    },
+    {
+      "label": "resources",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 3bbf4b0b-c0fd-4d6b-b98c-786a631e7790<br>Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 69dcd4a8-96b9-45a0-a8ec-647b3db05b02",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "3bbf4b0b-c0fd-4d6b-b98c-786a631e7790"
+        },
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "69dcd4a8-96b9-45a0-a8ec-647b3db05b02"
+        }
+      ],
+      "group": "entity",
+      "id": "resources"
+    },
+    {
+      "label": "ride",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 6e326f29-ba14-436f-ae6d-651a8b2aa536",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "6e326f29-ba14-436f-ae6d-651a8b2aa536"
+        }
+      ],
+      "group": "entity",
+      "id": "ride"
+    },
+    {
+      "label": "riding experience",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: dd1a7de0-6fba-400c-a7c4-8613368da2e8",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "dd1a7de0-6fba-400c-a7c4-8613368da2e8"
+        }
+      ],
+      "group": "entity",
+      "id": "riding experience"
+    },
+    {
+      "label": "right",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "right"
+    },
+    {
+      "label": "services",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 3bbf4b0b-c0fd-4d6b-b98c-786a631e7790",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "3bbf4b0b-c0fd-4d6b-b98c-786a631e7790"
+        }
+      ],
+      "group": "entity",
+      "id": "services"
+    },
+    {
+      "label": "stand engaged",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 69dcd4a8-96b9-45a0-a8ec-647b3db05b02",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "69dcd4a8-96b9-45a0-a8ec-647b3db05b02"
+        }
+      ],
+      "group": "entity",
+      "id": "stand engaged"
+    },
+    {
+      "label": "standard",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "standard"
+    },
+    {
+      "label": "standard warranty period",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "standard warranty period"
+    },
+    {
+      "label": "sustainability",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 3bbf4b0b-c0fd-4d6b-b98c-786a631e7790<br>Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 69dcd4a8-96b9-45a0-a8ec-647b3db05b02",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "3bbf4b0b-c0fd-4d6b-b98c-786a631e7790"
+        },
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "69dcd4a8-96b9-45a0-a8ec-647b3db05b02"
+        }
+      ],
+      "group": "entity",
+      "id": "sustainability"
+    },
+    {
+      "label": "sustainability resources",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 0af977cd-5263-4da4-98bb-5726b8d22f0e",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        }
+      ],
+      "group": "entity",
+      "id": "sustainability resources"
+    },
+    {
+      "label": "the number of people in the room",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c"
+        }
+      ],
+      "group": "entity",
+      "id": "the number of people in the room"
+    },
+    {
+      "label": "the time it takes to drive",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c"
+        }
+      ],
+      "group": "entity",
+      "id": "the time it takes to drive"
+    },
+    {
+      "label": "the weather",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c"
+        }
+      ],
+      "group": "entity",
+      "id": "the weather"
+    },
+    {
+      "label": "toyota corolla",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 8aa48097-29e0-4fca-ba34-2213efcb786f",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "8aa48097-29e0-4fca-ba34-2213efcb786f"
+        }
+      ],
+      "group": "entity",
+      "id": "toyota corolla"
+    },
+    {
+      "label": "transcend",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: dd1a7de0-6fba-400c-a7c4-8613368da2e8",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "dd1a7de0-6fba-400c-a7c4-8613368da2e8"
+        }
+      ],
+      "group": "entity",
+      "id": "transcend"
+    },
+    {
+      "label": "unicorn",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: ac42348a-c278-4d4f-afbb-fc2714e41fd8",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "ac42348a-c278-4d4f-afbb-fc2714e41fd8"
+        }
+      ],
+      "group": "entity",
+      "id": "unicorn"
+    },
+    {
+      "label": "unmatchable smoothness",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: dd1a7de0-6fba-400c-a7c4-8613368da2e8",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "dd1a7de0-6fba-400c-a7c4-8613368da2e8"
+        }
+      ],
+      "group": "entity",
+      "id": "unmatchable smoothness"
+    },
+    {
+      "label": "variants unicorn",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 0af977cd-5263-4da4-98bb-5726b8d22f0e",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        }
+      ],
+      "group": "entity",
+      "id": "variants unicorn"
+    },
+    {
+      "label": "what are common exclusion in warranty",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "what are common exclusion in warranty"
+    },
+    {
+      "label": "what does standard warranty covers",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "what does standard warranty covers"
+    },
+    {
+      "label": "what is an extended warranty",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "what is an extended warranty"
+    },
+    {
+      "label": "what is the free service schedule for the honda unicorn",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "what is the free service schedule for the honda unicorn"
+    },
+    {
+      "label": "what is the idle rpm of the honda unicorn",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "what is the idle rpm of the honda unicorn"
+    },
+    {
+      "label": "what is the oil capacity of the unicorn motorcycle",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "what is the oil capacity of the unicorn motorcycle"
+    },
+    {
+      "label": "what is the paid service schedule for unicorn",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "what is the paid service schedule for unicorn"
+    },
+    {
+      "label": "which oil grade is right for my unicorn motorcycle",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "group": "entity",
+      "id": "which oil grade is right for my unicorn motorcycle"
+    },
+    {
+      "label": "width: sustainability, 756 mm contact us products",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 0af977cd-5263-4da4-98bb-5726b8d22f0e",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        }
+      ],
+      "group": "entity",
+      "id": "width: sustainability, 756 mm contact us products"
+    },
+    {
+      "label": "\u20b9 103145",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 547daf2e-233d-4cc7-90a4-f8afb34d29e3",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "547daf2e-233d-4cc7-90a4-f8afb34d29e3"
+        }
+      ],
+      "group": "entity",
+      "id": "\u20b9 103145"
+    },
+    {
+      "label": "\u20b9 4712",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 547daf2e-233d-4cc7-90a4-f8afb34d29e3",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "547daf2e-233d-4cc7-90a4-f8afb34d29e3"
+        }
+      ],
+      "group": "entity",
+      "id": "\u20b9 4712"
+    },
+    {
+      "label": "\u20b9 9947",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 547daf2e-233d-4cc7-90a4-f8afb34d29e3",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "547daf2e-233d-4cc7-90a4-f8afb34d29e3"
+        }
+      ],
+      "group": "entity",
+      "id": "\u20b9 9947"
+    },
+    {
+      "label": "3 engine type, wheels & tyres = submit documents simplify your paperwork -. 3 engine type, suspension = submit documents at the. 3 engine type, chassis = dealership.. 3 engine type, dimensions = air cooled, 4s |. 3 engine type, electricals = . day displacement, wheels & tyres = 8-12. day displacement, suspension = . day displacement, chassis = . day displacement, dimensions = 124.7 cc |. day displacement, electricals = . pick 4 max. power, wheels & tyres = your vehicle. pick 4 max. power, suspension = . pick 4 max. power, chassis = . pick 4 max. power, dimensions = 8.5 kw @ 8250 |. pick 4 max. power, electricals = rpm. it ' s max. torque, wheels & tyres = time to ride ! pick up your. it ' s max. torque, suspension = vehicle from the dealership.. it ' s max. torque, chassis = . it ' s max. torque, dimensions = 10.5 nm @ 6500 |. it ' s max. torque, electricals = rpm. bore x stroke ( mm, wheels & tyres = ). bore x stroke ( mm, suspension = . bore x stroke ( mm, chassis = . bore x stroke ( mm, dimensions = 52.4 x 57.8 |. bore x stroke ( mm, electricals = . fuel system, wheels & tyres = . fuel system, suspension = . fuel system, chassis = . fuel system, dimensions = buy now fi |. fuel system, electricals = . starting method, wheels & tyres = . starting method, suspension = . starting method, chassis = . starting method, dimensions = kick / self |. starting method, electricals = 2.5 kva power, wheels & tyres = . starting method, suspension = . starting method, chassis = . starting method, dimensions = kick / self |. starting method, electricals = 2.5 kva power, wheels & tyres = . starting device, suspension = . starting device, chassis = . starting device, dimensions = 10.5 nm @ 6500 |. it ' s max. torque, wheels & tyres = time to ride ! pick up your. it ' s max. torque, suspension = vehicle from the dealership.. it ' s max. torque, chassis = . it ' s max. torque, dimensions = 10.5 nm @ 6500 |. it ' s max. torque, electricals = rpm. bore x stroke ( mm, wheels & tyres = ). bore x stroke ( mm, suspension = . bore x stroke ( mm, chassis = . bore x stroke ( mm, dimensions = 52.4 x 57.8 |. bore x stroke ( mm, electricals = . fuel system, wheels & tyres = . fuel system, suspension = . fuel system, chassis = . fuel system, dimensions = buy now fi |. fuel system, electricals = . starting method, wheels & tyres = . starting method, suspension = . starting method, chassis = . starting method, dimensions = kick / self |. starting method, electricals = 2.5 kva power, wheels & tyres = . starting device, suspension = . starting device, chassis = . starting device, dimensions = kick / self |. starting device, electricals = 2.5 kva power, wheels & tyres = . starting device, suspension = . starting device, chassis = . starting device, dimensions = kick + 10.5 nm @ 6500 |. it ' s important to be careful with the power and torque! it's important to choose a vehicle that is suitable for your needs. the engine type, wheels & tyres are not specified in this passage. if you have any questions about the information provided, please contact us. we are happy to help!</h2>",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 4288ff74-cf67-4fc6-8f2d-2e2234aaf898",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "4288ff74-cf67-4fc6-8f2d-2e2234aaf898"
+        }
+      ],
+      "group": "entity",
+      "id": "3 engine type, wheels & tyres = submit documents simplify your paperwork -. 3 engine type, suspension = submit documents at the. 3 engine type, chassis = dealership.. 3 engine type, dimensions = air cooled, 4s |. 3 engine type, electricals = . day displacement, wheels & tyres = 8-12. day displacement, suspension = . day displacement, chassis = . day displacement, dimensions = 124.7 cc |. day displacement, electricals = . pick 4 max. power, wheels & tyres = your vehicle. pick 4 max. power, suspension = . pick 4 max. power, chassis = . pick 4 max. power, dimensions = 8.5 kw @ 8250 |. pick 4 max. power, electricals = rpm. it ' s max. torque, wheels & tyres = time to ride ! pick up your. it ' s max. torque, suspension = vehicle from the dealership.. it ' s max. torque, chassis = . it ' s max. torque, dimensions = 10.5 nm @ 6500 |. it ' s max. torque, electricals = rpm. bore x stroke ( mm, wheels & tyres = ). bore x stroke ( mm, suspension = . bore x stroke ( mm, chassis = . bore x stroke ( mm, dimensions = 52.4 x 57.8 |. bore x stroke ( mm, electricals = . fuel system, wheels & tyres = . fuel system, suspension = . fuel system, chassis = . fuel system, dimensions = buy now fi |. fuel system, electricals = . starting method, wheels & tyres = . starting method, suspension = . starting method, chassis = . starting method, dimensions = kick / self |. starting method, electricals = 2.5 kva power, wheels & tyres = . starting method, suspension = . starting method, chassis = . starting method, dimensions = kick / self |. starting method, electricals = 2.5 kva power, wheels & tyres = . starting device, suspension = . starting device, chassis = . starting device, dimensions = 10.5 nm @ 6500 |. it ' s max. torque, wheels & tyres = time to ride ! pick up your. it ' s max. torque, suspension = vehicle from the dealership.. it ' s max. torque, chassis = . it ' s max. torque, dimensions = 10.5 nm @ 6500 |. it ' s max. torque, electricals = rpm. bore x stroke ( mm, wheels & tyres = ). bore x stroke ( mm, suspension = . bore x stroke ( mm, chassis = . bore x stroke ( mm, dimensions = 52.4 x 57.8 |. bore x stroke ( mm, electricals = . fuel system, wheels & tyres = . fuel system, suspension = . fuel system, chassis = . fuel system, dimensions = buy now fi |. fuel system, electricals = . starting method, wheels & tyres = . starting method, suspension = . starting method, chassis = . starting method, dimensions = kick / self |. starting method, electricals = 2.5 kva power, wheels & tyres = . starting device, suspension = . starting device, chassis = . starting device, dimensions = kick / self |. starting device, electricals = 2.5 kva power, wheels & tyres = . starting device, suspension = . starting device, chassis = . starting device, dimensions = kick + 10.5 nm @ 6500 |. it ' s important to be careful with the power and torque! it's important to choose a vehicle that is suitable for your needs. the engine type, wheels & tyres are not specified in this passage. if you have any questions about the information provided, please contact us. we are happy to help!</h2>"
+    },
+    {
+      "label": "Document abb273a4",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "group": "document",
+      "shape": "box",
+      "id": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617"
+    },
+    {
+      "label": "accessories",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: ac57b99d-5786-40ed-89e5-c45e9f02125e",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "ac57b99d-5786-40ed-89e5-c45e9f02125e"
+        }
+      ],
+      "group": "entity",
+      "id": "accessories"
+    },
+    {
+      "label": "colors & specification",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: ac57b99d-5786-40ed-89e5-c45e9f02125e",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "ac57b99d-5786-40ed-89e5-c45e9f02125e"
+        }
+      ],
+      "group": "entity",
+      "id": "colors & specification"
+    },
+    {
+      "label": "emi calculator",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: ac57b99d-5786-40ed-89e5-c45e9f02125e",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "ac57b99d-5786-40ed-89e5-c45e9f02125e"
+        }
+      ],
+      "group": "entity",
+      "id": "emi calculator"
+    },
+    {
+      "label": "engine type",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 4288ff74-cf67-4fc6-8f2d-2e2234aaf898<br>Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 65d33d84-10b0-40f5-a3e9-ecd68603205a",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "4288ff74-cf67-4fc6-8f2d-2e2234aaf898"
+        },
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "65d33d84-10b0-40f5-a3e9-ecd68603205a"
+        }
+      ],
+      "group": "entity",
+      "id": "engine type"
+    },
+    {
+      "label": "engine type, with e20 fuel. actual suspension = . displacement, based on third party testing reports wheels & tyres = . displacement, with e20 fuel. actual suspension = . displacement, figures may vary as chassis = . displacement, riding conditions",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 65d33d84-10b0-40f5-a3e9-ecd68603205a",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "65d33d84-10b0-40f5-a3e9-ecd68603205a"
+        }
+      ],
+      "group": "entity",
+      "id": "engine type, with e20 fuel. actual suspension = . displacement, based on third party testing reports wheels & tyres = . displacement, with e20 fuel. actual suspension = . displacement, figures may vary as chassis = . displacement, riding conditions"
+    },
+    {
+      "label": "explicit factual relationships",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 6956be29-e8ff-4b46-9fd5-f0883acf9c2b",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "6956be29-e8ff-4b46-9fd5-f0883acf9c2b"
+        }
+      ],
+      "group": "entity",
+      "id": "explicit factual relationships"
+    },
+    {
+      "label": "features",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 7920fb1c-c544-4fbb-95bc-a8bd339dbde4",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "7920fb1c-c544-4fbb-95bc-a8bd339dbde4"
+        }
+      ],
+      "group": "entity",
+      "id": "features"
+    },
+    {
+      "label": "glamour x",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 7920fb1c-c544-4fbb-95bc-a8bd339dbde4",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "7920fb1c-c544-4fbb-95bc-a8bd339dbde4"
+        }
+      ],
+      "group": "entity",
+      "id": "glamour x"
+    },
+    {
+      "label": "max. power, based on third party testing reports wheels & tyres = . max. power, with e20 fuel. actual suspension = . max. power, figures may vary as chassis = . max. power, riding conditions",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 65d33d84-10b0-40f5-a3e9-ecd68603205a",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "65d33d84-10b0-40f5-a3e9-ecd68603205a"
+        }
+      ],
+      "group": "entity",
+      "id": "max. power, based on third party testing reports wheels & tyres = . max. power, with e20 fuel. actual suspension = . max. power, figures may vary as chassis = . max. power, riding conditions"
+    },
+    {
+      "label": "max. torque, based on third party testing reports wheels & tyres = . max. torque, with e20 fuel. actual suspension = . max. power, figures may vary as chassis = . max. power, riding conditions",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 65d33d84-10b0-40f5-a3e9-ecd68603205a",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "65d33d84-10b0-40f5-a3e9-ecd68603205a"
+        }
+      ],
+      "group": "entity",
+      "id": "max. torque, based on third party testing reports wheels & tyres = . max. torque, with e20 fuel. actual suspension = . max. power, figures may vary as chassis = . max. power, riding conditions"
+    },
+    {
+      "label": "max. torque, based on third party testing reports wheels & tyres = . max. torque, with e20 fuel. actual suspension = . max. torque, figures may vary as chassis = . max. torque, riding conditions",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 65d33d84-10b0-40f5-a3e9-ecd68603205a",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "65d33d84-10b0-40f5-a3e9-ecd68603205a"
+        }
+      ],
+      "group": "entity",
+      "id": "max. torque, based on third party testing reports wheels & tyres = . max. torque, with e20 fuel. actual suspension = . max. torque, figures may vary as chassis = . max. torque, riding conditions"
+    },
+    {
+      "label": "mileage",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 7920fb1c-c544-4fbb-95bc-a8bd339dbde4",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "7920fb1c-c544-4fbb-95bc-a8bd339dbde4"
+        }
+      ],
+      "group": "entity",
+      "id": "mileage"
+    },
+    {
+      "label": "motorcycle",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 7920fb1c-c544-4fbb-95bc-a8bd339dbde4",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "7920fb1c-c544-4fbb-95bc-a8bd339dbde4"
+        }
+      ],
+      "group": "entity",
+      "id": "motorcycle"
+    },
+    {
+      "label": "motorcycles",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: ac57b99d-5786-40ed-89e5-c45e9f02125e",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "ac57b99d-5786-40ed-89e5-c45e9f02125e"
+        }
+      ],
+      "group": "entity",
+      "id": "motorcycles"
+    },
+    {
+      "label": "show more features",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 7920fb1c-c544-4fbb-95bc-a8bd339dbde4",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "7920fb1c-c544-4fbb-95bc-a8bd339dbde4"
+        }
+      ],
+      "group": "entity",
+      "id": "show more features"
+    },
+    {
+      "label": "superior mileage of 65 km",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 7920fb1c-c544-4fbb-95bc-a8bd339dbde4",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "7920fb1c-c544-4fbb-95bc-a8bd339dbde4"
+        }
+      ],
+      "group": "entity",
+      "id": "superior mileage of 65 km"
+    },
+    {
+      "label": "triple",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 6956be29-e8ff-4b46-9fd5-f0883acf9c2b",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "6956be29-e8ff-4b46-9fd5-f0883acf9c2b"
+        }
+      ],
+      "group": "entity",
+      "id": "triple"
+    },
+    {
+      "label": "wheel & tyre",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 65d33d84-10b0-40f5-a3e9-ecd68603205a",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "65d33d84-10b0-40f5-a3e9-ecd68603205a"
+        }
+      ],
+      "group": "entity",
+      "id": "wheel & tyre"
+    }
+  ],
+  "edges": [
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "about honda sustainability resources",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "amit",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "anti-lock braking sy (abs",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "body dimensions engine length",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "body dimensions engine length: 2081 mm, width: sustainability, contact us products",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "capacity",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "car",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "chrome accents",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "common",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "contact us",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "covers",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "cowl",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "design",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "digital panel",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "drive",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "driver",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "emi for 24 months",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "engine",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "engine cut off",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "explore accessories",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "extended",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "ford f-150",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "free",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "headlamp",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "high ground clearance",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "honda",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "honda civic",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "honda unicorn",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "idle",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "interest",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "led headlamp",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "loan amount",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "more on comfort",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "more on design",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "obd2b maintenance free battery products dealer network services about honda sustainability resources contact us",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "paid",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "people",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "power of dreams",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "premium front cowl",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "products",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "rain",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "ravi products dealer network services",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "resources",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "ride",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "riding experience",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "right",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "services",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "stand engaged",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "standard",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "standard warranty period",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "sustainability",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "sustainability resources",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "the number of people in the room",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "the time it takes to drive",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "the weather",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "toyota corolla",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "transcend",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "unicorn",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "unmatchable smoothness",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "variants unicorn",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "what are common exclusion in warranty",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "what does standard warranty covers",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "what is an extended warranty",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "what is the free service schedule for the honda unicorn",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "what is the idle rpm of the honda unicorn",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "what is the oil capacity of the unicorn motorcycle",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "what is the paid service schedule for unicorn",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "which oil grade is right for my unicorn motorcycle",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "width: sustainability, 756 mm contact us products",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "\u20b9 103145",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "\u20b9 4712",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:44d238b0-60ec-428f-b780-1515b097c09a",
+      "target": "\u20b9 9947",
+      "key": 0
+    },
+    {
+      "label": "amit",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 6e326f29-ba14-436f-ae6d-651a8b2aa536",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "6e326f29-ba14-436f-ae6d-651a8b2aa536"
+        }
+      ],
+      "arrows": "to",
+      "source": "amit",
+      "target": "driver",
+      "key": 0
+    },
+    {
+      "label": "take total control of the road",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 0af977cd-5263-4da4-98bb-5726b8d22f0e",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        }
+      ],
+      "arrows": "to",
+      "source": "anti-lock braking sy (abs",
+      "target": "body dimensions engine length: 2081 mm, width: sustainability, contact us products",
+      "key": 0
+    },
+    {
+      "label": "engine length: 2081 mm",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 0af977cd-5263-4da4-98bb-5726b8d22f0e",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        }
+      ],
+      "arrows": "to",
+      "source": "body dimensions engine length",
+      "target": "width: sustainability, 756 mm contact us products",
+      "key": 0
+    },
+    {
+      "label": "chrome",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: ac42348a-c278-4d4f-afbb-fc2714e41fd8",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "ac42348a-c278-4d4f-afbb-fc2714e41fd8"
+        }
+      ],
+      "arrows": "to",
+      "source": "chrome accents",
+      "target": "unicorn",
+      "key": 0
+    },
+    {
+      "label": "dealer network",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 0af977cd-5263-4da4-98bb-5726b8d22f0e",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        }
+      ],
+      "arrows": "to",
+      "source": "contact us",
+      "target": "products",
+      "key": 0
+    },
+    {
+      "label": "led headlamp",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: ac42348a-c278-4d4f-afbb-fc2714e41fd8",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "ac42348a-c278-4d4f-afbb-fc2714e41fd8"
+        }
+      ],
+      "arrows": "to",
+      "source": "digital panel",
+      "target": "unicorn",
+      "key": 0
+    },
+    {
+      "label": "amount",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 547daf2e-233d-4cc7-90a4-f8afb34d29e3",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "547daf2e-233d-4cc7-90a4-f8afb34d29e3"
+        }
+      ],
+      "arrows": "to",
+      "source": "emi for 24 months",
+      "target": "\u20b9 4712",
+      "key": 0
+    },
+    {
+      "label": "augment",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: dd1a7de0-6fba-400c-a7c4-8613368da2e8",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "dd1a7de0-6fba-400c-a7c4-8613368da2e8"
+        }
+      ],
+      "arrows": "to",
+      "source": "engine",
+      "target": "obd2b maintenance free battery products dealer network services about honda sustainability resources contact us",
+      "key": 0
+    },
+    {
+      "label": "super smooth",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 6e326f29-ba14-436f-ae6d-651a8b2aa536",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "6e326f29-ba14-436f-ae6d-651a8b2aa536"
+        }
+      ],
+      "arrows": "to",
+      "source": "engine",
+      "target": "ride",
+      "key": 0
+    },
+    {
+      "label": "resources",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 0af977cd-5263-4da4-98bb-5726b8d22f0e",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        }
+      ],
+      "arrows": "to",
+      "source": "explore accessories",
+      "target": "variants unicorn",
+      "key": 0
+    },
+    {
+      "label": "vehicle",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 8aa48097-29e0-4fca-ba34-2213efcb786f",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "8aa48097-29e0-4fca-ba34-2213efcb786f"
+        }
+      ],
+      "arrows": "to",
+      "source": "ford f-150",
+      "target": "car",
+      "key": 0
+    },
+    {
+      "label": "easily",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 69dcd4a8-96b9-45a0-a8ec-647b3db05b02",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "69dcd4a8-96b9-45a0-a8ec-647b3db05b02"
+        }
+      ],
+      "arrows": "to",
+      "source": "high ground clearance",
+      "target": "engine cut off",
+      "key": 0
+    },
+    {
+      "label": "about honda",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 3bbf4b0b-c0fd-4d6b-b98c-786a631e7790",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "3bbf4b0b-c0fd-4d6b-b98c-786a631e7790"
+        }
+      ],
+      "arrows": "to",
+      "source": "honda",
+      "target": "sustainability",
+      "key": 0
+    },
+    {
+      "label": "contact us",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 3bbf4b0b-c0fd-4d6b-b98c-786a631e7790",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "3bbf4b0b-c0fd-4d6b-b98c-786a631e7790"
+        }
+      ],
+      "arrows": "to",
+      "source": "honda",
+      "target": "contact us",
+      "key": 0
+    },
+    {
+      "label": "dealer network",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 3bbf4b0b-c0fd-4d6b-b98c-786a631e7790",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "3bbf4b0b-c0fd-4d6b-b98c-786a631e7790"
+        }
+      ],
+      "arrows": "to",
+      "source": "honda",
+      "target": "services",
+      "key": 0
+    },
+    {
+      "label": "resources",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 3bbf4b0b-c0fd-4d6b-b98c-786a631e7790",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "3bbf4b0b-c0fd-4d6b-b98c-786a631e7790"
+        }
+      ],
+      "arrows": "to",
+      "source": "honda",
+      "target": "resources",
+      "key": 0
+    },
+    {
+      "label": "vehicle",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 8aa48097-29e0-4fca-ba34-2213efcb786f",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "8aa48097-29e0-4fca-ba34-2213efcb786f"
+        }
+      ],
+      "arrows": "to",
+      "source": "honda civic",
+      "target": "car",
+      "key": 0
+    },
+    {
+      "label": "ravi products dealer network services",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 52458c06-e83d-49b2-9620-c595db03b7ea",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "52458c06-e83d-49b2-9620-c595db03b7ea"
+        }
+      ],
+      "arrows": "to",
+      "source": "honda unicorn",
+      "target": "about honda sustainability resources",
+      "key": 0
+    },
+    {
+      "label": "interest",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 547daf2e-233d-4cc7-90a4-f8afb34d29e3",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "547daf2e-233d-4cc7-90a4-f8afb34d29e3"
+        }
+      ],
+      "arrows": "to",
+      "source": "interest",
+      "target": "\u20b9 9947",
+      "key": 0
+    },
+    {
+      "label": "front cowl",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 7135d7a3-1ca4-4f09-9255-ed1f84aaee83",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "7135d7a3-1ca4-4f09-9255-ed1f84aaee83"
+        }
+      ],
+      "arrows": "to",
+      "source": "led headlamp",
+      "target": "headlamp",
+      "key": 0
+    },
+    {
+      "label": "amount",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 547daf2e-233d-4cc7-90a4-f8afb34d29e3",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "547daf2e-233d-4cc7-90a4-f8afb34d29e3"
+        }
+      ],
+      "arrows": "to",
+      "source": "loan amount",
+      "target": "\u20b9 103145",
+      "key": 0
+    },
+    {
+      "label": "comfort",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 69dcd4a8-96b9-45a0-a8ec-647b3db05b02",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "69dcd4a8-96b9-45a0-a8ec-647b3db05b02"
+        }
+      ],
+      "arrows": "to",
+      "source": "more on comfort",
+      "target": "stand engaged",
+      "key": 0
+    },
+    {
+      "label": "peace of mind you are looking for",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 7135d7a3-1ca4-4f09-9255-ed1f84aaee83",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "7135d7a3-1ca4-4f09-9255-ed1f84aaee83"
+        }
+      ],
+      "arrows": "to",
+      "source": "more on design",
+      "target": "design",
+      "key": 0
+    },
+    {
+      "label": "create",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: dd1a7de0-6fba-400c-a7c4-8613368da2e8",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "dd1a7de0-6fba-400c-a7c4-8613368da2e8"
+        }
+      ],
+      "arrows": "to",
+      "source": "power of dreams",
+      "target": "transcend",
+      "key": 0
+    },
+    {
+      "label": "more on design",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 7135d7a3-1ca4-4f09-9255-ed1f84aaee83",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "7135d7a3-1ca4-4f09-9255-ed1f84aaee83"
+        }
+      ],
+      "arrows": "to",
+      "source": "premium front cowl",
+      "target": "cowl",
+      "key": 0
+    },
+    {
+      "label": "dealer network",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 69dcd4a8-96b9-45a0-a8ec-647b3db05b02",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "69dcd4a8-96b9-45a0-a8ec-647b3db05b02"
+        }
+      ],
+      "arrows": "to",
+      "source": "products",
+      "target": "honda",
+      "key": 0
+    },
+    {
+      "label": "dealer network services about honda sustainability resources contact us",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 0af977cd-5263-4da4-98bb-5726b8d22f0e",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "0af977cd-5263-4da4-98bb-5726b8d22f0e"
+        }
+      ],
+      "arrows": "to",
+      "source": "products",
+      "target": "sustainability resources",
+      "key": 0
+    },
+    {
+      "label": "contact us",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 52458c06-e83d-49b2-9620-c595db03b7ea",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "52458c06-e83d-49b2-9620-c595db03b7ea"
+        }
+      ],
+      "arrows": "to",
+      "source": "ravi products dealer network services",
+      "target": "contact us",
+      "key": 0
+    },
+    {
+      "label": "superior riding experience",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: dd1a7de0-6fba-400c-a7c4-8613368da2e8",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "dd1a7de0-6fba-400c-a7c4-8613368da2e8"
+        }
+      ],
+      "arrows": "to",
+      "source": "riding experience",
+      "target": "unmatchable smoothness",
+      "key": 0
+    },
+    {
+      "label": "warranty",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "arrows": "to",
+      "source": "standard warranty period",
+      "target": "standard",
+      "key": 0
+    },
+    {
+      "label": "sustainability",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 69dcd4a8-96b9-45a0-a8ec-647b3db05b02",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "69dcd4a8-96b9-45a0-a8ec-647b3db05b02"
+        }
+      ],
+      "arrows": "to",
+      "source": "sustainability",
+      "target": "resources",
+      "key": 0
+    },
+    {
+      "label": "number",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c"
+        }
+      ],
+      "arrows": "to",
+      "source": "the number of people in the room",
+      "target": "people",
+      "key": 0
+    },
+    {
+      "label": "time",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c"
+        }
+      ],
+      "arrows": "to",
+      "source": "the time it takes to drive",
+      "target": "drive",
+      "key": 0
+    },
+    {
+      "label": "weather",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "c00f0786-b64e-4ba1-bd40-0f0b8bce0f9c"
+        }
+      ],
+      "arrows": "to",
+      "source": "the weather",
+      "target": "rain",
+      "key": 0
+    },
+    {
+      "label": "vehicle",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 8aa48097-29e0-4fca-ba34-2213efcb786f",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "8aa48097-29e0-4fca-ba34-2213efcb786f"
+        }
+      ],
+      "arrows": "to",
+      "source": "toyota corolla",
+      "target": "car",
+      "key": 0
+    },
+    {
+      "label": "unicorn",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: ac42348a-c278-4d4f-afbb-fc2714e41fd8",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "ac42348a-c278-4d4f-afbb-fc2714e41fd8"
+        }
+      ],
+      "arrows": "to",
+      "source": "unicorn",
+      "target": "unicorn",
+      "key": 0
+    },
+    {
+      "label": "warranty",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "arrows": "to",
+      "source": "what are common exclusion in warranty",
+      "target": "common",
+      "key": 0
+    },
+    {
+      "label": "warranty",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "arrows": "to",
+      "source": "what does standard warranty covers",
+      "target": "covers",
+      "key": 0
+    },
+    {
+      "label": "warranty",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "arrows": "to",
+      "source": "what is an extended warranty",
+      "target": "extended",
+      "key": 0
+    },
+    {
+      "label": "service schedule",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "arrows": "to",
+      "source": "what is the free service schedule for the honda unicorn",
+      "target": "free",
+      "key": 0
+    },
+    {
+      "label": "rpm",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "arrows": "to",
+      "source": "what is the idle rpm of the honda unicorn",
+      "target": "idle",
+      "key": 0
+    },
+    {
+      "label": "capacity",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "arrows": "to",
+      "source": "what is the oil capacity of the unicorn motorcycle",
+      "target": "capacity",
+      "key": 0
+    },
+    {
+      "label": "service schedule",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "arrows": "to",
+      "source": "what is the paid service schedule for unicorn",
+      "target": "paid",
+      "key": 0
+    },
+    {
+      "label": "oil grade",
+      "title": "Document: 44d238b0-60ec-428f-b780-1515b097c09a<br>Chunk: 9abece59-3ce9-43d2-a170-752aea9e217c",
+      "provenance": [
+        {
+          "document_id": "44d238b0-60ec-428f-b780-1515b097c09a",
+          "chunk_id": "9abece59-3ce9-43d2-a170-752aea9e217c"
+        }
+      ],
+      "arrows": "to",
+      "source": "which oil grade is right for my unicorn motorcycle",
+      "target": "right",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "3 engine type, wheels & tyres = submit documents simplify your paperwork -. 3 engine type, suspension = submit documents at the. 3 engine type, chassis = dealership.. 3 engine type, dimensions = air cooled, 4s |. 3 engine type, electricals = . day displacement, wheels & tyres = 8-12. day displacement, suspension = . day displacement, chassis = . day displacement, dimensions = 124.7 cc |. day displacement, electricals = . pick 4 max. power, wheels & tyres = your vehicle. pick 4 max. power, suspension = . pick 4 max. power, chassis = . pick 4 max. power, dimensions = 8.5 kw @ 8250 |. pick 4 max. power, electricals = rpm. it ' s max. torque, wheels & tyres = time to ride ! pick up your. it ' s max. torque, suspension = vehicle from the dealership.. it ' s max. torque, chassis = . it ' s max. torque, dimensions = 10.5 nm @ 6500 |. it ' s max. torque, electricals = rpm. bore x stroke ( mm, wheels & tyres = ). bore x stroke ( mm, suspension = . bore x stroke ( mm, chassis = . bore x stroke ( mm, dimensions = 52.4 x 57.8 |. bore x stroke ( mm, electricals = . fuel system, wheels & tyres = . fuel system, suspension = . fuel system, chassis = . fuel system, dimensions = buy now fi |. fuel system, electricals = . starting method, wheels & tyres = . starting method, suspension = . starting method, chassis = . starting method, dimensions = kick / self |. starting method, electricals = 2.5 kva power, wheels & tyres = . starting method, suspension = . starting method, chassis = . starting method, dimensions = kick / self |. starting method, electricals = 2.5 kva power, wheels & tyres = . starting device, suspension = . starting device, chassis = . starting device, dimensions = 10.5 nm @ 6500 |. it ' s max. torque, wheels & tyres = time to ride ! pick up your. it ' s max. torque, suspension = vehicle from the dealership.. it ' s max. torque, chassis = . it ' s max. torque, dimensions = 10.5 nm @ 6500 |. it ' s max. torque, electricals = rpm. bore x stroke ( mm, wheels & tyres = ). bore x stroke ( mm, suspension = . bore x stroke ( mm, chassis = . bore x stroke ( mm, dimensions = 52.4 x 57.8 |. bore x stroke ( mm, electricals = . fuel system, wheels & tyres = . fuel system, suspension = . fuel system, chassis = . fuel system, dimensions = buy now fi |. fuel system, electricals = . starting method, wheels & tyres = . starting method, suspension = . starting method, chassis = . starting method, dimensions = kick / self |. starting method, electricals = 2.5 kva power, wheels & tyres = . starting device, suspension = . starting device, chassis = . starting device, dimensions = kick / self |. starting device, electricals = 2.5 kva power, wheels & tyres = . starting device, suspension = . starting device, chassis = . starting device, dimensions = kick + 10.5 nm @ 6500 |. it ' s important to be careful with the power and torque! it's important to choose a vehicle that is suitable for your needs. the engine type, wheels & tyres are not specified in this passage. if you have any questions about the information provided, please contact us. we are happy to help!</h2>",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "accessories",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "colors & specification",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "emi calculator",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "engine type",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "engine type, with e20 fuel. actual suspension = . displacement, based on third party testing reports wheels & tyres = . displacement, with e20 fuel. actual suspension = . displacement, figures may vary as chassis = . displacement, riding conditions",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "explicit factual relationships",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "features",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "glamour x",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "max. power, based on third party testing reports wheels & tyres = . max. power, with e20 fuel. actual suspension = . max. power, figures may vary as chassis = . max. power, riding conditions",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "max. torque, based on third party testing reports wheels & tyres = . max. torque, with e20 fuel. actual suspension = . max. power, figures may vary as chassis = . max. power, riding conditions",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "max. torque, based on third party testing reports wheels & tyres = . max. torque, with e20 fuel. actual suspension = . max. torque, figures may vary as chassis = . max. torque, riding conditions",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "mileage",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "motorcycle",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "motorcycles",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "show more features",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "superior mileage of 65 km",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "triple",
+      "key": 0
+    },
+    {
+      "label": "contains",
+      "title": "Visualization-only provenance link",
+      "arrows": "to",
+      "dashes": true,
+      "visualization_only": true,
+      "source": "document:abb273a4-3a84-4c34-9a34-cdd0ea989617",
+      "target": "wheel & tyre",
+      "key": 0
+    },
+    {
+      "label": "based on third party testing reports",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 65d33d84-10b0-40f5-a3e9-ecd68603205a",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "65d33d84-10b0-40f5-a3e9-ecd68603205a"
+        }
+      ],
+      "arrows": "to",
+      "source": "engine type",
+      "target": "engine type, with e20 fuel. actual suspension = . displacement, based on third party testing reports wheels & tyres = . displacement, with e20 fuel. actual suspension = . displacement, figures may vary as chassis = . displacement, riding conditions",
+      "key": 0
+    },
+    {
+      "label": "based on third party testing reports",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 65d33d84-10b0-40f5-a3e9-ecd68603205a",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "65d33d84-10b0-40f5-a3e9-ecd68603205a"
+        }
+      ],
+      "arrows": "to",
+      "source": "engine type",
+      "target": "max. power, based on third party testing reports wheels & tyres = . max. power, with e20 fuel. actual suspension = . max. power, figures may vary as chassis = . max. power, riding conditions",
+      "key": 0
+    },
+    {
+      "label": "based on third party testing reports",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 65d33d84-10b0-40f5-a3e9-ecd68603205a",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "65d33d84-10b0-40f5-a3e9-ecd68603205a"
+        }
+      ],
+      "arrows": "to",
+      "source": "engine type",
+      "target": "max. torque, based on third party testing reports wheels & tyres = . max. torque, with e20 fuel. actual suspension = . max. power, figures may vary as chassis = . max. power, riding conditions",
+      "key": 0
+    },
+    {
+      "label": "based on third party testing reports",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 65d33d84-10b0-40f5-a3e9-ecd68603205a",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "65d33d84-10b0-40f5-a3e9-ecd68603205a"
+        }
+      ],
+      "arrows": "to",
+      "source": "engine type",
+      "target": "max. torque, based on third party testing reports wheels & tyres = . max. torque, with e20 fuel. actual suspension = . max. torque, figures may vary as chassis = . max. torque, riding conditions",
+      "key": 0
+    },
+    {
+      "label": "based on third party testing reports",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 65d33d84-10b0-40f5-a3e9-ecd68603205a",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "65d33d84-10b0-40f5-a3e9-ecd68603205a"
+        }
+      ],
+      "arrows": "to",
+      "source": "engine type",
+      "target": "wheel & tyre",
+      "key": 0
+    },
+    {
+      "label": "is",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 4288ff74-cf67-4fc6-8f2d-2e2234aaf898",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "4288ff74-cf67-4fc6-8f2d-2e2234aaf898"
+        }
+      ],
+      "arrows": "to",
+      "source": "engine type",
+      "target": "3 engine type, wheels & tyres = submit documents simplify your paperwork -. 3 engine type, suspension = submit documents at the. 3 engine type, chassis = dealership.. 3 engine type, dimensions = air cooled, 4s |. 3 engine type, electricals = . day displacement, wheels & tyres = 8-12. day displacement, suspension = . day displacement, chassis = . day displacement, dimensions = 124.7 cc |. day displacement, electricals = . pick 4 max. power, wheels & tyres = your vehicle. pick 4 max. power, suspension = . pick 4 max. power, chassis = . pick 4 max. power, dimensions = 8.5 kw @ 8250 |. pick 4 max. power, electricals = rpm. it ' s max. torque, wheels & tyres = time to ride ! pick up your. it ' s max. torque, suspension = vehicle from the dealership.. it ' s max. torque, chassis = . it ' s max. torque, dimensions = 10.5 nm @ 6500 |. it ' s max. torque, electricals = rpm. bore x stroke ( mm, wheels & tyres = ). bore x stroke ( mm, suspension = . bore x stroke ( mm, chassis = . bore x stroke ( mm, dimensions = 52.4 x 57.8 |. bore x stroke ( mm, electricals = . fuel system, wheels & tyres = . fuel system, suspension = . fuel system, chassis = . fuel system, dimensions = buy now fi |. fuel system, electricals = . starting method, wheels & tyres = . starting method, suspension = . starting method, chassis = . starting method, dimensions = kick / self |. starting method, electricals = 2.5 kva power, wheels & tyres = . starting method, suspension = . starting method, chassis = . starting method, dimensions = kick / self |. starting method, electricals = 2.5 kva power, wheels & tyres = . starting device, suspension = . starting device, chassis = . starting device, dimensions = 10.5 nm @ 6500 |. it ' s max. torque, wheels & tyres = time to ride ! pick up your. it ' s max. torque, suspension = vehicle from the dealership.. it ' s max. torque, chassis = . it ' s max. torque, dimensions = 10.5 nm @ 6500 |. it ' s max. torque, electricals = rpm. bore x stroke ( mm, wheels & tyres = ). bore x stroke ( mm, suspension = . bore x stroke ( mm, chassis = . bore x stroke ( mm, dimensions = 52.4 x 57.8 |. bore x stroke ( mm, electricals = . fuel system, wheels & tyres = . fuel system, suspension = . fuel system, chassis = . fuel system, dimensions = buy now fi |. fuel system, electricals = . starting method, wheels & tyres = . starting method, suspension = . starting method, chassis = . starting method, dimensions = kick / self |. starting method, electricals = 2.5 kva power, wheels & tyres = . starting device, suspension = . starting device, chassis = . starting device, dimensions = kick / self |. starting device, electricals = 2.5 kva power, wheels & tyres = . starting device, suspension = . starting device, chassis = . starting device, dimensions = kick + 10.5 nm @ 6500 |. it ' s important to be careful with the power and torque! it's important to choose a vehicle that is suitable for your needs. the engine type, wheels & tyres are not specified in this passage. if you have any questions about the information provided, please contact us. we are happy to help!</h2>",
+      "key": 0
+    },
+    {
+      "label": "is stated",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 6956be29-e8ff-4b46-9fd5-f0883acf9c2b",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "6956be29-e8ff-4b46-9fd5-f0883acf9c2b"
+        }
+      ],
+      "arrows": "to",
+      "source": "explicit factual relationships",
+      "target": "triple",
+      "key": 0
+    },
+    {
+      "label": "highlights",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 7920fb1c-c544-4fbb-95bc-a8bd339dbde4",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "7920fb1c-c544-4fbb-95bc-a8bd339dbde4"
+        }
+      ],
+      "arrows": "to",
+      "source": "glamour x",
+      "target": "motorcycle",
+      "key": 0
+    },
+    {
+      "label": "compare",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: ac57b99d-5786-40ed-89e5-c45e9f02125e",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "ac57b99d-5786-40ed-89e5-c45e9f02125e"
+        }
+      ],
+      "arrows": "to",
+      "source": "motorcycles",
+      "target": "accessories",
+      "key": 0
+    },
+    {
+      "label": "glamour x",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: ac57b99d-5786-40ed-89e5-c45e9f02125e",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "ac57b99d-5786-40ed-89e5-c45e9f02125e"
+        }
+      ],
+      "arrows": "to",
+      "source": "motorcycles",
+      "target": "colors & specification",
+      "key": 0
+    },
+    {
+      "label": "glamour x",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: ac57b99d-5786-40ed-89e5-c45e9f02125e",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "ac57b99d-5786-40ed-89e5-c45e9f02125e"
+        }
+      ],
+      "arrows": "to",
+      "source": "motorcycles",
+      "target": "emi calculator",
+      "key": 0
+    },
+    {
+      "label": "colors",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 7920fb1c-c544-4fbb-95bc-a8bd339dbde4",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "7920fb1c-c544-4fbb-95bc-a8bd339dbde4"
+        }
+      ],
+      "arrows": "to",
+      "source": "show more features",
+      "target": "features",
+      "key": 0
+    },
+    {
+      "label": "fuel",
+      "title": "Document: abb273a4-3a84-4c34-9a34-cdd0ea989617<br>Chunk: 7920fb1c-c544-4fbb-95bc-a8bd339dbde4",
+      "provenance": [
+        {
+          "document_id": "abb273a4-3a84-4c34-9a34-cdd0ea989617",
+          "chunk_id": "7920fb1c-c544-4fbb-95bc-a8bd339dbde4"
+        }
+      ],
+      "arrows": "to",
+      "source": "superior mileage of 65 km",
+      "target": "mileage",
+      "key": 0
+    }
+  ]
+}

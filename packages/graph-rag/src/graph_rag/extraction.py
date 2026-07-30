@@ -10,6 +10,7 @@ _TRIPLE_SCHEMA = {
     "properties": {
         "triples": {
             "type": "array",
+            "maxItems": 24,
             "items": {
                 "type": "object",
                 "properties": {
@@ -29,6 +30,7 @@ _TRIPLE_SCHEMA = {
 _SYSTEM_PROMPT = """\
 Extract explicit factual relationships from the supplied passage.
 Return each fact as a subject, relation, and object triple.
+Return at most 24 distinct, salient facts.
 Use concise entity names and relation phrases grounded only in the passage.
 Resolve pronouns only when their referent is unambiguous.
 Do not infer unstated facts. Return an empty triples list when there are no facts.

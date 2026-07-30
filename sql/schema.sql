@@ -48,6 +48,19 @@ CREATE TABLE IF NOT EXISTS ingestion_jobs (
     completed_at timestamptz
 );
 
+CREATE TABLE IF NOT EXISTS graph_indexing_jobs (
+    document_id uuid PRIMARY KEY REFERENCES documents(id) ON DELETE CASCADE,
+    status text NOT NULL DEFAULT 'queued'
+        CHECK (status IN ('queued', 'processing', 'ready', 'failed')),
+    output_path text,
+    extraction_model text,
+    index_version text,
+    error_message text,
+    queued_at timestamptz NOT NULL DEFAULT now(),
+    started_at timestamptz,
+    completed_at timestamptz
+);
+
 CREATE TABLE IF NOT EXISTS chunks (
     id uuid PRIMARY KEY,
     wiki_base_id uuid NOT NULL REFERENCES wiki_bases(id) ON DELETE CASCADE,
@@ -75,8 +88,16 @@ ALTER TABLE chunks
     ALTER COLUMN embedding TYPE vector(1024)
     USING embedding::vector(1024);
 
+INSERT INTO graph_indexing_jobs (document_id)
+SELECT id
+FROM documents
+WHERE status = 'ready'
+ON CONFLICT (document_id) DO NOTHING;
+
 CREATE INDEX IF NOT EXISTS documents_wiki_base_id_idx ON documents (wiki_base_id);
 CREATE INDEX IF NOT EXISTS ingestion_jobs_status_idx ON ingestion_jobs (status, queued_at);
+CREATE INDEX IF NOT EXISTS graph_indexing_jobs_status_idx
+    ON graph_indexing_jobs (status, queued_at);
 CREATE INDEX IF NOT EXISTS chunks_wiki_base_id_idx ON chunks (wiki_base_id);
 CREATE INDEX IF NOT EXISTS chunks_document_id_idx ON chunks (document_id);
 CREATE INDEX IF NOT EXISTS chunks_search_vector_idx ON chunks USING gin (search_vector);

@@ -88,6 +88,16 @@ def test_loading_older_json_adds_document_nodes_from_provenance() -> None:
     assert loaded.has_edge(document_node, "alice")
 
 
+def test_loads_canonical_knowledge_graph_json() -> None:
+    graph = make_graph()
+
+    network = GraphVisualizer.from_json(graph.to_json())
+
+    assert {"alice", "acme", "paris"}.issubset(network.nodes)
+    assert f"document:{DOCUMENT_ONE}" in network.nodes
+    assert f"document:{DOCUMENT_TWO}" in network.nodes
+
+
 def test_renders_interactive_pyvis_html() -> None:
     network = GraphVisualizer(make_graph()).build()
 
