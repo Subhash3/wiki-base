@@ -8,3 +8,11 @@ class RetrievalMode(StrEnum):
 
     LITE = "lite"
     PRO = "pro"
+
+
+class RetrievalStrategy(StrEnum):
+    """Describe the strategy that supplied the retrieved chunks."""
+
+    VECTOR = "vector"
+    GRAPH = "graph"
+    VECTOR_FALLBACK = "vector_fallback"

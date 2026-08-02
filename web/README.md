@@ -23,8 +23,9 @@ The chat offers two answering modes:
 - **Lite** uses cosine-similarity chunk retrieval.
 - **Pro** uses the wiki base's ready document graphs for GraphRAG retrieval.
 
-The selected mode is sent as the `mode` field of `POST /query`. Assistant messages show the
-mode returned by the API.
+The selected mode is sent as the `mode` field of `POST /query`. Assistant messages show both
+the requested mode and the `retrieval_strategy` actually used. A Pro request that cannot
+produce graph-ranked chunks is labeled `Pro · Vector fallback`.
 
 Wiki-base responses expose a `retrieval_statuses` map. The table displays Lite and Pro
 readiness separately, and modes that are not ready are disabled for the selected wiki base.

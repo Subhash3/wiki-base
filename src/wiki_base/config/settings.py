@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     )
 
     environment: str = "development"
-    log_level: str = "INFO"
+    log_level: str = "DEBUG"
     host: str = "0.0.0.0"
     port: int = Field(default=8000, ge=1, le=65535)
 
@@ -31,17 +31,30 @@ class Settings(BaseSettings):
     embedding_batch_size: int = Field(default=16, ge=1)
     ollama_url: str = "http://127.0.0.1:11434"
     ollama_timeout_seconds: float = Field(default=120, gt=0)
-    generation_model: str = "gemma3:270m"
+    extraction_model: str = "qwen3.5:0.8b"
+    answer_generation_model: str = "qwen3.5:0.8b"
+    ocr_languages: str = "english"
+    ocr_force_full_page: bool = False
     chunk_max_tokens: int = Field(default=700, ge=50)
     chunk_tokenizer_model: str = "BAAI/bge-m3"
     worker_poll_interval_seconds: float = Field(default=1, gt=0)
     graph_directory: Path = Path(".wiki-base-graphs")
     graph_index_version: str = "1"
+    graph_entity_similarity_threshold: float = Field(default=0.75, ge=-1, le=1)
+    graph_relationship_similarity_threshold: float = Field(default=0.6, ge=-1, le=1)
+    graph_entity_max_links: int = Field(default=1, ge=1)
+    graph_entity_embedding_batch_size: int = Field(default=128, ge=1)
     cors_origins: str = "http://localhost:8080,http://127.0.0.1:8080"
 
     @property
     def parsed_cors_origins(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+
+    @property
+    def parsed_ocr_languages(self) -> list[str]:
+        """Return configured RapidOCR languages."""
+
+        return [language.strip() for language in self.ocr_languages.split(",") if language.strip()]
 
 
 @lru_cache

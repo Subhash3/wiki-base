@@ -1,12 +1,18 @@
+import logging
+import re
+
 from graph_rag.entity_linking import EntityLinker
 from graph_rag.graph import KnowledgeGraph
 from graph_rag.models import RankedChunk
-from graph_rag.query_extraction import QueryEntityExtractor
+from graph_rag.normalization import normalize_text
+from graph_rag.query_extraction import QueryConcepts, QueryEntityExtractor
 from graph_rag.ranking import (
     aggregate_chunk_scores,
     build_ranking_graph,
     personalized_page_rank,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class HippoRAGRetriever:
@@ -41,8 +47,20 @@ class HippoRAGRetriever:
         if limit < 1:
             raise ValueError("limit must be positive")
 
-        entities = await self._entity_extractor.extract(question)
-        seeds = self._entity_linker.link(entities, graph)
+        concepts = await self._entity_extractor.extract(question)
+        mentioned_nodes = _mentioned_nodes(question, graph)
+        concepts = QueryConcepts(
+            entities=[*mentioned_nodes, *concepts.entities],
+            relationships=concepts.relationships,
+        )
+        seeds = await self._entity_linker.link(concepts, graph)
+        logger.debug(
+            "Graph retrieval entities=%s relationships=%s mentioned_nodes=%s seeds=%s",
+            concepts.entities,
+            concepts.relationships,
+            mentioned_nodes,
+            seeds,
+        )
         if not seeds:
             return []
 
@@ -55,3 +73,16 @@ class HippoRAGRetriever:
             tolerance=self._tolerance,
         )
         return aggregate_chunk_scores(graph, node_scores)[:limit]
+
+
+def _mentioned_nodes(question: str, graph: KnowledgeGraph) -> list[str]:
+    """Return graph nodes explicitly mentioned in the question."""
+
+    normalized_question = normalize_text(question)
+    if not normalized_question:
+        return []
+    return [
+        node
+        for node in sorted(graph.nodes)
+        if re.search(rf"(?<!\w){re.escape(node)}(?!\w)", normalized_question)
+    ]

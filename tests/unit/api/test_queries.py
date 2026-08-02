@@ -1,7 +1,7 @@
 from uuid import UUID
 
 from wiki_base.api.routes.queries import query
-from wiki_base.retrieval import RetrievalMode
+from wiki_base.retrieval import RetrievalMode, RetrievalStrategy
 from wiki_base.schemas.queries import ConversationMessage, QueryRequest
 from wiki_base.services.querying import AnswerCitation, QueryAnswer
 
@@ -31,6 +31,7 @@ class StubQueryService:
                 )
             ],
             mode=mode,
+            retrieval_strategy=RetrievalStrategy.GRAPH,
         )
 
 
@@ -48,3 +49,4 @@ async def test_query_returns_generated_answer_with_verified_citations() -> None:
     assert response.citations[0].document_name == "policy.pdf"
     assert response.citations[0].page == 7
     assert response.mode == RetrievalMode.PRO
+    assert response.retrieval_strategy == RetrievalStrategy.GRAPH

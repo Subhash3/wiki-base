@@ -35,6 +35,16 @@ Start the graph indexing worker in another terminal:
 uv run wiki-base-graph-worker
 ```
 
+Structured extraction and final answers can use different Ollama models:
+
+```env
+WIKI_BASE_EXTRACTION_MODEL=qwen3.5:0.8b
+WIKI_BASE_ANSWER_GENERATION_MODEL=qwen3.5:9b
+```
+
+The extraction model handles graph indexing and query-concept extraction. The answer model
+is used only after retrieval has selected supporting chunks.
+
 The API is then available at `http://localhost:8000`. Useful initial endpoints are:
 
 - `GET /health`

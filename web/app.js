@@ -188,8 +188,13 @@ function renderChat() {
 
     if (message.role === "assistant" && message.mode) {
       const mode = document.createElement("span");
-      mode.className = `retrieval-mode ${message.mode}`;
-      mode.textContent = message.mode === "pro" ? "Pro · GraphRAG" : "Lite";
+      const usedFallback = message.retrievalStrategy === "vector_fallback";
+      mode.className = `retrieval-mode ${message.mode}${usedFallback ? " fallback" : ""}`;
+      mode.textContent = usedFallback
+        ? "Pro · Vector fallback"
+        : message.mode === "pro"
+          ? "Pro · GraphRAG"
+          : "Lite · Vector";
       element.prepend(mode);
     }
 
@@ -254,6 +259,7 @@ chatForm.addEventListener("submit", async (event) => {
       content: result.answer,
       citations: result.citations ?? [],
       mode: result.mode ?? mode,
+      retrievalStrategy: result.retrieval_strategy,
     });
   } catch (error) {
     history.push({

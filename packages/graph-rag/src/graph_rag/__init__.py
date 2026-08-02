@@ -1,6 +1,6 @@
 """Graph-based retrieval-augmented generation."""
 
-from graph_rag.entity_linking import EntityLinker, ExactEntityLinker
+from graph_rag.entity_linking import EmbeddingEntityLinker, EntityLinker, ExactEntityLinker
 from graph_rag.extraction import LLMTripleExtractor, TripleExtractor
 from graph_rag.graph import KnowledgeGraph
 from graph_rag.indexing import HippoRAGIndexer
@@ -12,7 +12,11 @@ from graph_rag.models import (
     TripleProvenance,
 )
 from graph_rag.normalization import normalize_text, normalize_triple
-from graph_rag.query_extraction import LLMQueryEntityExtractor, QueryEntityExtractor
+from graph_rag.query_extraction import (
+    LLMQueryEntityExtractor,
+    QueryConcepts,
+    QueryEntityExtractor,
+)
 from graph_rag.ranking import (
     aggregate_chunk_scores,
     build_ranking_graph,
@@ -28,6 +32,7 @@ __all__ = [
     "GraphVisualizer",
     "HippoRAGIndexer",
     "HippoRAGRetriever",
+    "EmbeddingEntityLinker",
     "EntityLinker",
     "ExactEntityLinker",
     "IndexedChunk",
@@ -38,6 +43,7 @@ __all__ = [
     "TripleExtractor",
     "TripleProvenance",
     "QueryEntityExtractor",
+    "QueryConcepts",
     "RankedChunk",
     "aggregate_chunk_scores",
     "build_ranking_graph",

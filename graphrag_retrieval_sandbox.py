@@ -13,12 +13,13 @@ from pathlib import Path
 from uuid import UUID
 
 from graph_rag import (
-    ExactEntityLinker,
+    EmbeddingEntityLinker,
     HippoRAGRetriever,
     KnowledgeGraph,
     LLMQueryEntityExtractor,
     RankedChunk,
 )
+from llm_providers.embeddings.ollama import OllamaEmbeddingProvider
 from llm_providers.generation.ollama import OllamaGenerationProvider
 
 from wiki_base.config.settings import get_settings
@@ -74,9 +75,15 @@ async def main(question: str, graph_json: Path, *, limit: int) -> None:
 
     settings = get_settings()
     graph = load_graph(graph_json)
-    generation = OllamaGenerationProvider(
+    extraction = OllamaGenerationProvider(
         base_url=settings.ollama_url,
-        model=settings.generation_model,
+        model=settings.extraction_model,
+        timeout_seconds=settings.ollama_timeout_seconds,
+    )
+    embeddings = OllamaEmbeddingProvider(
+        base_url=settings.ollama_url,
+        model=settings.embedding_model,
+        dimensions=settings.embedding_dimensions,
         timeout_seconds=settings.ollama_timeout_seconds,
     )
     database = Database(settings.database_url)
@@ -86,8 +93,16 @@ async def main(question: str, graph_json: Path, *, limit: int) -> None:
     )
     try:
         retriever = HippoRAGRetriever(
-            entity_extractor=LLMQueryEntityExtractor(generation=generation),
-            entity_linker=ExactEntityLinker(),
+            entity_extractor=LLMQueryEntityExtractor(generation=extraction),
+            entity_linker=EmbeddingEntityLinker(
+                embeddings=embeddings,
+                similarity_threshold=settings.graph_entity_similarity_threshold,
+                relationship_similarity_threshold=(
+                    settings.graph_relationship_similarity_threshold
+                ),
+                max_links_per_entity=settings.graph_entity_max_links,
+                embedding_batch_size=settings.graph_entity_embedding_batch_size,
+            ),
         )
         ranked_chunks = await retriever.retrieve(
             question,
@@ -96,7 +111,8 @@ async def main(question: str, graph_json: Path, *, limit: int) -> None:
         )
         chunk_text = await load_chunk_text(database, ranked_chunks)
     finally:
-        await generation.close()
+        await embeddings.close()
+        await extraction.close()
         await database.disconnect()
 
     if not ranked_chunks:

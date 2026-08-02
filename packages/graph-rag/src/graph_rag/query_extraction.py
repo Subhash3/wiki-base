@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Protocol
 
 from llm_providers.generation.base import ChatMessage, StructuredGenerationProvider
@@ -9,42 +10,60 @@ _ENTITY_SCHEMA = {
             "type": "array",
             "maxItems": 12,
             "items": {"type": "string"},
-        }
+        },
+        "relationships": {
+            "type": "array",
+            "maxItems": 12,
+            "items": {"type": "string"},
+        },
     },
-    "required": ["entities"],
+    "required": ["entities", "relationships"],
     "additionalProperties": False,
 }
 
 _SYSTEM_PROMPT = """\
-Extract the named entities and key noun-phrase concepts needed to retrieve an answer.
-Use concise phrases copied from the question.
-Do not answer the question or infer unstated entities.
-Return at most 12 distinct entities.
-Return an empty list when the question contains no useful entities."""
+Extract the entities and relationships needed to retrieve an answer.
+Entities are named things or key noun phrases. Relationships are actions, attributes,
+comparisons, or constraints connecting those things. Use concise phrases copied from the
+question and preserve meaningful modifiers, such as "loan offers" instead of "offers".
+Do not answer the question or infer unstated concepts.
+Return at most 12 distinct values in each list and use empty lists when appropriate.
+
+Example:
+Question: Any loan offers on Honda Unicorn?
+Output: {"entities":["Honda Unicorn"],"relationships":["loan offers"]}"""
+
+
+@dataclass(frozen=True, slots=True)
+class QueryConcepts:
+    """Entities and relationships extracted from a question."""
+
+    entities: list[str]
+    relationships: list[str]
 
 
 class QueryEntityExtractor(Protocol):
-    """Extract retrieval entities from a question."""
+    """Extract retrieval concepts from a question."""
 
-    async def extract(self, question: str) -> list[str]:
-        """Return the entities needed to retrieve an answer."""
+    async def extract(self, question: str) -> QueryConcepts:
+        """Return entities and relationships needed for retrieval."""
 
         ...
 
 
 class LLMQueryEntityExtractor:
-    """Extract query entities with a structured language model."""
+    """Extract query entities and relationships with a language model."""
 
     def __init__(self, *, generation: StructuredGenerationProvider) -> None:
         """Configure the structured generation provider."""
 
         self._generation = generation
 
-    async def extract(self, question: str) -> list[str]:
-        """Extract and validate entities from a question."""
+    async def extract(self, question: str) -> QueryConcepts:
+        """Extract and validate concepts from a question."""
 
         if not question.strip():
-            return []
+            return QueryConcepts(entities=[], relationships=[])
 
         result = await self._generation.generate_structured(
             [
@@ -59,6 +78,20 @@ class LLMQueryEntityExtractor:
             isinstance(entity, str) for entity in raw_entities
         ):
             raise ValueError("LLM returned an invalid entities list")
+        raw_relationships = result.get("relationships")
+        if not isinstance(raw_relationships, list) or not all(
+            isinstance(relationship, str) for relationship in raw_relationships
+        ):
+            raise ValueError("LLM returned an invalid relationships list")
 
-        entities = [entity.strip() for entity in raw_entities if entity.strip()]
-        return list(dict.fromkeys(entities))
+        return QueryConcepts(
+            entities=_clean_values(raw_entities),
+            relationships=_clean_values(raw_relationships),
+        )
+
+
+def _clean_values(values: list[str]) -> list[str]:
+    """Clean and deduplicate extracted values while preserving order."""
+
+    cleaned = [value.strip() for value in values if value.strip()]
+    return list(dict.fromkeys(cleaned))

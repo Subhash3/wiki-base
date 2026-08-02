@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass
 from pathlib import Path
 from uuid import UUID
@@ -19,7 +20,9 @@ from wiki_base.database.queries.wiki_bases import (
     list_wiki_base_retrieval_statuses,
 )
 from wiki_base.database.records import IngestionStatus
-from wiki_base.retrieval import RetrievalMode
+from wiki_base.retrieval import RetrievalMode, RetrievalStrategy
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True, slots=True)
@@ -45,6 +48,7 @@ class QueryChunksResult:
     question: str
     chunks: list[RetrievedChunk]
     mode: RetrievalMode = RetrievalMode.LITE
+    retrieval_strategy: RetrievalStrategy = RetrievalStrategy.VECTOR
 
 
 class QueryChunksService:
@@ -109,12 +113,21 @@ class QueryChunksService:
                     question=normalized_question,
                     limit=limit,
                 )
+                retrieval_strategy = RetrievalStrategy.GRAPH
+                if not chunks:
+                    chunks = await self._query_vector(
+                        wiki_base_id=wiki_base_id,
+                        question=normalized_question,
+                        limit=limit,
+                    )
+                    retrieval_strategy = RetrievalStrategy.VECTOR_FALLBACK
             else:
                 chunks = await self._query_vector(
                     wiki_base_id=wiki_base_id,
                     question=normalized_question,
                     limit=limit,
                 )
+                retrieval_strategy = RetrievalStrategy.VECTOR
         except ServiceError:
             raise
         except (
@@ -133,6 +146,7 @@ class QueryChunksService:
             question=normalized_question,
             chunks=chunks,
             mode=mode,
+            retrieval_strategy=retrieval_strategy,
         )
 
     async def _query_vector(
@@ -189,6 +203,11 @@ class QueryChunksService:
                 wiki_base_id=wiki_base_id,
                 chunk_ids=[item.chunk_id for item in ranked],
             )
+        logger.debug(
+            "Graph ranked chunks=%s hydrated_chunk_ids=%s",
+            [(str(item.chunk_id), round(item.score, 4)) for item in ranked],
+            [str(chunk.id) for chunk in stored],
+        )
         chunks_by_id = {chunk.id: chunk for chunk in stored}
         return [
             RetrievedChunk(

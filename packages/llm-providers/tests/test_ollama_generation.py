@@ -13,6 +13,7 @@ async def test_generates_a_structured_answer() -> None:
         assert request.url.path == "/api/chat"
         assert body["model"] == "gemma3:270m"
         assert "[S1] policy.pdf" in body["messages"][0]["content"]
+        assert "ignore unrelated sources" in body["messages"][0]["content"]
         return httpx.Response(
             200,
             json={

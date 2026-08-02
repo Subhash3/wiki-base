@@ -15,18 +15,18 @@ async def run_worker() -> None:
     settings = get_settings()
     configure_logging(settings.log_level)
     database = Database(settings.database_url)
-    generation = OllamaGenerationProvider(
+    extraction = OllamaGenerationProvider(
         base_url=settings.ollama_url,
-        model=settings.generation_model,
+        model=settings.extraction_model,
         timeout_seconds=settings.ollama_timeout_seconds,
     )
     worker = GraphIndexingWorker(
         database=database,
         indexer=HippoRAGIndexer(
-            extractor=LLMTripleExtractor(generation=generation),
+            extractor=LLMTripleExtractor(generation=extraction),
         ),
         output_directory=settings.graph_directory,
-        extraction_model=settings.generation_model,
+        extraction_model=settings.extraction_model,
         index_version=settings.graph_index_version,
         poll_interval_seconds=settings.worker_poll_interval_seconds,
     )
@@ -38,7 +38,7 @@ async def run_worker() -> None:
     try:
         await worker.run()
     finally:
-        await generation.close()
+        await extraction.close()
         await database.disconnect()
 
 

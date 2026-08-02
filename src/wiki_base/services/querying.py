@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass
 from uuid import UUID
 
@@ -5,8 +6,10 @@ import httpx
 from llm_providers.generation.base import ChatMessage, GenerationProvider
 
 from wiki_base.api.errors import ServiceError
-from wiki_base.retrieval import RetrievalMode
+from wiki_base.retrieval import RetrievalMode, RetrievalStrategy
 from wiki_base.services.query_chunks import QueryChunksService, RetrievedChunk
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True, slots=True)
@@ -29,6 +32,7 @@ class QueryAnswer:
     answer: str
     citations: list[AnswerCitation]
     mode: RetrievalMode = RetrievalMode.LITE
+    retrieval_strategy: RetrievalStrategy = RetrievalStrategy.VECTOR
 
 
 class QueryService:
@@ -65,6 +69,7 @@ class QueryService:
                 answer="The available documents do not provide enough information.",
                 citations=[],
                 mode=retrieval.mode,
+                retrieval_strategy=retrieval.retrieval_strategy,
             )
 
         source_map = {
@@ -73,6 +78,19 @@ class QueryService:
         context = "\n\n".join(
             self._format_source(source_id, chunk)
             for source_id, chunk in source_map.items()
+        )
+        logger.debug(
+            "Answer generation sources=%s history_messages=%d",
+            [
+                (
+                    source_id,
+                    str(chunk.id),
+                    round(chunk.score, 4),
+                    " ".join(chunk.content[:180].split()),
+                )
+                for source_id, chunk in source_map.items()
+            ],
+            len(history),
         )
         messages = [*history, ChatMessage(role="user", content=retrieval.question)]
         try:
@@ -87,12 +105,18 @@ class QueryService:
             for source_id in dict.fromkeys(generated.source_ids)
             if source_id in source_map
         ]
+        logger.debug(
+            "Generated answer=%r source_ids=%s",
+            generated.text,
+            generated.source_ids,
+        )
         return QueryAnswer(
             wiki_base_id=wiki_base_id,
             question=retrieval.question,
             answer=generated.text,
             citations=[self._citation(chunk) for chunk in cited_chunks],
             mode=retrieval.mode,
+            retrieval_strategy=retrieval.retrieval_strategy,
         )
 
     @staticmethod

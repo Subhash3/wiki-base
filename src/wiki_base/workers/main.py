@@ -24,7 +24,10 @@ async def run_worker() -> None:
         dimensions=settings.embedding_dimensions,
         timeout_seconds=settings.ollama_timeout_seconds,
     )
-    converter = DoclingConverter()
+    converter = DoclingConverter(
+        ocr_languages=settings.parsed_ocr_languages,
+        force_full_page_ocr=settings.ocr_force_full_page,
+    )
     parser_registry = ParserRegistry(
         [
             PdfDocumentParser(converter),

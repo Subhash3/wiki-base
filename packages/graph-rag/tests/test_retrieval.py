@@ -5,6 +5,7 @@ import pytest
 from graph_rag.entity_linking import ExactEntityLinker
 from graph_rag.graph import KnowledgeGraph
 from graph_rag.models import Triple, TripleProvenance
+from graph_rag.query_extraction import QueryConcepts
 from graph_rag.retrieval import HippoRAGRetriever
 
 DOCUMENT_ONE = UUID("10000000-0000-0000-0000-000000000001")
@@ -14,19 +15,27 @@ CHUNK_TWO = UUID("00000000-0000-0000-0000-000000000002")
 
 
 class StubEntityExtractor:
-    """Return configured query entities."""
+    """Return configured query concepts."""
 
-    def __init__(self, entities: list[str]) -> None:
-        """Store the entities returned during retrieval."""
+    def __init__(
+        self,
+        entities: list[str],
+        relationships: list[str] | None = None,
+    ) -> None:
+        """Store the concepts returned during retrieval."""
 
         self.entities = entities
+        self.relationships = relationships or []
         self.questions: list[str] = []
 
-    async def extract(self, question: str) -> list[str]:
-        """Capture the question and return configured entities."""
+    async def extract(self, question: str) -> QueryConcepts:
+        """Capture the question and return configured concepts."""
 
         self.questions.append(question)
-        return self.entities
+        return QueryConcepts(
+            entities=self.entities,
+            relationships=self.relationships,
+        )
 
 
 def make_multihop_graph() -> KnowledgeGraph:
@@ -85,6 +94,62 @@ async def test_returns_empty_when_entities_do_not_link() -> None:
     )
 
     assert ranked == []
+
+
+async def test_uses_graph_nodes_mentioned_in_question_when_extraction_is_wrong() -> None:
+    """Explicit node mentions survive an incorrect LLM entity list."""
+
+    retriever = HippoRAGRetriever(
+        entity_extractor=StubEntityExtractor(["Tesla Model 3", "Austin Powers"]),
+        entity_linker=ExactEntityLinker(),
+    )
+
+    ranked = await retriever.retrieve(
+        "Where does Alice work?",
+        make_multihop_graph(),
+        limit=5,
+    )
+
+    assert {chunk.chunk_id for chunk in ranked} == {CHUNK_ONE, CHUNK_TWO}
+
+
+async def test_uses_relationships_to_reach_disconnected_evidence() -> None:
+    """A matched relationship seeds the endpoints of its graph edge."""
+
+    graph = KnowledgeGraph()
+    graph.add_triple(
+        Triple(subject="honda unicorn", relation="is a", object="motorcycle"),
+        provenance=TripleProvenance(
+            document_id=DOCUMENT_ONE,
+            chunk_id=CHUNK_ONE,
+        ),
+    )
+    graph.add_triple(
+        Triple(
+            subject="ex-showroom delhi",
+            relation="loan amount for",
+            object="total interest",
+        ),
+        provenance=TripleProvenance(
+            document_id=DOCUMENT_TWO,
+            chunk_id=CHUNK_TWO,
+        ),
+    )
+    retriever = HippoRAGRetriever(
+        entity_extractor=StubEntityExtractor(
+            ["Honda Unicorn"],
+            ["loan amount for"],
+        ),
+        entity_linker=ExactEntityLinker(),
+    )
+
+    ranked = await retriever.retrieve(
+        "Any loan offers on Honda Unicorn?",
+        graph,
+        limit=5,
+    )
+
+    assert {chunk.chunk_id for chunk in ranked} == {CHUNK_ONE, CHUNK_TWO}
 
 
 async def test_applies_result_limit() -> None:

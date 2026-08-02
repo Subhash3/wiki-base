@@ -5,7 +5,7 @@ description = "Reusable document parsing and chunking"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "docling>=2",
+    "docling[rapidocr]>=2",
     "transformers>=5",
 ]
 

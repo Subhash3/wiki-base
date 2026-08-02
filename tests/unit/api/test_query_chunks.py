@@ -1,7 +1,7 @@
 from uuid import UUID
 
 from wiki_base.api.routes.query_chunks import query_chunks
-from wiki_base.retrieval import RetrievalMode
+from wiki_base.retrieval import RetrievalMode, RetrievalStrategy
 from wiki_base.services.query_chunks import QueryChunksResult, RetrievedChunk
 
 
@@ -28,6 +28,7 @@ class StubQueryChunksService:
                 )
             ],
             mode=mode,
+            retrieval_strategy=RetrievalStrategy.GRAPH,
         )
 
 
@@ -47,3 +48,4 @@ async def test_query_chunks_returns_ranked_content_and_citation_metadata() -> No
     assert response.chunks[0].document_name == "policy.pdf"
     assert response.chunks[0].page == 7
     assert response.mode == RetrievalMode.PRO
+    assert response.retrieval_strategy == RetrievalStrategy.GRAPH

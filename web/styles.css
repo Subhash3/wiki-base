@@ -200,6 +200,11 @@ td:first-child {
   background: #fff0c2;
 }
 
+.retrieval-mode.fallback {
+  color: #7a2e0b;
+  background: #ffe0d1;
+}
+
 .citations {
   margin-top: 8px;
   color: #555;

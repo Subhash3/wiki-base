@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from graph_rag import EmbeddingEntityLinker
 from llm_providers.embeddings.ollama import OllamaEmbeddingProvider
 from llm_providers.generation.ollama import OllamaGenerationProvider
 
@@ -32,17 +33,33 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         timeout_seconds=settings.ollama_timeout_seconds,
     )
     app.state.embedding_provider = embedding_provider
-    generation_provider = OllamaGenerationProvider(
+    app.state.entity_linker = EmbeddingEntityLinker(
+        embeddings=embedding_provider,
+        similarity_threshold=settings.graph_entity_similarity_threshold,
+        relationship_similarity_threshold=(
+            settings.graph_relationship_similarity_threshold
+        ),
+        max_links_per_entity=settings.graph_entity_max_links,
+        embedding_batch_size=settings.graph_entity_embedding_batch_size,
+    )
+    extraction_provider = OllamaGenerationProvider(
         base_url=settings.ollama_url,
-        model=settings.generation_model,
+        model=settings.extraction_model,
         timeout_seconds=settings.ollama_timeout_seconds,
     )
-    app.state.generation_provider = generation_provider
+    app.state.extraction_provider = extraction_provider
+    answer_provider = OllamaGenerationProvider(
+        base_url=settings.ollama_url,
+        model=settings.answer_generation_model,
+        timeout_seconds=settings.ollama_timeout_seconds,
+    )
+    app.state.answer_provider = answer_provider
 
     try:
         yield
     finally:
-        await generation_provider.close()
+        await answer_provider.close()
+        await extraction_provider.close()
         await embedding_provider.close()
         await database.disconnect()
 

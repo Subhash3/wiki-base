@@ -2,7 +2,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 
-from wiki_base.retrieval import RetrievalMode
+from wiki_base.retrieval import RetrievalMode, RetrievalStrategy
 
 
 class RetrievedChunkResponse(BaseModel):
@@ -26,3 +26,4 @@ class QueryChunksResponse(BaseModel):
     question: str
     chunks: list[RetrievedChunkResponse]
     mode: RetrievalMode
+    retrieval_strategy: RetrievalStrategy

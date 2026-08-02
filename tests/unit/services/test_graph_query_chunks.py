@@ -8,9 +8,9 @@ from graph_rag import KnowledgeGraph, RankedChunk, Triple, TripleProvenance
 
 from wiki_base.database.queries.chunks import StoredChunk
 from wiki_base.database.records import IngestionStatus, WikiBaseRecord
-from wiki_base.retrieval import RetrievalMode
+from wiki_base.retrieval import RetrievalMode, RetrievalStrategy
 from wiki_base.services import query_chunks
-from wiki_base.services.query_chunks import QueryChunksService
+from wiki_base.services.query_chunks import QueryChunksService, RetrievedChunk
 
 WIKI_BASE_ID = UUID("0190f3a0-7d83-7a41-a27c-b7314f5ae705")
 DOCUMENT_ONE = UUID("0190f3a0-b096-7af5-8392-cc61de46f6de")
@@ -173,3 +173,68 @@ async def test_pro_retrieval_merges_wiki_base_graphs_and_preserves_rank(
     assert [chunk.id for chunk in result.chunks] == [CHUNK_TWO, CHUNK_ONE]
     assert [chunk.score for chunk in result.chunks] == [0.8, 0.6]
     assert result.mode == RetrievalMode.PRO
+    assert result.retrieval_strategy == RetrievalStrategy.GRAPH
+
+
+async def test_pro_retrieval_falls_back_to_vector_chunks(monkeypatch) -> None:
+    """Pro uses vector retrieval when the graph produces no chunks."""
+
+    async def get_wiki_base(_connection, _wiki_base_id):
+        return WikiBaseRecord(
+            id=WIKI_BASE_ID,
+            name="Test",
+            created_at=datetime.now(UTC),
+            started_at=None,
+            completed_at=None,
+        )
+
+    async def list_statuses(_connection, _wiki_base_id):
+        return {
+            WIKI_BASE_ID: {
+                RetrievalMode.LITE: IngestionStatus.READY,
+                RetrievalMode.PRO: IngestionStatus.READY,
+            }
+        }
+
+    monkeypatch.setattr(query_chunks, "get_wiki_base", get_wiki_base)
+    monkeypatch.setattr(
+        query_chunks,
+        "list_wiki_base_retrieval_statuses",
+        list_statuses,
+    )
+    service = QueryChunksService(
+        database=StubDatabase(),
+        embeddings=UnusedEmbeddings(),
+        graph_retriever=StubGraphRetriever(),
+    )
+    fallback = RetrievedChunk(
+        id=CHUNK_ONE,
+        document_id=DOCUMENT_ONE,
+        document_name="first.pdf",
+        content="Alice works at Acme.",
+        score=0.9,
+        page=1,
+        slide=None,
+        section=None,
+        heading=None,
+    )
+
+    async def query_graph(**_arguments):
+        return []
+
+    async def query_vector(**_arguments):
+        return [fallback]
+
+    monkeypatch.setattr(service, "_query_graph", query_graph)
+    monkeypatch.setattr(service, "_query_vector", query_vector)
+
+    result = await service.query(
+        wiki_base_id=WIKI_BASE_ID,
+        question="Who owns the car?",
+        limit=5,
+        mode=RetrievalMode.PRO,
+    )
+
+    assert result.chunks == [fallback]
+    assert result.mode == RetrievalMode.PRO
+    assert result.retrieval_strategy == RetrievalStrategy.VECTOR_FALLBACK

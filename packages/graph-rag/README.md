@@ -56,27 +56,32 @@ source files. It also accepts an explicit list of canonical JSON files and an op
 
 ```mermaid
 flowchart LR
-    A[Question] --> B[Extract query entities]
-    B --> C[Link graph nodes]
+    A[Question] --> B[Extract entities and relationships]
+    B --> C[Link nodes and edge labels]
     C --> D[Personalized PageRank]
     D --> E[Rank passages]
     E --> F[Generate answer]
 ```
 
 1. **Question:** Accept the user's question as the retrieval input.
-2. **Extract query entities:** Identify the important entities and concepts in the question.
-3. **Link graph nodes:** Match those entities to corresponding nodes in the knowledge graph.
+2. **Extract query concepts:** Identify important entities and relationships in the question.
+3. **Link graph concepts:** Match entities to nodes and relationships to edge labels. A matched
+   relationship contributes the subject and object of its matching edges as ranking seeds.
 4. **Personalized PageRank:** Spread relevance from the matched nodes through their graph connections.
 5. **Rank passages:** Score and select passages associated with the most relevant graph nodes.
 6. **Generate answer:** Ask an LLM to answer the question using the selected passages as evidence.
 
-`LLMQueryEntityExtractor` implements the query-entity extraction step through the shared
-structured generation provider. It returns a small, validated list of named entities and
-key noun phrases without answering the question.
+`LLMQueryEntityExtractor` implements query-concept extraction through the shared structured
+generation provider. It returns validated entity and relationship lists without answering
+the question.
 
-`ExactEntityLinker` links extracted entities to graph nodes through the same normalization
-used during indexing. Unmatched entities are ignored; embedding-based linking can be added
-later through the `EntityLinker` protocol.
+`EmbeddingEntityLinker` resolves normalized exact matches first, then embeds unmatched
+entities, relationships, graph nodes, and edge labels to find semantic matches above a
+configurable similarity threshold. Semantic relationship matching uses the complete edge
+text—subject, relationship, and object—so generic labels such as `offers` retain their fact
+context. A matched edge contributes its subject and object nodes. Node and edge embeddings
+are cached and reused across retrieval requests. Relationship linking has its own lower
+threshold and uses rare shared terms to focus semantic comparison on relevant facts.
 
 `build_ranking_graph` projects the knowledge graph into an undirected, unweighted NetworkX
 entity graph. It excludes visualization-only document nodes and collapses repeated
@@ -92,6 +97,10 @@ returns deterministic `RankedChunk` results ordered by graph relevance.
 `HippoRAGRetriever` composes query extraction, entity linking, the ranking projection,
 Personalized PageRank, and chunk aggregation. It returns ranked document/chunk IDs and
 does not depend on a database or chunk-content store.
+
+## Roadmap
+
+See [OPTIMIZATIONS.md](OPTIMIZATIONS.md) for the prioritized retrieval improvements.
 
 ## Development
 

@@ -1,7 +1,7 @@
 from typing import Annotated
 
 from fastapi import Depends, Request
-from graph_rag import ExactEntityLinker, HippoRAGRetriever, LLMQueryEntityExtractor
+from graph_rag import EntityLinker, HippoRAGRetriever, LLMQueryEntityExtractor
 from llm_providers.embeddings.base import EmbeddingProvider
 from llm_providers.generation.base import GenerationProvider, StructuredGenerationProvider
 
@@ -28,22 +28,33 @@ def get_embedding_provider(request: Request) -> EmbeddingProvider:
 EmbeddingProviderDependency = Annotated[EmbeddingProvider, Depends(get_embedding_provider)]
 
 
-def get_generation_provider(request: Request) -> GenerationProvider:
-    return request.app.state.generation_provider
+def get_entity_linker(request: Request) -> EntityLinker:
+    """Return the shared graph entity linker."""
+
+    return request.app.state.entity_linker
 
 
-GenerationProviderDependency = Annotated[GenerationProvider, Depends(get_generation_provider)]
+EntityLinkerDependency = Annotated[EntityLinker, Depends(get_entity_linker)]
 
 
-def get_structured_generation_provider(request: Request) -> StructuredGenerationProvider:
-    """Return the application's structured generation provider."""
+def get_answer_provider(request: Request) -> GenerationProvider:
+    """Return the provider used for final answer generation."""
 
-    return request.app.state.generation_provider
+    return request.app.state.answer_provider
 
 
-StructuredGenerationProviderDependency = Annotated[
+AnswerProviderDependency = Annotated[GenerationProvider, Depends(get_answer_provider)]
+
+
+def get_extraction_provider(request: Request) -> StructuredGenerationProvider:
+    """Return the provider used for structured query extraction."""
+
+    return request.app.state.extraction_provider
+
+
+ExtractionProviderDependency = Annotated[
     StructuredGenerationProvider,
-    Depends(get_structured_generation_provider),
+    Depends(get_extraction_provider),
 ]
 
 
@@ -79,14 +90,15 @@ WikiBaseServiceDependency = Annotated[
 def get_query_chunks_service(
     database: DatabaseDependency,
     embeddings: EmbeddingProviderDependency,
-    generation: StructuredGenerationProviderDependency,
+    extraction: ExtractionProviderDependency,
+    entity_linker: EntityLinkerDependency,
 ) -> QueryChunksService:
     return QueryChunksService(
         database=database,
         embeddings=embeddings,
         graph_retriever=HippoRAGRetriever(
-            entity_extractor=LLMQueryEntityExtractor(generation=generation),
-            entity_linker=ExactEntityLinker(),
+            entity_extractor=LLMQueryEntityExtractor(generation=extraction),
+            entity_linker=entity_linker,
         ),
     )
 
@@ -99,9 +111,9 @@ QueryChunksServiceDependency = Annotated[
 
 def get_query_service(
     chunks: QueryChunksServiceDependency,
-    generation: GenerationProviderDependency,
+    answer_provider: AnswerProviderDependency,
 ) -> QueryService:
-    return QueryService(chunks=chunks, generation=generation)
+    return QueryService(chunks=chunks, generation=answer_provider)
 
 
 QueryServiceDependency = Annotated[QueryService, Depends(get_query_service)]

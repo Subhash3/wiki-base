@@ -3,7 +3,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from wiki_base.retrieval import RetrievalMode
+from wiki_base.retrieval import RetrievalMode, RetrievalStrategy
 
 
 class ConversationMessage(BaseModel):
@@ -41,3 +41,4 @@ class QueryResponse(BaseModel):
     answer: str
     citations: list[CitationResponse]
     mode: RetrievalMode
+    retrieval_strategy: RetrievalStrategy
