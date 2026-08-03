@@ -47,6 +47,11 @@ class KnowledgeGraph:
     def to_json(self) -> str:
         """Serialize the canonical graph and provenance as JSON."""
 
+        return json.dumps(self.to_dict(), indent=2)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return the canonical graph as a JSON-compatible mapping."""
+
         edges = []
         for edge in sorted(
             self.edges(),
@@ -72,13 +77,18 @@ class KnowledgeGraph:
                     ],
                 }
             )
-        return json.dumps({"version": 1, "edges": edges}, indent=2)
+        return {"version": 1, "edges": edges}
 
     @classmethod
     def from_json(cls, content: str) -> "KnowledgeGraph":
         """Load a canonical knowledge graph from JSON."""
 
-        payload = json.loads(content)
+        return cls.from_dict(json.loads(content))
+
+    @classmethod
+    def from_dict(cls, payload: Any) -> "KnowledgeGraph":
+        """Load a canonical graph from a JSON-compatible mapping."""
+
         if not isinstance(payload, dict) or payload.get("version") != 1:
             raise ValueError("Unsupported knowledge graph JSON")
         edges = payload.get("edges")

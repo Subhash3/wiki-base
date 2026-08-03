@@ -118,8 +118,13 @@ async def list_wiki_base_retrieval_statuses(
         """
         SELECT document.wiki_base_id, ingestion.status AS lite_status,
                CASE
-                   WHEN ingestion.status = 'ready'
-                       THEN coalesce(graph.status, 'queued')
+                   WHEN ingestion.status = 'ready' THEN
+                       CASE
+                           WHEN graph.status = 'ready'
+                                AND stored_graph.document_id IS NULL
+                               THEN 'queued'
+                           ELSE coalesce(graph.status, 'queued')
+                       END
                    ELSE ingestion.status
                END AS pro_status
         FROM documents AS document
@@ -127,6 +132,8 @@ async def list_wiki_base_retrieval_statuses(
           ON ingestion.document_id = document.id
         LEFT JOIN graph_indexing_jobs AS graph
           ON graph.document_id = document.id
+        LEFT JOIN document_graphs AS stored_graph
+          ON stored_graph.document_id = document.id
         WHERE $1::uuid IS NULL OR document.wiki_base_id = $1
         """,
         wiki_base_id,

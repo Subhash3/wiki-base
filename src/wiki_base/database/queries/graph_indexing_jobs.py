@@ -1,5 +1,4 @@
 import json
-from pathlib import Path
 from typing import Any
 from uuid import UUID
 
@@ -8,29 +7,6 @@ from document_processing.models import DocumentChunk
 from graph_rag import IndexedChunk
 
 from wiki_base.database.records import GraphIndexingJobRecord
-
-
-async def list_ready_wiki_base_graph_paths(
-    connection: Connection,
-    wiki_base_id: UUID,
-) -> list[Path]:
-    """List ready document graph files for a wiki base."""
-
-    rows = await connection.fetch(
-        """
-        SELECT job.output_path
-        FROM graph_indexing_jobs AS job
-        JOIN documents AS document ON document.id = job.document_id
-        JOIN ingestion_jobs AS ingestion_job
-          ON ingestion_job.document_id = document.id
-        WHERE document.wiki_base_id = $1
-          AND ingestion_job.status = 'ready'
-          AND job.status = 'ready'
-          AND job.output_path IS NOT NULL
-        """,
-        wiki_base_id,
-    )
-    return [Path(row["output_path"]) for row in rows]
 
 
 async def claim_next_graph_indexing_job(
@@ -99,24 +75,16 @@ async def load_graph_indexing_chunks(
 async def complete_graph_indexing_job(
     connection: Connection,
     job: GraphIndexingJobRecord,
-    *,
-    output_path: Path,
-    extraction_model: str,
-    index_version: str,
 ) -> None:
     """Mark a graph indexing job ready."""
 
     await connection.execute(
         """
         UPDATE graph_indexing_jobs
-        SET status = 'ready', output_path = $2, extraction_model = $3,
-            index_version = $4, completed_at = now(), error_message = NULL
+        SET status = 'ready', completed_at = now(), error_message = NULL
         WHERE document_id = $1
         """,
         job.document_id,
-        str(output_path),
-        extraction_model,
-        index_version,
     )
 
 

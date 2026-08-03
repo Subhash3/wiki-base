@@ -45,6 +45,10 @@ WIKI_BASE_ANSWER_GENERATION_MODEL=qwen3.5:9b
 The extraction model handles graph indexing and query-concept extraction. The answer model
 is used only after retrieval has selected supporting chunks.
 
+The graph worker stores one canonical JSONB graph per document in PostgreSQL. Graph-indexing
+jobs contain processing status and errors only; Pro retrieval loads ready document graphs
+from the database and merges them in memory.
+
 The API is then available at `http://localhost:8000`. Useful initial endpoints are:
 
 - `GET /health`

@@ -1,6 +1,5 @@
 import logging
 from dataclasses import dataclass
-from pathlib import Path
 from uuid import UUID
 
 import asyncpg
@@ -12,8 +11,8 @@ from llm_providers.embeddings.base import EmbeddingProvider
 from wiki_base.api.errors import ServiceError
 from wiki_base.database.connection import Database
 from wiki_base.database.queries.chunks import load_chunks_by_ids, search_chunks
-from wiki_base.database.queries.graph_indexing_jobs import (
-    list_ready_wiki_base_graph_paths,
+from wiki_base.database.queries.document_graphs import (
+    list_ready_wiki_base_graphs,
 )
 from wiki_base.database.queries.wiki_bases import (
     get_wiki_base,
@@ -191,10 +190,13 @@ class QueryChunksService:
         """Retrieve chunks from merged ready document graphs."""
 
         async with self._database.connection() as connection:
-            paths = await list_ready_wiki_base_graph_paths(connection, wiki_base_id)
+            stored_graphs = await list_ready_wiki_base_graphs(connection, wiki_base_id)
         graph = KnowledgeGraph()
-        for path in paths:
-            graph = KnowledgeGraph.merge(graph, self._load_graph(path))
+        for stored_graph in stored_graphs:
+            graph = KnowledgeGraph.merge(
+                graph,
+                KnowledgeGraph.from_dict(stored_graph),
+            )
 
         ranked = await self._graph_retriever.retrieve(question, graph, limit=limit)
         async with self._database.connection() as connection:
@@ -224,10 +226,3 @@ class QueryChunksService:
             for item in ranked
             if (chunk := chunks_by_id.get(item.chunk_id)) is not None
         ]
-
-    @staticmethod
-    def _load_graph(path: Path) -> KnowledgeGraph:
-        """Load one canonical document graph."""
-
-        content = path.read_text(encoding="utf-8")
-        return KnowledgeGraph.from_json(content)

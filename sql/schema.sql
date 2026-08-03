@@ -53,13 +53,22 @@ CREATE TABLE IF NOT EXISTS graph_indexing_jobs (
     document_id uuid PRIMARY KEY REFERENCES documents(id) ON DELETE CASCADE,
     status text NOT NULL DEFAULT 'queued'
         CHECK (status IN ('queued', 'processing', 'ready', 'failed')),
-    output_path text,
-    extraction_model text,
-    index_version text,
     error_message text,
     queued_at timestamptz NOT NULL DEFAULT now(),
     started_at timestamptz,
     completed_at timestamptz
+);
+
+ALTER TABLE graph_indexing_jobs
+    DROP COLUMN IF EXISTS output_path,
+    DROP COLUMN IF EXISTS extraction_model,
+    DROP COLUMN IF EXISTS index_version;
+
+CREATE TABLE IF NOT EXISTS document_graphs (
+    document_id uuid PRIMARY KEY REFERENCES documents(id) ON DELETE CASCADE,
+    graph jsonb NOT NULL CHECK (jsonb_typeof(graph) = 'object'),
+    extraction_model text NOT NULL,
+    index_version text NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS chunks (
@@ -95,6 +104,17 @@ FROM documents AS document
 JOIN ingestion_jobs AS job ON job.document_id = document.id
 WHERE job.status = 'ready'
 ON CONFLICT (document_id) DO NOTHING;
+
+-- File-backed ready jobs have no database artifact and must be indexed again.
+UPDATE graph_indexing_jobs AS job
+SET status = 'queued', queued_at = now(), started_at = NULL,
+    completed_at = NULL, error_message = NULL
+WHERE job.status = 'ready'
+  AND NOT EXISTS (
+      SELECT 1
+      FROM document_graphs AS graph
+      WHERE graph.document_id = job.document_id
+  );
 
 CREATE INDEX IF NOT EXISTS documents_wiki_base_id_idx ON documents (wiki_base_id);
 CREATE INDEX IF NOT EXISTS ingestion_jobs_status_idx ON ingestion_jobs (status, queued_at);

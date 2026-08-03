@@ -31,14 +31,13 @@ class Settings(BaseSettings):
     embedding_batch_size: int = Field(default=16, ge=1)
     ollama_url: str = "http://127.0.0.1:11434"
     ollama_timeout_seconds: float = Field(default=120, gt=0)
-    extraction_model: str = "qwen3.5:0.8b"
-    answer_generation_model: str = "qwen3.5:0.8b"
+    extraction_model: str = "gemma3:270m"
+    answer_generation_model: str = "gemma3:270m"
     ocr_languages: str = "english"
     ocr_force_full_page: bool = False
     chunk_max_tokens: int = Field(default=700, ge=50)
     chunk_tokenizer_model: str = "BAAI/bge-m3"
     worker_poll_interval_seconds: float = Field(default=1, gt=0)
-    graph_directory: Path = Path(".wiki-base-graphs")
     graph_index_version: str = "1"
     graph_entity_similarity_threshold: float = Field(default=0.75, ge=-1, le=1)
     graph_relationship_similarity_threshold: float = Field(default=0.6, ge=-1, le=1)

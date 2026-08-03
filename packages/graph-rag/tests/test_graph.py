@@ -59,3 +59,18 @@ def test_canonical_json_round_trip_preserves_graph() -> None:
     assert loaded.nodes == graph.nodes
     assert list(loaded.edges()) == list(graph.edges())
     assert "document:" not in graph.to_json()
+
+
+def test_canonical_dict_round_trip_preserves_graph() -> None:
+    """Database-ready mappings retain graph facts and provenance."""
+
+    graph = KnowledgeGraph()
+    graph.add_triple(
+        Triple(subject="alice", relation="works at", object="acme"),
+        provenance=TripleProvenance(document_id=DOCUMENT_ONE, chunk_id=CHUNK_ONE),
+    )
+
+    loaded = KnowledgeGraph.from_dict(graph.to_dict())
+
+    assert loaded.nodes == graph.nodes
+    assert list(loaded.edges()) == list(graph.edges())

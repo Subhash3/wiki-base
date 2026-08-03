@@ -1,6 +1,5 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from pathlib import Path
 from uuid import UUID
 
 from document_processing.models import DocumentChunk
@@ -17,11 +16,25 @@ CHUNK_ID = UUID("00000000-0000-0000-0000-000000000001")
 class StubDatabase:
     """Provide a connection context for worker tests."""
 
+    class Connection:
+        """Provide a transaction context for graph persistence."""
+
+        @asynccontextmanager
+        async def transaction(self) -> AsyncIterator[None]:
+            """Yield one placeholder transaction."""
+
+            yield
+
+    def __init__(self) -> None:
+        """Create the shared placeholder connection."""
+
+        self._connection = self.Connection()
+
     @asynccontextmanager
     async def connection(self) -> AsyncIterator[object]:
         """Yield a placeholder connection."""
 
-        yield object()
+        yield self._connection
 
 
 class StubIndexer:
@@ -63,13 +76,13 @@ def make_chunk() -> IndexedChunk:
 
 
 async def test_worker_indexes_and_completes_one_job(
-    tmp_path: Path,
     monkeypatch,
 ) -> None:
-    """A queued document is written and marked ready."""
+    """A queued document graph is stored and marked ready."""
 
     job = GraphIndexingJobRecord(document_id=DOCUMENT_ID)
-    completed: dict[str, object] = {}
+    stored: dict[str, object] = {}
+    completed = False
 
     async def claim(_connection):
         return job
@@ -78,16 +91,20 @@ async def test_worker_indexes_and_completes_one_job(
         assert document_id == DOCUMENT_ID
         return [make_chunk()]
 
-    async def complete(_connection, _job, **values):
-        completed.update(values)
+    async def store(_connection, **values):
+        stored.update(values)
+
+    async def complete(_connection, _job):
+        nonlocal completed
+        completed = True
 
     monkeypatch.setattr(graph_indexing, "claim_next_graph_indexing_job", claim)
     monkeypatch.setattr(graph_indexing, "load_graph_indexing_chunks", load)
+    monkeypatch.setattr(graph_indexing, "upsert_document_graph", store)
     monkeypatch.setattr(graph_indexing, "complete_graph_indexing_job", complete)
     worker = GraphIndexingWorker(
         database=StubDatabase(),  # type: ignore[arg-type]
         indexer=StubIndexer(),  # type: ignore[arg-type]
-        output_directory=tmp_path,
         extraction_model="test-model",
         index_version="1",
         poll_interval_seconds=1,
@@ -95,15 +112,17 @@ async def test_worker_indexes_and_completes_one_job(
 
     processed = await worker.run_once()
 
-    output_path = tmp_path / f"{DOCUMENT_ID}.json"
     assert processed is True
-    assert completed["output_path"] == output_path
-    assert KnowledgeGraph.from_json(output_path.read_text()).nodes == frozenset(
+    assert completed is True
+    assert stored["document_id"] == DOCUMENT_ID
+    assert stored["extraction_model"] == "test-model"
+    assert stored["index_version"] == "1"
+    assert KnowledgeGraph.from_dict(stored["graph"]).nodes == frozenset(
         {"alice", "acme"}
     )
 
 
-async def test_worker_marks_failed_job(tmp_path: Path, monkeypatch) -> None:
+async def test_worker_marks_failed_job(monkeypatch) -> None:
     """An empty document is marked failed."""
 
     job = GraphIndexingJobRecord(document_id=DOCUMENT_ID)
@@ -124,7 +143,6 @@ async def test_worker_marks_failed_job(tmp_path: Path, monkeypatch) -> None:
     worker = GraphIndexingWorker(
         database=StubDatabase(),  # type: ignore[arg-type]
         indexer=StubIndexer(),  # type: ignore[arg-type]
-        output_directory=tmp_path,
         extraction_model="test-model",
         index_version="1",
         poll_interval_seconds=1,

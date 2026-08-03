@@ -25,7 +25,6 @@ async def run_worker() -> None:
         indexer=HippoRAGIndexer(
             extractor=LLMTripleExtractor(generation=extraction),
         ),
-        output_directory=settings.graph_directory,
         extraction_model=settings.extraction_model,
         index_version=settings.graph_index_version,
         poll_interval_seconds=settings.worker_poll_interval_seconds,

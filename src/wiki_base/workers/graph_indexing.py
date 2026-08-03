@@ -1,11 +1,10 @@
 import asyncio
 import logging
-from pathlib import Path
-from uuid import UUID
 
-from graph_rag import HippoRAGIndexer, KnowledgeGraph
+from graph_rag import HippoRAGIndexer
 
 from wiki_base.database.connection import Database
+from wiki_base.database.queries.document_graphs import upsert_document_graph
 from wiki_base.database.queries.graph_indexing_jobs import (
     claim_next_graph_indexing_job,
     complete_graph_indexing_job,
@@ -24,7 +23,6 @@ class GraphIndexingWorker:
         *,
         database: Database,
         indexer: HippoRAGIndexer,
-        output_directory: Path,
         extraction_model: str,
         index_version: str,
         poll_interval_seconds: float,
@@ -33,7 +31,6 @@ class GraphIndexingWorker:
 
         self._database = database
         self._indexer = indexer
-        self._output_directory = output_directory
         self._extraction_model = extraction_model
         self._index_version = index_version
         self._poll_interval_seconds = poll_interval_seconds
@@ -63,15 +60,16 @@ class GraphIndexingWorker:
                 raise ValueError("Document has no chunks to index")
 
             graph = await self._indexer.index(chunks)
-            output_path = self._write_graph(job.document_id, graph)
             async with self._database.connection() as connection:
-                await complete_graph_indexing_job(
-                    connection,
-                    job,
-                    output_path=output_path,
-                    extraction_model=self._extraction_model,
-                    index_version=self._index_version,
-                )
+                async with connection.transaction():
+                    await upsert_document_graph(
+                        connection,
+                        document_id=job.document_id,
+                        graph=graph.to_dict(),
+                        extraction_model=self._extraction_model,
+                        index_version=self._index_version,
+                    )
+                    await complete_graph_indexing_job(connection, job)
             logger.info("indexed graph for document %s", job.document_id)
         except Exception as error:
             logger.exception("graph indexing failed for document %s", job.document_id)
@@ -82,11 +80,3 @@ class GraphIndexingWorker:
                     error_message=str(error)[:500] or "Graph indexing failed",
                 )
         return True
-
-    def _write_graph(self, document_id: UUID, graph: KnowledgeGraph) -> Path:
-        """Write one canonical graph JSON file."""
-
-        self._output_directory.mkdir(parents=True, exist_ok=True)
-        output_path = self._output_directory / f"{document_id}.json"
-        output_path.write_text(graph.to_json(), encoding="utf-8")
-        return output_path

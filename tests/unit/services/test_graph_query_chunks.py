@@ -1,7 +1,6 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
-from pathlib import Path
 from uuid import UUID
 
 from graph_rag import KnowledgeGraph, RankedChunk, Triple, TripleProvenance
@@ -60,37 +59,31 @@ class StubGraphRetriever:
         ]
 
 
-def write_graph(
-    path: Path,
+def make_graph(
     *,
     triple: Triple,
     document_id: UUID,
     chunk_id: UUID,
-) -> None:
-    """Write one canonical document graph."""
+) -> dict[str, object]:
+    """Build one canonical document graph payload."""
 
     graph = KnowledgeGraph()
     graph.add_triple(
         triple,
         provenance=TripleProvenance(document_id=document_id, chunk_id=chunk_id),
     )
-    path.write_text(graph.to_json(), encoding="utf-8")
+    return graph.to_dict()
 
 
 async def test_pro_retrieval_merges_wiki_base_graphs_and_preserves_rank(
     monkeypatch,
-    tmp_path: Path,
 ) -> None:
-    first_path = tmp_path / "first.json"
-    second_path = tmp_path / "second.json"
-    write_graph(
-        first_path,
+    first_graph = make_graph(
         triple=Triple(subject="Alice", relation="works at", object="Acme"),
         document_id=DOCUMENT_ONE,
         chunk_id=CHUNK_ONE,
     )
-    write_graph(
-        second_path,
+    second_graph = make_graph(
         triple=Triple(subject="Acme", relation="located in", object="Paris"),
         document_id=DOCUMENT_TWO,
         chunk_id=CHUNK_TWO,
@@ -113,8 +106,8 @@ async def test_pro_retrieval_merges_wiki_base_graphs_and_preserves_rank(
             }
         }
 
-    async def list_paths(_connection, _wiki_base_id):
-        return [first_path, second_path]
+    async def list_graphs(_connection, _wiki_base_id):
+        return [first_graph, second_graph]
 
     async def load_chunks(_connection, *, wiki_base_id, chunk_ids):
         assert wiki_base_id == WIKI_BASE_ID
@@ -150,8 +143,8 @@ async def test_pro_retrieval_merges_wiki_base_graphs_and_preserves_rank(
     )
     monkeypatch.setattr(
         query_chunks,
-        "list_ready_wiki_base_graph_paths",
-        list_paths,
+        "list_ready_wiki_base_graphs",
+        list_graphs,
     )
     monkeypatch.setattr(query_chunks, "load_chunks_by_ids", load_chunks)
 
