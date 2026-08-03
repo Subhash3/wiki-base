@@ -1,3 +1,4 @@
+import logging
 from uuid import UUID
 
 from graph_rag.entity_linking import EmbeddingEntityLinker, ExactEntityLinker
@@ -110,7 +111,7 @@ async def test_embedding_linker_uses_exact_matches_without_embeddings() -> None:
     assert embeddings.queries == []
 
 
-async def test_embedding_linker_matches_unseen_entity_by_similarity() -> None:
+async def test_embedding_linker_matches_unseen_entity_by_similarity(caplog) -> None:
     """An unmatched entity links to its closest graph node."""
 
     embeddings = StubEmbeddings(
@@ -124,11 +125,13 @@ async def test_embedding_linker_matches_unseen_entity_by_similarity() -> None:
         embeddings=embeddings,
         similarity_threshold=0.8,
     )
+    caplog.set_level(logging.DEBUG, logger="graph_rag.entity_linking")
 
     nodes = await linker.link(concepts(["the company"]), make_graph())
 
     assert nodes == ["acme"]
     assert embeddings.queries == ["the company"]
+    assert "Embedding entity match 'the company' -> 'acme'" in caplog.text
 
 
 async def test_embedding_linker_rejects_candidates_below_threshold() -> None:

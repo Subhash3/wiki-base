@@ -1,3 +1,4 @@
+import logging
 from uuid import UUID
 
 import pytest
@@ -59,7 +60,7 @@ def make_multihop_graph() -> KnowledgeGraph:
     return graph
 
 
-async def test_retrieves_chunks_across_multiple_graph_hops() -> None:
+async def test_retrieves_chunks_across_multiple_graph_hops(caplog) -> None:
     """A query seed retrieves evidence connected through shared entities."""
 
     extractor = StubEntityExtractor(["Alice"])
@@ -67,6 +68,7 @@ async def test_retrieves_chunks_across_multiple_graph_hops() -> None:
         entity_extractor=extractor,
         entity_linker=ExactEntityLinker(),
     )
+    caplog.set_level(logging.DEBUG, logger="graph_rag")
 
     ranked = await retriever.retrieve(
         "Where is Alice's employer headquartered?",
@@ -77,6 +79,9 @@ async def test_retrieves_chunks_across_multiple_graph_hops() -> None:
     assert extractor.questions == ["Where is Alice's employer headquartered?"]
     assert {chunk.chunk_id for chunk in ranked} == {CHUNK_ONE, CHUNK_TWO}
     assert ranked[0].score >= ranked[1].score
+    assert "Graph query concepts entities=['Alice'] relationships=[]" in caplog.text
+    assert "Exact graph matches entities=" in caplog.text
+    assert "PageRank nodes total=3 top=" in caplog.text
 
 
 async def test_returns_empty_when_entities_do_not_link() -> None:

@@ -14,6 +14,8 @@ from graph_rag.ranking import (
 
 logger = logging.getLogger(__name__)
 
+_PAGE_RANK_LOG_LIMIT = 20
+
 
 class HippoRAGRetriever:
     """Retrieve chunks through entity linking and Personalized PageRank."""
@@ -48,6 +50,11 @@ class HippoRAGRetriever:
             raise ValueError("limit must be positive")
 
         concepts = await self._entity_extractor.extract(question)
+        logger.debug(
+            "Graph query concepts entities=%s relationships=%s",
+            concepts.entities,
+            concepts.relationships,
+        )
         mentioned_nodes = _mentioned_nodes(question, graph)
         concepts = QueryConcepts(
             entities=[*mentioned_nodes, *concepts.entities],
@@ -71,6 +78,14 @@ class HippoRAGRetriever:
             alpha=self._alpha,
             max_iterations=self._max_iterations,
             tolerance=self._tolerance,
+        )
+        logger.debug(
+            "PageRank nodes total=%d top=%s",
+            len(node_scores),
+            [
+                (node, round(score, 6))
+                for node, score in list(node_scores.items())[:_PAGE_RANK_LOG_LIMIT]
+            ],
         )
         return aggregate_chunk_scores(graph, node_scores)[:limit]
 

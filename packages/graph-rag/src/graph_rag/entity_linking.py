@@ -35,15 +35,24 @@ class ExactEntityLinker:
 
         linked: list[str] = []
         seen: set[str] = set()
+        exact_entities: list[tuple[str, str]] = []
         for entity in concepts.entities:
             node = normalize_text(entity)
             if node in graph.nodes and node not in seen:
                 linked.append(node)
                 seen.add(node)
+                exact_entities.append((entity, node))
         relation_lookup = _relation_lookup(graph)
+        exact_relationships: list[tuple[str, str]] = []
         for relationship in concepts.relationships:
             for relation in relation_lookup.get(normalize_text(relationship), []):
+                exact_relationships.append((relationship, relation))
                 _append_relation_endpoints(linked, seen, graph, relation)
+        logger.debug(
+            "Exact graph matches entities=%s relationships=%s",
+            exact_entities,
+            exact_relationships,
+        )
         return linked
 
 
@@ -88,6 +97,7 @@ class EmbeddingEntityLinker:
 
         linked: list[str] = []
         seen: set[str] = set()
+        exact_entities: list[tuple[str, str]] = []
         unmatched_entities: list[str] = []
         unmatched_entity_keys: set[str] = set()
         for entity in concepts.entities:
@@ -98,11 +108,13 @@ class EmbeddingEntityLinker:
                 if normalized not in seen:
                     linked.append(normalized)
                     seen.add(normalized)
+                    exact_entities.append((entity, normalized))
             elif normalized not in unmatched_entity_keys:
                 unmatched_entities.append(entity.strip())
                 unmatched_entity_keys.add(normalized)
 
         relation_lookup = _relation_lookup(graph)
+        exact_relationships: list[tuple[str, str]] = []
         unmatched_relationships: list[str] = []
         unmatched_relationship_keys: set[str] = set()
         for relationship in concepts.relationships:
@@ -112,10 +124,17 @@ class EmbeddingEntityLinker:
             exact_relations = relation_lookup.get(normalized)
             if exact_relations:
                 for relation in exact_relations:
+                    exact_relationships.append((relationship, relation))
                     _append_relation_endpoints(linked, seen, graph, relation)
             elif normalized not in unmatched_relationship_keys:
                 unmatched_relationships.append(relationship.strip())
                 unmatched_relationship_keys.add(normalized)
+
+        logger.debug(
+            "Exact graph matches entities=%s relationships=%s",
+            exact_entities,
+            exact_relationships,
+        )
 
         nodes = sorted(graph.nodes)
         for _, node in await self._semantic_matches(
@@ -177,7 +196,7 @@ class EmbeddingEntityLinker:
             best_similarity, best_candidate = ranked[0]
             if best_similarity + score_bonus < threshold:
                 logger.debug(
-                    "Rejected semantic %s link %r -> %r "
+                    "Rejected embedding %s match %r -> %r "
                     "(similarity=%.3f score=%.3f threshold=%.3f)",
                     kind,
                     query,
@@ -192,7 +211,7 @@ class EmbeddingEntityLinker:
                 if score < threshold:
                     break
                 logger.debug(
-                    "Semantic %s link %r -> %r (similarity=%.3f score=%.3f)",
+                    "Embedding %s match %r -> %r (similarity=%.3f score=%.3f)",
                     kind,
                     query,
                     candidate,
