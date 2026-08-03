@@ -33,6 +33,23 @@ async def upsert_document_graph(
     )
 
 
+async def get_document_graph(
+    connection: Connection,
+    document_id: UUID,
+) -> dict[str, Any] | None:
+    """Load the canonical graph stored for one document."""
+
+    value = await connection.fetchval(
+        """
+        SELECT graph
+        FROM document_graphs
+        WHERE document_id = $1
+        """,
+        document_id,
+    )
+    return None if value is None else _graph_payload(value)
+
+
 async def list_ready_wiki_base_graphs(
     connection: Connection,
     wiki_base_id: UUID,

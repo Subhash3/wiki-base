@@ -49,6 +49,13 @@ The graph worker stores one canonical JSONB graph per document in PostgreSQL. Gr
 jobs contain processing status and errors only; Pro retrieval loads ready document graphs
 from the database and merges them in memory.
 
+Render one stored document graph, or export and visualize the merged graph for a wiki base:
+
+```bash
+uv run graph-rag-visualize <document-id>
+uv run graph-rag-visualize-merge <wiki-base-id>
+```
+
 The API is then available at `http://localhost:8000`. Useful initial endpoints are:
 
 - `GET /health`

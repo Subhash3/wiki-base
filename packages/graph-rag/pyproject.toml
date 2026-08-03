@@ -11,10 +11,6 @@ dependencies = [
     "pyvis>=0.3.2",
 ]
 
-[project.scripts]
-graph-rag-visualize = "graph_rag.visualization_cli:run"
-graph-rag-visualize-merge = "graph_rag.visualization_merge_cli:run"
-
 [dependency-groups]
 dev = [
     "pytest>=8.3",

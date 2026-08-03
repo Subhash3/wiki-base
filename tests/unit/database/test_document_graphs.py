@@ -2,6 +2,7 @@ import json
 from uuid import UUID
 
 from wiki_base.database.queries.document_graphs import (
+    get_document_graph,
     list_ready_wiki_base_graphs,
     upsert_document_graph,
 )
@@ -19,6 +20,7 @@ class StubConnection:
 
         self.execute_arguments: tuple[object, ...] = ()
         self.rows: list[dict[str, object]] = []
+        self.value: object | None = None
 
     async def execute(self, _query: str, *arguments: object) -> None:
         """Capture graph upsert arguments."""
@@ -30,6 +32,12 @@ class StubConnection:
 
         assert wiki_base_id == WIKI_BASE_ID
         return self.rows
+
+    async def fetchval(self, _query: str, document_id: UUID) -> object | None:
+        """Return the configured document graph."""
+
+        assert document_id == DOCUMENT_ID
+        return self.value
 
 
 async def test_upserts_canonical_graph_as_json() -> None:
@@ -65,3 +73,17 @@ async def test_loads_jsonb_strings_and_mappings() -> None:
     )
 
     assert graphs == [GRAPH, GRAPH]
+
+
+async def test_loads_one_document_graph() -> None:
+    """A stored document graph is normalized into a mapping."""
+
+    connection = StubConnection()
+    connection.value = json.dumps(GRAPH)
+
+    graph = await get_document_graph(
+        connection,  # type: ignore[arg-type]
+        DOCUMENT_ID,
+    )
+
+    assert graph == GRAPH
