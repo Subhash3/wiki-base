@@ -22,3 +22,4 @@ logs/
 docs-for-testing/
 graph-visualization/
 benchmarks/*.results.json
+PLAN.md

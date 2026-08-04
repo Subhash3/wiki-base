@@ -2,7 +2,7 @@
 
 Run from the repository root:
 
-    uv run --package graph-rag python graphrag_sandbox.py path/to/documents
+    uv run --package graph-rag python cli/graphrag_sandbox.py path/to/documents
 
 Generation settings are loaded from the repository's Wiki Base environment.
 """

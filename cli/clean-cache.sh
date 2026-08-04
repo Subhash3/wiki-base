@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Remove local Python tooling caches from the repository.
+
 set -eu
 
 script_directory="$(cd -- "$(dirname -- "$0")" && pwd)"

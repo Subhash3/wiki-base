@@ -26,7 +26,7 @@ uv run uvicorn wiki_base.main:app --reload
 In a second terminal, start the single ingestion worker:
 
 ```bash
-uv run wiki-base-worker
+uv run wiki-base-ingestion-worker
 ```
 
 Start the graph indexing worker in another terminal:
@@ -66,6 +66,15 @@ uv run graph-rag-visualize-merge <wiki-base-id>
 
 Both commands write canonical JSON and interactive HTML files using the supplied ID as
 the filename.
+
+Standalone development utilities are collected in [`cli/`](cli/). Run them from the
+repository root so they can load the project configuration and use root-relative outputs:
+
+```bash
+uv run --package graph-rag python cli/graphrag_sandbox.py path/to/documents
+uv run python cli/graphrag_retrieval_sandbox.py "Your question" path/to/graph.json
+cli/clean-cache.sh
+```
 
 The API is then available at `http://localhost:8000`. Useful initial endpoints are:
 

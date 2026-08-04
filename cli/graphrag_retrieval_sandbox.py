@@ -2,7 +2,7 @@
 
 Run from the repository root:
 
-    uv run python graphrag_retrieval_sandbox.py \
+    uv run python cli/graphrag_retrieval_sandbox.py \
       "Where is Alice's employer headquartered?" \
       .wiki-base-graphs/document-id.json
 """
