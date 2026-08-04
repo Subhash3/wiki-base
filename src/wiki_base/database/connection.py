@@ -1,6 +1,7 @@
 import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from typing import cast
 
 import asyncpg
 from asyncpg import Connection, Pool
@@ -40,7 +41,7 @@ class Database:
         if self._pool is None:
             raise RuntimeError("Database is not connected")
         async with self._pool.acquire() as connection:
-            yield connection
+            yield cast(Connection, connection)
 
     async def is_ready(self) -> bool:
         if self._pool is None:

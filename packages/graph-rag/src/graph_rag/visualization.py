@@ -153,7 +153,7 @@ class GraphVisualizer:
             directed=True,
             heading=title,
             bgcolor="#f8fafc",
-            font_color="#0f172a",
+            font_color="#0f172a",  # pyright: ignore[reportArgumentType]
             cdn_resources="in_line",
         )
         visualization.from_nx(network)
@@ -224,7 +224,7 @@ class GraphVisualizer:
             if attributes.get("group") != "document":
                 continue
             entity_count = sum(
-                data.get("visualization_only")
+                data.get("visualization_only") is True
                 for _source, _target, data in network.out_edges(node, data=True)
             )
             attributes["title"] = f"{attributes['title']}<br>Entities: {entity_count}"

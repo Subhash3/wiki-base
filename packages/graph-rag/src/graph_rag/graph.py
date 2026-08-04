@@ -42,7 +42,7 @@ class KnowledgeGraph:
             raise ValueError("synonym similarity must be between -1 and 1")
         if first == second or first not in self.nodes or second not in self.nodes:
             return False
-        key = tuple(sorted((first, second)))
+        key = (first, second) if first < second else (second, first)
         self._synonyms[key] = max(similarity, self._synonyms.get(key, -1.0))
         return True
 

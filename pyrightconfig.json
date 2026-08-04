@@ -1,4 +1,11 @@
 {
+  "include": [
+    "cli",
+    "src",
+    "packages/document-processing/src",
+    "packages/graph-rag/src",
+    "packages/llm-providers/src"
+  ],
   "venvPath": ".",
   "venv": ".venv",
   "extraPaths": [

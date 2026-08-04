@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from docling.chunking import HybridChunker
+from docling_core.transforms.chunker.hybrid_chunker import HybridChunker
 from docling_core.transforms.chunker.tokenizer.base import BaseTokenizer
 from docling_core.transforms.chunker.tokenizer.huggingface import (
     HuggingFaceTokenizer,

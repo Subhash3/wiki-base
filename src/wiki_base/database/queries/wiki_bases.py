@@ -58,6 +58,8 @@ async def create_wiki_base_manifest(
                 document_id,
                 str(document.path),
             )
+    if created_at is None:
+        raise RuntimeError("Wiki base creation did not return a timestamp")
     return created_at
 
 

@@ -4,7 +4,8 @@ from docling_core.transforms.chunker.tokenizer.base import BaseTokenizer
 from docling_core.transforms.chunker.tokenizer.huggingface import (
     HuggingFaceTokenizer,
 )
-from docling_core.types.doc import DocItemLabel, DoclingDocument
+from docling_core.types.doc.document import DoclingDocument
+from docling_core.types.doc.labels import DocItemLabel
 
 from document_processing.chunking.docling import DoclingDocumentChunker
 from document_processing.models import ParsedDocument

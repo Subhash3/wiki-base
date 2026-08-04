@@ -421,6 +421,7 @@ def _print_report(report: BenchmarkReport, output: Path) -> None:
             print(f"{result.case_id} [{result.mode.value}] ERROR {result.error}")
             continue
         assert result.metrics is not None
+        assert result.retrieval_strategy is not None
         print(
             f"{result.case_id} [{result.mode.value}/{result.retrieval_strategy.value}] "
             f"hit={result.metrics.hit} recall={result.metrics.recall:.3f} "
