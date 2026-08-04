@@ -45,9 +45,10 @@ WIKI_BASE_ANSWER_GENERATION_MODEL=qwen3.5:9b
 The extraction model handles graph indexing and query-concept extraction. The answer model
 is used only after retrieval has selected supporting chunks.
 
-The graph worker stores one canonical JSONB graph per document in PostgreSQL. Graph-indexing
-jobs contain processing status and errors only; Pro retrieval loads ready document graphs
-from the database and merges them in memory.
+The graph worker stores one canonical JSONB graph and its pgvector entity and relationship
+index per document in PostgreSQL. Graph-indexing jobs contain processing status and errors
+only; Pro retrieval loads ready document graphs, links unmatched query concepts through
+PostgreSQL similarity search, and merges the graphs in memory.
 
 Render one stored document graph, or export and visualize the merged graph for a wiki base:
 

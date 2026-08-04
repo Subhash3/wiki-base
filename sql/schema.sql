@@ -71,6 +71,27 @@ CREATE TABLE IF NOT EXISTS document_graphs (
     index_version text NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS document_graph_concepts (
+    document_id uuid NOT NULL REFERENCES document_graphs(document_id) ON DELETE CASCADE,
+    wiki_base_id uuid NOT NULL REFERENCES wiki_bases(id) ON DELETE CASCADE,
+    concept_type text NOT NULL CHECK (concept_type IN ('entity', 'relationship')),
+    concept_key text NOT NULL,
+    concept_text text NOT NULL CHECK (length(trim(concept_text)) > 0),
+    subject text,
+    relationship text,
+    object text,
+    embedding vector(1024) NOT NULL,
+    embedding_model text NOT NULL,
+    PRIMARY KEY (document_id, concept_type, concept_key),
+    CHECK (
+        (concept_type = 'entity'
+            AND subject IS NULL AND relationship IS NULL AND object IS NULL)
+        OR
+        (concept_type = 'relationship'
+            AND subject IS NOT NULL AND relationship IS NOT NULL AND object IS NOT NULL)
+    )
+);
+
 CREATE TABLE IF NOT EXISTS chunks (
     id uuid PRIMARY KEY,
     wiki_base_id uuid NOT NULL REFERENCES wiki_bases(id) ON DELETE CASCADE,
@@ -120,6 +141,10 @@ CREATE INDEX IF NOT EXISTS documents_wiki_base_id_idx ON documents (wiki_base_id
 CREATE INDEX IF NOT EXISTS ingestion_jobs_status_idx ON ingestion_jobs (status, queued_at);
 CREATE INDEX IF NOT EXISTS graph_indexing_jobs_status_idx
     ON graph_indexing_jobs (status, queued_at);
+CREATE INDEX IF NOT EXISTS document_graph_concepts_scope_idx
+    ON document_graph_concepts (wiki_base_id, concept_type, embedding_model);
+CREATE INDEX IF NOT EXISTS document_graph_concepts_embedding_hnsw_idx
+    ON document_graph_concepts USING hnsw (embedding vector_cosine_ops);
 CREATE INDEX IF NOT EXISTS chunks_wiki_base_id_idx ON chunks (wiki_base_id);
 CREATE INDEX IF NOT EXISTS chunks_document_id_idx ON chunks (document_id);
 CREATE INDEX IF NOT EXISTS chunks_search_vector_idx ON chunks USING gin (search_vector);

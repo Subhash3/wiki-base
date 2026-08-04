@@ -1,10 +1,12 @@
 import asyncio
 import logging
 
-from graph_rag import HippoRAGIndexer
+from graph_rag import GraphConcept, HippoRAGIndexer, graph_concepts
+from llm_providers.embeddings.base import EmbeddingProvider
 
 from wiki_base.database.connection import Database
 from wiki_base.database.queries.document_graphs import upsert_document_graph
+from wiki_base.database.queries.graph_concepts import replace_document_graph_concepts
 from wiki_base.database.queries.graph_indexing_jobs import (
     claim_next_graph_indexing_job,
     complete_graph_indexing_job,
@@ -23,16 +25,23 @@ class GraphIndexingWorker:
         *,
         database: Database,
         indexer: HippoRAGIndexer,
+        embeddings: EmbeddingProvider,
         extraction_model: str,
         index_version: str,
+        embedding_batch_size: int,
         poll_interval_seconds: float,
     ) -> None:
         """Configure the graph indexing worker."""
 
+        if embedding_batch_size < 1:
+            raise ValueError("embedding_batch_size must be positive")
+
         self._database = database
         self._indexer = indexer
+        self._embeddings = embeddings
         self._extraction_model = extraction_model
         self._index_version = index_version
+        self._embedding_batch_size = embedding_batch_size
         self._poll_interval_seconds = poll_interval_seconds
 
     async def run(self) -> None:
@@ -60,6 +69,8 @@ class GraphIndexingWorker:
                 raise ValueError("Document has no chunks to index")
 
             graph = await self._indexer.index(chunks)
+            concepts = graph_concepts(graph)
+            concept_embeddings = await self._embed_concepts(concepts)
             async with self._database.connection() as connection:
                 async with connection.transaction():
                     await upsert_document_graph(
@@ -68,6 +79,13 @@ class GraphIndexingWorker:
                         graph=graph.to_dict(),
                         extraction_model=self._extraction_model,
                         index_version=self._index_version,
+                    )
+                    await replace_document_graph_concepts(
+                        connection,
+                        document_id=job.document_id,
+                        concepts=concepts,
+                        embeddings=concept_embeddings,
+                        embedding_model=self._embeddings.model_info.model,
                     )
                     await complete_graph_indexing_job(connection, job)
             logger.info("indexed graph for document %s", job.document_id)
@@ -80,3 +98,21 @@ class GraphIndexingWorker:
                     error_message=str(error)[:500] or "Graph indexing failed",
                 )
         return True
+
+    async def _embed_concepts(
+        self,
+        concepts: list[GraphConcept],
+    ) -> list[list[float]]:
+        """Embed graph concepts in bounded batches."""
+
+        embeddings: list[list[float]] = []
+        for start in range(0, len(concepts), self._embedding_batch_size):
+            batch = concepts[start : start + self._embedding_batch_size]
+            embeddings.extend(
+                await self._embeddings.embed_documents(
+                    [concept.text for concept in batch]
+                )
+            )
+        if len(embeddings) != len(concepts):
+            raise ValueError("Embedding provider returned an unexpected vector count")
+        return embeddings

@@ -77,13 +77,14 @@ flowchart LR
 generation provider. It returns validated entity and relationship lists without answering
 the question.
 
-`EmbeddingEntityLinker` resolves normalized exact matches first, then embeds unmatched
-entities, relationships, graph nodes, and edge labels to find semantic matches above a
-configurable similarity threshold. Semantic relationship matching uses the complete edge
-text—subject, relationship, and object—so generic labels such as `offers` retain their fact
-context. A matched edge contributes its subject and object nodes. Node and edge embeddings
-are cached and reused across retrieval requests. Relationship linking has its own lower
-threshold and uses rare shared terms to focus semantic comparison on relevant facts.
+`EmbeddingEntityLinker` resolves normalized exact matches first, then embeds unmatched query
+entities and relationships to find semantic matches above a configurable threshold.
+Semantic relationship matching uses the complete edge text—subject, relationship, and
+object—so generic labels such as `offers` retain their fact context. A matched edge
+contributes its subject and object nodes. Wiki Base persists graph concept embeddings and
+supplies pgvector search to the linker, so candidate concepts are not re-embedded during
+retrieval. Standalone use embeds and caches graph candidates in memory. Relationship linking
+has its own lower threshold and uses shared meaningful terms to focus semantic comparison.
 
 `build_ranking_graph` projects the knowledge graph into an undirected, unweighted NetworkX
 entity graph. It excludes visualization-only document nodes and collapses repeated

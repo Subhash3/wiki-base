@@ -4,6 +4,7 @@ from datetime import UTC, datetime
 from uuid import UUID
 
 from graph_rag import KnowledgeGraph, RankedChunk, Triple, TripleProvenance
+from llm_providers.embeddings.base import EmbeddingModelInfo
 
 from wiki_base.database.queries.chunks import StoredChunk
 from wiki_base.database.records import IngestionStatus, WikiBaseRecord
@@ -31,6 +32,12 @@ class StubDatabase:
 class UnusedEmbeddings:
     """Fail if Pro retrieval tries to create an embedding."""
 
+    @property
+    def model_info(self) -> EmbeddingModelInfo:
+        """Return the model used by stored graph concepts."""
+
+        return EmbeddingModelInfo(model="test-model", dimensions=2, max_tokens=10)
+
     async def embed_query(self, _text: str) -> list[float]:
         """Reject unexpected vector retrieval."""
 
@@ -48,10 +55,12 @@ class StubGraphRetriever:
         graph: KnowledgeGraph,
         *,
         limit: int,
+        semantic_search,
     ) -> list[RankedChunk]:
         """Return two chunks in graph rank order."""
 
         assert limit == 2
+        assert semantic_search is not None
         self.graph = graph
         return [
             RankedChunk(document_id=DOCUMENT_TWO, chunk_id=CHUNK_TWO, score=0.8),

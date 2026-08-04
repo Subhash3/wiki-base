@@ -20,6 +20,7 @@ from wiki_base.database.queries.wiki_bases import (
 )
 from wiki_base.database.records import IngestionStatus
 from wiki_base.retrieval import RetrievalMode, RetrievalStrategy
+from wiki_base.retrieval.graph_concepts import PostgresSemanticConceptSearch
 
 logger = logging.getLogger(__name__)
 
@@ -198,7 +199,16 @@ class QueryChunksService:
                 KnowledgeGraph.from_dict(stored_graph),
             )
 
-        ranked = await self._graph_retriever.retrieve(question, graph, limit=limit)
+        ranked = await self._graph_retriever.retrieve(
+            question,
+            graph,
+            limit=limit,
+            semantic_search=PostgresSemanticConceptSearch(
+                database=self._database,
+                wiki_base_id=wiki_base_id,
+                embedding_model=self._embeddings.model_info.model,
+            ),
+        )
         async with self._database.connection() as connection:
             stored = await load_chunks_by_ids(
                 connection,

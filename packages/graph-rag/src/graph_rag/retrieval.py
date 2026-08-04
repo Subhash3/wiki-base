@@ -1,7 +1,7 @@
 import logging
 import re
 
-from graph_rag.entity_linking import EntityLinker
+from graph_rag.entity_linking import EntityLinker, SemanticConceptSearch
 from graph_rag.graph import KnowledgeGraph
 from graph_rag.models import RankedChunk
 from graph_rag.normalization import normalize_text
@@ -43,6 +43,7 @@ class HippoRAGRetriever:
         graph: KnowledgeGraph,
         *,
         limit: int,
+        semantic_search: SemanticConceptSearch | None = None,
     ) -> list[RankedChunk]:
         """Return the highest-ranked chunks for a question."""
 
@@ -60,7 +61,11 @@ class HippoRAGRetriever:
             entities=[*mentioned_nodes, *concepts.entities],
             relationships=concepts.relationships,
         )
-        seeds = await self._entity_linker.link(concepts, graph)
+        seeds = await self._entity_linker.link(
+            concepts,
+            graph,
+            semantic_search=semantic_search,
+        )
         logger.debug(
             "Graph retrieval entities=%s relationships=%s mentioned_nodes=%s seeds=%s",
             concepts.entities,

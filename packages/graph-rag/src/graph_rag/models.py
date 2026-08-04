@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from enum import StrEnum
 from uuid import UUID
 
 from document_processing.models import DocumentChunk
@@ -46,3 +47,41 @@ class GraphEdge:
     relation: str
     object: str
     provenance: frozenset[TripleProvenance]
+
+
+class GraphConceptType(StrEnum):
+    """The searchable type of a graph concept."""
+
+    ENTITY = "entity"
+    RELATIONSHIP = "relationship"
+
+
+@dataclass(frozen=True, slots=True)
+class GraphConcept:
+    """An entity or contextual relationship prepared for embedding."""
+
+    type: GraphConceptType
+    key: str
+    text: str
+    subject: str | None = None
+    relationship: str | None = None
+    object: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class EntityConceptMatch:
+    """An entity returned by semantic concept search."""
+
+    entity: str
+    similarity: float
+
+
+@dataclass(frozen=True, slots=True)
+class RelationshipConceptMatch:
+    """A relationship fact returned by semantic concept search."""
+
+    text: str
+    subject: str
+    relationship: str
+    object: str
+    similarity: float

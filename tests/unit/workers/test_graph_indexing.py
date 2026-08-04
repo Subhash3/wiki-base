@@ -4,6 +4,7 @@ from uuid import UUID
 
 from document_processing.models import DocumentChunk
 from graph_rag import IndexedChunk, KnowledgeGraph, Triple, TripleProvenance
+from llm_providers.embeddings.base import EmbeddingModelInfo
 
 from wiki_base.database.records import GraphIndexingJobRecord
 from wiki_base.workers import graph_indexing
@@ -55,6 +56,32 @@ class StubIndexer:
         return graph
 
 
+class StubEmbeddings:
+    """Embed graph concepts with deterministic test vectors."""
+
+    def __init__(self) -> None:
+        """Capture embedded concept batches."""
+
+        self.batches: list[list[str]] = []
+
+    @property
+    def model_info(self) -> EmbeddingModelInfo:
+        """Return the configured test model."""
+
+        return EmbeddingModelInfo(model="test-embedding", dimensions=2, max_tokens=10)
+
+    async def embed_documents(self, texts: list[str]) -> list[list[float]]:
+        """Return one vector for every supplied concept."""
+
+        self.batches.append(texts)
+        return [[1.0, 0.0] for _ in texts]
+
+    async def embed_query(self, _text: str) -> list[float]:
+        """Reject query embedding in the indexing worker."""
+
+        raise AssertionError("Graph indexing must not embed queries")
+
+
 def make_chunk() -> IndexedChunk:
     """Create one stored chunk for a worker test."""
 
@@ -82,6 +109,7 @@ async def test_worker_indexes_and_completes_one_job(
 
     job = GraphIndexingJobRecord(document_id=DOCUMENT_ID)
     stored: dict[str, object] = {}
+    stored_concepts: dict[str, object] = {}
     completed = False
 
     async def claim(_connection):
@@ -98,15 +126,26 @@ async def test_worker_indexes_and_completes_one_job(
         nonlocal completed
         completed = True
 
+    async def store_concepts(_connection, **values):
+        stored_concepts.update(values)
+
     monkeypatch.setattr(graph_indexing, "claim_next_graph_indexing_job", claim)
     monkeypatch.setattr(graph_indexing, "load_graph_indexing_chunks", load)
     monkeypatch.setattr(graph_indexing, "upsert_document_graph", store)
+    monkeypatch.setattr(
+        graph_indexing,
+        "replace_document_graph_concepts",
+        store_concepts,
+    )
     monkeypatch.setattr(graph_indexing, "complete_graph_indexing_job", complete)
+    embeddings = StubEmbeddings()
     worker = GraphIndexingWorker(
         database=StubDatabase(),  # type: ignore[arg-type]
         indexer=StubIndexer(),  # type: ignore[arg-type]
+        embeddings=embeddings,
         extraction_model="test-model",
         index_version="1",
+        embedding_batch_size=2,
         poll_interval_seconds=1,
     )
 
@@ -120,6 +159,13 @@ async def test_worker_indexes_and_completes_one_job(
     assert KnowledgeGraph.from_dict(stored["graph"]).nodes == frozenset(
         {"alice", "acme"}
     )
+    assert embeddings.batches == [
+        ["acme", "alice"],
+        ["alice works at acme"],
+    ]
+    assert stored_concepts["embedding_model"] == "test-embedding"
+    assert len(stored_concepts["concepts"]) == 3
+    assert len(stored_concepts["embeddings"]) == 3
 
 
 async def test_worker_marks_failed_job(monkeypatch) -> None:
@@ -143,8 +189,10 @@ async def test_worker_marks_failed_job(monkeypatch) -> None:
     worker = GraphIndexingWorker(
         database=StubDatabase(),  # type: ignore[arg-type]
         indexer=StubIndexer(),  # type: ignore[arg-type]
+        embeddings=StubEmbeddings(),
         extraction_model="test-model",
         index_version="1",
+        embedding_batch_size=2,
         poll_interval_seconds=1,
     )
 

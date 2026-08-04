@@ -5,8 +5,13 @@ from typing import Protocol
 
 from llm_providers.embeddings.base import EmbeddingProvider
 
+from graph_rag.concepts import edge_text
 from graph_rag.graph import KnowledgeGraph
-from graph_rag.models import GraphEdge
+from graph_rag.models import (
+    EntityConceptMatch,
+    GraphEdge,
+    RelationshipConceptMatch,
+)
 from graph_rag.normalization import normalize_text
 from graph_rag.query_extraction import QueryConcepts
 
@@ -16,12 +21,45 @@ _RELATIONSHIP_STOP_WORDS = frozenset(
     {"a", "an", "and", "at", "by", "for", "from", "in", "is", "of", "on", "or", "the", "to", "with"}
 )
 _LEXICAL_RELATIONSHIP_BONUS = 0.15
+_SEMANTIC_SEARCH_LIMIT = 20
+
+
+class SemanticConceptSearch(Protocol):
+    """Search persisted graph-concept embeddings."""
+
+    async def search_entities(
+        self,
+        embedding: list[float],
+        *,
+        threshold: float,
+        limit: int,
+    ) -> list[EntityConceptMatch]:
+        """Return semantically similar entities."""
+
+        ...
+
+    async def search_relationships(
+        self,
+        embedding: list[float],
+        *,
+        threshold: float,
+        limit: int,
+    ) -> list[RelationshipConceptMatch]:
+        """Return semantically similar relationship facts."""
+
+        ...
 
 
 class EntityLinker(Protocol):
     """Link query concepts to knowledge graph nodes."""
 
-    async def link(self, concepts: QueryConcepts, graph: KnowledgeGraph) -> list[str]:
+    async def link(
+        self,
+        concepts: QueryConcepts,
+        graph: KnowledgeGraph,
+        *,
+        semantic_search: SemanticConceptSearch | None = None,
+    ) -> list[str]:
         """Return graph nodes matching query entities and relationships."""
 
         ...
@@ -30,8 +68,16 @@ class EntityLinker(Protocol):
 class ExactEntityLinker:
     """Link entities and relationships through exact matching."""
 
-    async def link(self, concepts: QueryConcepts, graph: KnowledgeGraph) -> list[str]:
+    async def link(
+        self,
+        concepts: QueryConcepts,
+        graph: KnowledgeGraph,
+        *,
+        semantic_search: SemanticConceptSearch | None = None,
+    ) -> list[str]:
         """Return distinct nodes matching query concepts."""
+
+        del semantic_search
 
         linked: list[str] = []
         seen: set[str] = set()
@@ -89,7 +135,13 @@ class EmbeddingEntityLinker:
         self._node_embeddings: dict[str, list[float]] = {}
         self._edge_embeddings: dict[str, list[float]] = {}
 
-    async def link(self, concepts: QueryConcepts, graph: KnowledgeGraph) -> list[str]:
+    async def link(
+        self,
+        concepts: QueryConcepts,
+        graph: KnowledgeGraph,
+        *,
+        semantic_search: SemanticConceptSearch | None = None,
+    ) -> list[str]:
         """Return nodes matching entities and relationship labels."""
 
         if not graph.nodes or not (concepts.entities or concepts.relationships):
@@ -136,9 +188,126 @@ class EmbeddingEntityLinker:
             exact_relationships,
         )
 
+        if semantic_search is not None:
+            await self._link_stored_concepts(
+                unmatched_entities,
+                unmatched_relationships,
+                graph,
+                semantic_search,
+                linked,
+                seen,
+            )
+        else:
+            await self._link_in_memory(
+                unmatched_entities,
+                unmatched_relationships,
+                graph,
+                linked,
+                seen,
+            )
+        return linked
+
+    async def _link_stored_concepts(
+        self,
+        entities: list[str],
+        relationships: list[str],
+        graph: KnowledgeGraph,
+        semantic_search: SemanticConceptSearch,
+        linked: list[str],
+        seen: set[str],
+    ) -> None:
+        """Link unmatched concepts through persisted embeddings."""
+
+        for entity in entities:
+            query_embedding = await self._embeddings.embed_query(entity)
+            matches = await semantic_search.search_entities(
+                query_embedding,
+                threshold=self._similarity_threshold,
+                limit=max(_SEMANTIC_SEARCH_LIMIT, self._max_links_per_entity),
+            )
+            accepted = 0
+            for match in matches:
+                if match.similarity < self._similarity_threshold:
+                    logger.debug(
+                        "Rejected PostgreSQL entity match %r -> %r "
+                        "(similarity=%.3f threshold=%.3f)",
+                        entity,
+                        match.entity,
+                        match.similarity,
+                        self._similarity_threshold,
+                    )
+                    continue
+                logger.debug(
+                    "PostgreSQL entity match %r -> %r (similarity=%.3f)",
+                    entity,
+                    match.entity,
+                    match.similarity,
+                )
+                if match.entity in graph.nodes and match.entity not in seen:
+                    linked.append(match.entity)
+                    seen.add(match.entity)
+                    accepted += 1
+                    if accepted == self._max_links_per_entity:
+                        break
+
+        candidate_threshold = max(
+            -1.0,
+            self._relationship_similarity_threshold - _LEXICAL_RELATIONSHIP_BONUS,
+        )
+        for relationship in relationships:
+            query_embedding = await self._embeddings.embed_query(relationship)
+            candidates = await semantic_search.search_relationships(
+                query_embedding,
+                threshold=candidate_threshold,
+                limit=max(_SEMANTIC_SEARCH_LIMIT, self._max_links_per_entity),
+            )
+            ranked = sorted(
+                (
+                    (
+                        candidate.similarity
+                        + _relationship_bonus(relationship, candidate.text),
+                        candidate,
+                    )
+                    for candidate in candidates
+                ),
+                key=lambda item: (-item[0], item[1].text),
+            )
+            matches = 0
+            for score, candidate in ranked:
+                if score < self._relationship_similarity_threshold:
+                    continue
+                logger.debug(
+                    "PostgreSQL relationship match %r -> %r "
+                    "(similarity=%.3f score=%.3f)",
+                    relationship,
+                    candidate.text,
+                    candidate.similarity,
+                    score,
+                )
+                _append_nodes(
+                    linked,
+                    seen,
+                    graph,
+                    candidate.subject,
+                    candidate.object,
+                )
+                matches += 1
+                if matches == self._max_links_per_entity:
+                    break
+
+    async def _link_in_memory(
+        self,
+        entities: list[str],
+        relationships: list[str],
+        graph: KnowledgeGraph,
+        linked: list[str],
+        seen: set[str],
+    ) -> None:
+        """Link unmatched concepts using the standalone in-memory index."""
+
         nodes = sorted(graph.nodes)
         for _, node in await self._semantic_matches(
-            unmatched_entities,
+            entities,
             nodes,
             self._node_embeddings,
             threshold=self._similarity_threshold,
@@ -148,9 +317,12 @@ class EmbeddingEntityLinker:
                 linked.append(node)
                 seen.add(node)
 
-        edge_lookup = {_edge_text(edge): edge for edge in graph.edges()}
+        edge_lookup = {
+            edge_text(edge.subject, edge.relation, edge.object): edge
+            for edge in graph.edges()
+        }
         edge_texts = sorted(edge_lookup)
-        for relationship in unmatched_relationships:
+        for relationship in relationships:
             candidates, bonus = _focus_relationship_candidates(
                 relationship,
                 edge_texts,
@@ -163,9 +335,8 @@ class EmbeddingEntityLinker:
                 kind="relationship",
                 score_bonus=bonus,
             )
-            for _, edge_text in matches:
-                _append_edge_endpoints(linked, seen, edge_lookup[edge_text])
-        return linked
+            for _, matched_edge_text in matches:
+                _append_edge_endpoints(linked, seen, edge_lookup[matched_edge_text])
 
     async def _semantic_matches(
         self,
@@ -278,12 +449,6 @@ def _append_edge_endpoints(
             seen.add(node)
 
 
-def _edge_text(edge: GraphEdge) -> str:
-    """Return searchable text containing an edge and its context."""
-
-    return f"{edge.subject} {edge.relation} {edge.object}"
-
-
 def _focus_relationship_candidates(
     relationship: str,
     candidates: list[str],
@@ -327,6 +492,30 @@ def _focus_relationship_candidates(
         len(focused),
     )
     return focused, _LEXICAL_RELATIONSHIP_BONUS
+
+
+def _relationship_bonus(query: str, candidate: str) -> float:
+    """Boost stored relationship facts sharing meaningful query terms."""
+
+    return (
+        _LEXICAL_RELATIONSHIP_BONUS
+        if _content_tokens(query) & _content_tokens(candidate)
+        else 0.0
+    )
+
+
+def _append_nodes(
+    linked: list[str],
+    seen: set[str],
+    graph: KnowledgeGraph,
+    *nodes: str,
+) -> None:
+    """Append matched nodes that exist in the active graph."""
+
+    for node in nodes:
+        if node in graph.nodes and node not in seen:
+            linked.append(node)
+            seen.add(node)
 
 
 def _content_tokens(value: str) -> set[str]:

@@ -1,9 +1,16 @@
 import logging
 from uuid import UUID
 
+import pytest
+
 from graph_rag.entity_linking import EmbeddingEntityLinker, ExactEntityLinker
 from graph_rag.graph import KnowledgeGraph
-from graph_rag.models import Triple, TripleProvenance
+from graph_rag.models import (
+    EntityConceptMatch,
+    RelationshipConceptMatch,
+    Triple,
+    TripleProvenance,
+)
 from graph_rag.query_extraction import QueryConcepts
 
 DOCUMENT_ID = UUID("10000000-0000-0000-0000-000000000001")
@@ -57,6 +64,47 @@ class StubEmbeddings:
 
         self.queries.append(text)
         return self.vectors[text]
+
+
+class StubSemanticSearch:
+    """Return configured persisted concept matches."""
+
+    def __init__(
+        self,
+        *,
+        entities: list[EntityConceptMatch] | None = None,
+        relationships: list[RelationshipConceptMatch] | None = None,
+    ) -> None:
+        """Store semantic matches and capture search parameters."""
+
+        self.entities = entities or []
+        self.relationships = relationships or []
+        self.entity_searches: list[tuple[list[float], float, int]] = []
+        self.relationship_searches: list[tuple[list[float], float, int]] = []
+
+    async def search_entities(
+        self,
+        embedding: list[float],
+        *,
+        threshold: float,
+        limit: int,
+    ) -> list[EntityConceptMatch]:
+        """Return configured entity matches."""
+
+        self.entity_searches.append((embedding, threshold, limit))
+        return self.entities
+
+    async def search_relationships(
+        self,
+        embedding: list[float],
+        *,
+        threshold: float,
+        limit: int,
+    ) -> list[RelationshipConceptMatch]:
+        """Return configured relationship matches."""
+
+        self.relationship_searches.append((embedding, threshold, limit))
+        return self.relationships
 
 
 async def test_links_normalized_exact_entities() -> None:
@@ -236,3 +284,80 @@ async def test_embedding_linker_caches_graph_node_embeddings() -> None:
     await linker.link(concepts(["person"]), make_graph())
 
     assert embeddings.document_batches == [["acme", "alice"]]
+
+
+async def test_embedding_linker_uses_persisted_entity_search() -> None:
+    """Stored entity vectors replace candidate embedding in Wiki Base retrieval."""
+
+    embeddings = StubEmbeddings({"the company": [1.0, 0.0]})
+    search = StubSemanticSearch(
+        entities=[EntityConceptMatch(entity="acme", similarity=0.91)]
+    )
+    linker = EmbeddingEntityLinker(
+        embeddings=embeddings,
+        similarity_threshold=0.8,
+    )
+
+    nodes = await linker.link(
+        concepts(["the company"]),
+        make_graph(),
+        semantic_search=search,
+    )
+
+    assert nodes == ["acme"]
+    assert embeddings.document_batches == []
+    assert embeddings.queries == ["the company"]
+    assert search.entity_searches == [([1.0, 0.0], 0.8, 20)]
+
+
+async def test_embedding_linker_rechecks_persisted_entity_threshold() -> None:
+    """Weak database results cannot bypass the configured entity threshold."""
+
+    embeddings = StubEmbeddings({"the company": [1.0, 0.0]})
+    search = StubSemanticSearch(
+        entities=[EntityConceptMatch(entity="acme", similarity=0.79)]
+    )
+    linker = EmbeddingEntityLinker(
+        embeddings=embeddings,
+        similarity_threshold=0.8,
+    )
+
+    nodes = await linker.link(
+        concepts(["the company"]),
+        make_graph(),
+        semantic_search=search,
+    )
+
+    assert nodes == []
+
+
+async def test_persisted_relationship_match_uses_contextual_bonus() -> None:
+    """A lexical bonus can promote a stored relationship above its threshold."""
+
+    embeddings = StubEmbeddings({"loan offers": [1.0, 0.0]})
+    search = StubSemanticSearch(
+        relationships=[
+            RelationshipConceptMatch(
+                text="alice loan offers acme",
+                subject="alice",
+                relationship="loan offers",
+                object="acme",
+                similarity=0.5,
+            )
+        ]
+    )
+    linker = EmbeddingEntityLinker(
+        embeddings=embeddings,
+        relationship_similarity_threshold=0.6,
+    )
+
+    nodes = await linker.link(
+        concepts(relationships=["loan offers"]),
+        make_graph(),
+        semantic_search=search,
+    )
+
+    assert nodes == ["alice", "acme"]
+    assert search.relationship_searches[0][0] == [1.0, 0.0]
+    assert search.relationship_searches[0][1] == pytest.approx(0.45)
+    assert search.relationship_searches[0][2] == 20

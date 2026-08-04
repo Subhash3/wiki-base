@@ -26,5 +26,5 @@ This file tracks retrieval improvements worth evaluating after the initial imple
 ## Implementation notes
 
 - Keep normalized exact entity matches as the highest-confidence path.
-- Persist or cache graph-node embeddings instead of recomputing them per question.
+- [x] Persist graph entity and relationship embeddings for pgvector concept search.
 - Calibrate entity similarity thresholds against the evaluation set.

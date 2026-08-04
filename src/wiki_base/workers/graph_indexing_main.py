@@ -1,6 +1,7 @@
 import asyncio
 
 from graph_rag import HippoRAGIndexer, LLMTripleExtractor
+from llm_providers.embeddings.ollama import OllamaEmbeddingProvider
 from llm_providers.generation.ollama import OllamaGenerationProvider
 
 from wiki_base.config.logging import configure_logging
@@ -20,13 +21,21 @@ async def run_worker() -> None:
         model=settings.extraction_model,
         timeout_seconds=settings.ollama_timeout_seconds,
     )
+    embeddings = OllamaEmbeddingProvider(
+        base_url=settings.ollama_url,
+        model=settings.embedding_model,
+        dimensions=settings.embedding_dimensions,
+        timeout_seconds=settings.ollama_timeout_seconds,
+    )
     worker = GraphIndexingWorker(
         database=database,
         indexer=HippoRAGIndexer(
             extractor=LLMTripleExtractor(generation=extraction),
         ),
+        embeddings=embeddings,
         extraction_model=settings.extraction_model,
         index_version=settings.graph_index_version,
+        embedding_batch_size=settings.graph_entity_embedding_batch_size,
         poll_interval_seconds=settings.worker_poll_interval_seconds,
     )
 
@@ -37,6 +46,7 @@ async def run_worker() -> None:
     try:
         await worker.run()
     finally:
+        await embeddings.close()
         await extraction.close()
         await database.disconnect()
 
