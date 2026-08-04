@@ -33,6 +33,7 @@ class StubWikiBaseService:
             retrieval_statuses={
                 RetrievalMode.LITE: IngestionStatus.QUEUED,
                 RetrievalMode.PRO: IngestionStatus.QUEUED,
+                RetrievalMode.FACTS: IngestionStatus.QUEUED,
             },
             documents=[
                 QueuedDocument(
@@ -57,6 +58,7 @@ class StubWikiBaseService:
             retrieval_statuses={
                 RetrievalMode.LITE: IngestionStatus.PROCESSING,
                 RetrievalMode.PRO: IngestionStatus.QUEUED,
+                RetrievalMode.FACTS: IngestionStatus.QUEUED,
             },
             document_count=1,
             created_at=datetime(2026, 7, 21, tzinfo=UTC),
@@ -82,6 +84,7 @@ class StubWikiBaseService:
                 retrieval_statuses={
                     RetrievalMode.LITE: IngestionStatus.READY,
                     RetrievalMode.PRO: IngestionStatus.PROCESSING,
+                    RetrievalMode.FACTS: IngestionStatus.PROCESSING,
                 },
                 document_count=2,
                 created_at=datetime(2026, 7, 21, tzinfo=UTC),
@@ -121,6 +124,7 @@ async def test_create_wiki_base_returns_queued_manifest() -> None:
     assert response.retrieval_statuses == {
         RetrievalMode.LITE: "queued",
         RetrievalMode.PRO: "queued",
+        RetrievalMode.FACTS: "queued",
     }
     assert [document.name for document in response.documents] == [
         "policy.pdf",
@@ -139,6 +143,7 @@ async def test_get_wiki_base_status_returns_document_progress() -> None:
     assert response.id == wiki_base_id
     assert response.retrieval_statuses[RetrievalMode.LITE] == "processing"
     assert response.retrieval_statuses[RetrievalMode.PRO] == "queued"
+    assert response.retrieval_statuses[RetrievalMode.FACTS] == "queued"
     assert response.document_count == 1
     assert response.documents[0].name == "policy.pdf"
     assert response.documents[0].status == "processing"
@@ -151,6 +156,7 @@ async def test_list_wiki_bases_returns_summaries() -> None:
     assert response[0].name == "Engineering Handbook"
     assert response[0].retrieval_statuses[RetrievalMode.LITE] == "ready"
     assert response[0].retrieval_statuses[RetrievalMode.PRO] == "processing"
+    assert response[0].retrieval_statuses[RetrievalMode.FACTS] == "processing"
     assert response[0].document_count == 2
 
 

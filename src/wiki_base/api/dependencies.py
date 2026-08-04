@@ -1,7 +1,13 @@
 from typing import Annotated
 
 from fastapi import Depends, Request
-from graph_rag import EntityLinker, HippoRAGRetriever, LLMQueryEntityExtractor
+from graph_rag import (
+    EntityLinker,
+    FactRetriever,
+    GraphFactTraverser,
+    LLMQueryEntityExtractor,
+    PageRankRetriever,
+)
 from llm_providers.embeddings.base import EmbeddingProvider
 from llm_providers.generation.base import GenerationProvider, StructuredGenerationProvider
 
@@ -97,9 +103,19 @@ def get_query_chunks_service(
     return QueryChunksService(
         database=database,
         embeddings=embeddings,
-        graph_retriever=HippoRAGRetriever(
+        page_rank_retriever=PageRankRetriever(
             entity_extractor=LLMQueryEntityExtractor(generation=extraction),
             entity_linker=entity_linker,
+        ),
+        fact_retriever=FactRetriever(
+            entity_extractor=LLMQueryEntityExtractor(generation=extraction),
+            entity_linker=entity_linker,
+            embeddings=embeddings,
+            traverser=GraphFactTraverser(
+                max_depth=settings.graph_fact_max_depth,
+                max_candidates=settings.graph_fact_max_candidates,
+            ),
+            max_facts=settings.graph_fact_max_facts,
         ),
         synonym_similarity_threshold=settings.graph_synonym_similarity_threshold,
     )

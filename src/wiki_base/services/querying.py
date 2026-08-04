@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from uuid import UUID
 
 import httpx
+from graph_rag import RankedFact
 from llm_providers.generation.base import ChatMessage, GenerationProvider
 
 from wiki_base.api.errors import ServiceError
@@ -72,15 +73,37 @@ class QueryService:
                 retrieval_strategy=retrieval.retrieval_strategy,
             )
 
-        source_map = {
-            f"S{index}": chunk for index, chunk in enumerate(retrieval.chunks, start=1)
-        }
-        context = "\n\n".join(
-            self._format_source(source_id, chunk)
-            for source_id, chunk in source_map.items()
+        source_map = {f"S{index}": chunk for index, chunk in enumerate(retrieval.chunks, start=1)}
+        source_context = "\n\n".join(
+            self._format_source(source_id, chunk) for source_id, chunk in source_map.items()
+        )
+        fact_context = self._format_facts(retrieval.facts, source_map)
+        context = (
+            f"GRAPH FACTS\n{fact_context}\n\nSOURCE PASSAGES\n{source_context}"
+            if fact_context
+            else source_context
+        )
+        logger.info(
+            "answer generation started wiki_base_id=%s mode=%s strategy=%s "
+            "question=%r facts=%d sources=%d",
+            wiki_base_id,
+            retrieval.mode.value,
+            retrieval.retrieval_strategy.value,
+            retrieval.question,
+            len(retrieval.facts),
+            len(source_map),
         )
         logger.debug(
-            "Answer generation sources=%s history_messages=%d",
+            "Answer generation facts=%s sources=%s history_messages=%d",
+            [
+                (
+                    fact.fact.subject,
+                    fact.fact.relation,
+                    fact.fact.object,
+                    round(fact.score, 4),
+                )
+                for fact in retrieval.facts
+            ],
             [
                 (
                     source_id,
@@ -91,6 +114,11 @@ class QueryService:
                 for source_id, chunk in source_map.items()
             ],
             len(history),
+        )
+        logger.debug(
+            "complete answer-generation context wiki_base_id=%s\n%s",
+            wiki_base_id,
+            context,
         )
         messages = [*history, ChatMessage(role="user", content=retrieval.question)]
         try:
@@ -105,11 +133,36 @@ class QueryService:
             for source_id in dict.fromkeys(generated.source_ids)
             if source_id in source_map
         ]
+        unknown_source_ids = [
+            source_id
+            for source_id in dict.fromkeys(generated.source_ids)
+            if source_id not in source_map
+        ]
         logger.debug(
-            "Generated answer=%r source_ids=%s",
+            "answer generation result wiki_base_id=%s answer=%r "
+            "model_source_ids=%s accepted_source_ids=%s unknown_source_ids=%s "
+            "resolved_chunk_ids=%s",
+            wiki_base_id,
             generated.text,
             generated.source_ids,
+            [
+                source_id
+                for source_id in dict.fromkeys(generated.source_ids)
+                if source_id in source_map
+            ],
+            unknown_source_ids,
+            [str(chunk.id) for chunk in cited_chunks],
         )
+        if not cited_chunks:
+            logger.warning(
+                "answer has no valid citations wiki_base_id=%s mode=%s "
+                "strategy=%s model_source_ids=%s answer=%r",
+                wiki_base_id,
+                retrieval.mode.value,
+                retrieval.retrieval_strategy.value,
+                generated.source_ids,
+                generated.text,
+            )
         return QueryAnswer(
             wiki_base_id=wiki_base_id,
             question=retrieval.question,
@@ -130,6 +183,31 @@ class QueryService:
             location_parts.append(f"section {chunk.section}")
         location = ", ".join(location_parts) or "location unavailable"
         return f"[{source_id}] {chunk.document_name} ({location})\n{chunk.content}"
+
+    @staticmethod
+    def _format_facts(
+        facts: list[RankedFact],
+        source_map: dict[str, RetrievedChunk],
+    ) -> str:
+        """Format ranked graph facts with supporting source identifiers."""
+
+        source_ids_by_chunk = {chunk.id: source_id for source_id, chunk in source_map.items()}
+        lines = []
+        for item in facts:
+            source_ids = sorted(
+                {
+                    source_ids_by_chunk[provenance.chunk_id]
+                    for provenance in item.fact.provenance
+                    if provenance.chunk_id in source_ids_by_chunk
+                }
+            )
+            if not source_ids:
+                continue
+            citations = ", ".join(f"[{source_id}]" for source_id in source_ids)
+            lines.append(
+                f"- {item.fact.subject} {item.fact.relation} {item.fact.object}. {citations}"
+            )
+        return "\n".join(lines)
 
     @staticmethod
     def _citation(chunk: RetrievedChunk) -> AnswerCitation:

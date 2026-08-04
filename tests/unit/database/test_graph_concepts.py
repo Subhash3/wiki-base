@@ -140,4 +140,26 @@ async def test_searches_contextual_relationships() -> None:
     assert matches[0].subject == "honda unicorn"
     assert matches[0].relationship == "offers"
     assert matches[0].object == "loan amount"
+    assert connection.fetch_arguments[-1] is None
     assert "$4::double precision" in connection.fetch_query
+
+
+async def test_restricts_relationship_search_to_candidate_keys() -> None:
+    """Fact retrieval can rank only relationships reached by traversal."""
+
+    connection = StubConnection()
+
+    await search_graph_relationships(
+        connection,  # type: ignore[arg-type]
+        wiki_base_id=WIKI_BASE_ID,
+        embedding_model="bge-m3",
+        embedding=[1.0, 0.0],
+        threshold=-1.0,
+        limit=20,
+        concept_keys=['["honda unicorn","offers","loan amount"]'],
+    )
+
+    assert connection.fetch_arguments[-1] == [
+        '["honda unicorn","offers","loan amount"]'
+    ]
+    assert "$6::text[]" in connection.fetch_query

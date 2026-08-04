@@ -1,3 +1,4 @@
+import json
 from uuid import UUID
 
 from graph_rag.entity_linking import SemanticConceptSearch
@@ -51,6 +52,7 @@ class PostgresSemanticConceptSearch(SemanticConceptSearch):
         *,
         threshold: float,
         limit: int,
+        candidate_keys: frozenset[tuple[str, str, str]] | None = None,
     ) -> list[RelationshipConceptMatch]:
         """Return the closest stored relationship concepts."""
 
@@ -62,4 +64,12 @@ class PostgresSemanticConceptSearch(SemanticConceptSearch):
                 embedding=embedding,
                 threshold=threshold,
                 limit=limit,
+                concept_keys=(
+                    [
+                        json.dumps(key, ensure_ascii=False, separators=(",", ":"))
+                        for key in sorted(candidate_keys)
+                    ]
+                    if candidate_keys is not None
+                    else None
+                ),
             )

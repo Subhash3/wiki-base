@@ -137,6 +137,7 @@ class WikiBaseService:
                 retrieval_statuses={
                     RetrievalMode.LITE: IngestionStatus.QUEUED,
                     RetrievalMode.PRO: IngestionStatus.QUEUED,
+                    RetrievalMode.FACTS: IngestionStatus.QUEUED,
                 },
                 documents=[
                     QueuedDocument(
@@ -240,4 +241,5 @@ class WikiBaseService:
         return {
             RetrievalMode.LITE: IngestionStatus.QUEUED,
             RetrievalMode.PRO: IngestionStatus.QUEUED,
+            RetrievalMode.FACTS: IngestionStatus.QUEUED,
         }

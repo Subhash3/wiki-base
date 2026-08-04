@@ -1,11 +1,17 @@
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from uuid import UUID
 
 import asyncpg
 import httpx
 import networkx as nx
-from graph_rag import HippoRAGRetriever, KnowledgeGraph
+from graph_rag import (
+    FactRetriever,
+    KnowledgeGraph,
+    PageRankRetriever,
+    RankedChunk,
+    RankedFact,
+)
 from llm_providers.embeddings.base import EmbeddingProvider
 
 from wiki_base.api.errors import ServiceError
@@ -48,6 +54,7 @@ class QueryChunksResult:
     wiki_base_id: UUID
     question: str
     chunks: list[RetrievedChunk]
+    facts: list[RankedFact] = field(default_factory=list)
     mode: RetrievalMode = RetrievalMode.LITE
     retrieval_strategy: RetrievalStrategy = RetrievalStrategy.VECTOR
 
@@ -60,14 +67,16 @@ class QueryChunksService:
         *,
         database: Database,
         embeddings: EmbeddingProvider,
-        graph_retriever: HippoRAGRetriever,
+        page_rank_retriever: PageRankRetriever,
+        fact_retriever: FactRetriever,
         synonym_similarity_threshold: float = 0.95,
     ) -> None:
-        """Configure Lite and Pro retrieval dependencies."""
+        """Configure vector, PageRank, and fact retrieval dependencies."""
 
         self._database = database
         self._embeddings = embeddings
-        self._graph_retriever = graph_retriever
+        self._page_rank_retriever = page_rank_retriever
+        self._fact_retriever = fact_retriever
         self._synonym_similarity_threshold = synonym_similarity_threshold
 
     async def query(
@@ -84,6 +93,14 @@ class QueryChunksService:
         if not normalized_question:
             raise ServiceError("invalid_question", "Question cannot be blank.", 422)
 
+        logger.info(
+            "retrieval started wiki_base_id=%s mode=%s limit=%d question=%r",
+            wiki_base_id,
+            mode.value,
+            limit,
+            normalized_question,
+        )
+
         try:
             async with self._database.connection() as connection:
                 wiki_base = await get_wiki_base(connection, wiki_base_id)
@@ -99,6 +116,20 @@ class QueryChunksService:
                     mode,
                     IngestionStatus.QUEUED,
                 )
+                logger.debug(
+                    "retrieval readiness wiki_base_id=%s requested_mode=%s "
+                    "requested_status=%s all_statuses=%s",
+                    wiki_base_id,
+                    mode.value,
+                    status.value,
+                    {
+                        retrieval_mode.value: retrieval_status.value
+                        for retrieval_mode, retrieval_status in retrieval_statuses.get(
+                            wiki_base_id,
+                            {},
+                        ).items()
+                    },
+                )
                 if status not in {
                     IngestionStatus.READY,
                     IngestionStatus.PARTIALLY_FAILED,
@@ -110,19 +141,47 @@ class QueryChunksService:
                         409,
                     )
 
+            facts: list[RankedFact] = []
             if mode == RetrievalMode.PRO:
-                chunks = await self._query_graph(
+                chunks = await self._query_page_rank(
                     wiki_base_id=wiki_base_id,
                     question=normalized_question,
                     limit=limit,
                 )
                 retrieval_strategy = RetrievalStrategy.GRAPH
                 if not chunks:
+                    logger.warning(
+                        "PageRank returned no chunks; using vector fallback "
+                        "wiki_base_id=%s question=%r",
+                        wiki_base_id,
+                        normalized_question,
+                    )
                     chunks = await self._query_vector(
                         wiki_base_id=wiki_base_id,
                         question=normalized_question,
                         limit=limit,
                     )
+                    retrieval_strategy = RetrievalStrategy.VECTOR_FALLBACK
+            elif mode == RetrievalMode.FACTS:
+                chunks, facts = await self._query_facts(
+                    wiki_base_id=wiki_base_id,
+                    question=normalized_question,
+                    limit=limit,
+                )
+                retrieval_strategy = RetrievalStrategy.FACT_GRAPH
+                if not chunks:
+                    logger.warning(
+                        "fact traversal returned no chunks; using vector fallback "
+                        "wiki_base_id=%s question=%r",
+                        wiki_base_id,
+                        normalized_question,
+                    )
+                    chunks = await self._query_vector(
+                        wiki_base_id=wiki_base_id,
+                        question=normalized_question,
+                        limit=limit,
+                    )
+                    facts = []
                     retrieval_strategy = RetrievalStrategy.VECTOR_FALLBACK
             else:
                 chunks = await self._query_vector(
@@ -144,13 +203,25 @@ class QueryChunksService:
                 "retrieval_unavailable", "Chunks could not be retrieved right now.", 503
             ) from error
 
-        return QueryChunksResult(
+        result = QueryChunksResult(
             wiki_base_id=wiki_base_id,
             question=normalized_question,
             chunks=chunks,
+            facts=facts,
             mode=mode,
             retrieval_strategy=retrieval_strategy,
         )
+        logger.info(
+            "retrieval completed wiki_base_id=%s requested_mode=%s strategy=%s "
+            "chunks=%d facts=%d chunk_ids=%s",
+            wiki_base_id,
+            mode.value,
+            retrieval_strategy.value,
+            len(chunks),
+            len(facts),
+            [str(chunk.id) for chunk in chunks],
+        )
+        return result
 
     async def _query_vector(
         self,
@@ -169,6 +240,21 @@ class QueryChunksService:
                 embedding=embedding,
                 limit=limit,
             )
+        logger.debug(
+            "vector retrieval wiki_base_id=%s question=%r matches=%s",
+            wiki_base_id,
+            question,
+            [
+                {
+                    "chunk_id": str(match.id),
+                    "document_id": str(match.document_id),
+                    "document_name": match.document_name,
+                    "score": round(match.score, 6),
+                    "content": match.content,
+                }
+                for match in matches
+            ],
+        )
         return [
             RetrievedChunk(
                 id=match.id,
@@ -184,14 +270,88 @@ class QueryChunksService:
             for match in matches
         ]
 
-    async def _query_graph(
+    async def _query_page_rank(
         self,
         *,
         wiki_base_id: UUID,
         question: str,
         limit: int,
     ) -> list[RetrievedChunk]:
-        """Retrieve chunks from merged ready document graphs."""
+        """Retrieve chunks using Personalized PageRank."""
+
+        graph = await self._load_graph(wiki_base_id)
+        ranked = await self._page_rank_retriever.retrieve(
+            question,
+            graph,
+            limit=limit,
+            semantic_search=self._semantic_search(wiki_base_id),
+        )
+        return await self._hydrate_ranked_chunks(
+            wiki_base_id=wiki_base_id,
+            ranked=ranked,
+            log_label="PageRank",
+        )
+
+    async def _query_facts(
+        self,
+        *,
+        wiki_base_id: UUID,
+        question: str,
+        limit: int,
+    ) -> tuple[list[RetrievedChunk], list[RankedFact]]:
+        """Retrieve ranked facts and their supporting chunks."""
+
+        graph = await self._load_graph(wiki_base_id)
+        result = await self._fact_retriever.retrieve(
+            question,
+            graph,
+            limit=limit,
+            semantic_search=self._semantic_search(wiki_base_id),
+        )
+        chunks = await self._hydrate_ranked_chunks(
+            wiki_base_id=wiki_base_id,
+            ranked=result.chunks,
+            log_label="Fact",
+        )
+        hydrated_ids = {chunk.id for chunk in chunks}
+        facts = [
+            fact
+            for fact in result.facts
+            if any(provenance.chunk_id in hydrated_ids for provenance in fact.fact.provenance)
+        ]
+        logger.debug(
+            "fact provenance hydration wiki_base_id=%s hydrated_chunk_ids=%s retained_facts=%s",
+            wiki_base_id,
+            [str(chunk.id) for chunk in chunks],
+            [
+                {
+                    "subject": item.fact.subject,
+                    "relation": item.fact.relation,
+                    "object": item.fact.object,
+                    "score": round(item.score, 6),
+                    "depth": item.fact.depth,
+                    "seeds": sorted(item.fact.seeds),
+                    "provenance": [
+                        {
+                            "document_id": str(source.document_id),
+                            "chunk_id": str(source.chunk_id),
+                        }
+                        for source in sorted(
+                            item.fact.provenance,
+                            key=lambda source: (
+                                source.document_id.int,
+                                source.chunk_id.int,
+                            ),
+                        )
+                    ],
+                }
+                for item in facts
+            ],
+        )
+        return chunks, facts
+
+    async def _load_graph(self, wiki_base_id: UUID) -> KnowledgeGraph:
+        """Load and merge ready document graphs and synonym edges."""
 
         async with self._database.connection() as connection:
             stored_graphs = await list_ready_wiki_base_graphs(connection, wiki_base_id)
@@ -216,21 +376,35 @@ class QueryChunksService:
             for synonym in synonyms
         )
         logger.debug(
-            "Graph synonym edges loaded=%d added=%d",
+            "knowledge graph loaded wiki_base_id=%s document_graphs=%d nodes=%d "
+            "factual_edges=%d synonym_edges_loaded=%d synonym_edges_added=%d",
+            wiki_base_id,
+            len(stored_graphs),
+            len(graph.nodes),
+            sum(1 for _edge in graph.edges()),
             len(synonyms),
             added_synonyms,
         )
+        return graph
 
-        ranked = await self._graph_retriever.retrieve(
-            question,
-            graph,
-            limit=limit,
-            semantic_search=PostgresSemanticConceptSearch(
-                database=self._database,
-                wiki_base_id=wiki_base_id,
-                embedding_model=self._embeddings.model_info.model,
-            ),
+    def _semantic_search(self, wiki_base_id: UUID) -> PostgresSemanticConceptSearch:
+        """Create a semantic graph-concept search scoped to one wiki base."""
+
+        return PostgresSemanticConceptSearch(
+            database=self._database,
+            wiki_base_id=wiki_base_id,
+            embedding_model=self._embeddings.model_info.model,
         )
+
+    async def _hydrate_ranked_chunks(
+        self,
+        *,
+        wiki_base_id: UUID,
+        ranked: list[RankedChunk],
+        log_label: str,
+    ) -> list[RetrievedChunk]:
+        """Load ranked chunk contents while preserving graph order."""
+
         async with self._database.connection() as connection:
             stored = await load_chunks_by_ids(
                 connection,
@@ -238,7 +412,8 @@ class QueryChunksService:
                 chunk_ids=[item.chunk_id for item in ranked],
             )
         logger.debug(
-            "Graph ranked chunks=%s hydrated_chunk_ids=%s",
+            "%s ranked chunks=%s hydrated_chunk_ids=%s",
+            log_label,
             [(str(item.chunk_id), round(item.score, 4)) for item in ranked],
             [str(chunk.id) for chunk in stored],
         )

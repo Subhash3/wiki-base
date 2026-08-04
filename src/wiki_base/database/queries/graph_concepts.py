@@ -118,6 +118,7 @@ async def search_graph_relationships(
     embedding: list[float],
     threshold: float,
     limit: int,
+    concept_keys: list[str] | None = None,
 ) -> list[RelationshipConceptMatch]:
     """Find the closest distinct relationship facts with pgvector."""
 
@@ -133,6 +134,7 @@ async def search_graph_relationships(
           AND concept.concept_type = 'relationship'
           AND concept.embedding_model = $2
           AND job.status = 'ready'
+          AND ($6::text[] IS NULL OR concept.concept_key = ANY($6::text[]))
           AND (concept.embedding <=> $3::vector)
               <= (1::double precision - $4::double precision)
         ORDER BY concept.embedding <=> $3::vector
@@ -143,6 +145,7 @@ async def search_graph_relationships(
         embedding,
         threshold,
         limit,
+        concept_keys,
     )
     matches: list[RelationshipConceptMatch] = []
     seen: set[tuple[str, str, str]] = set()

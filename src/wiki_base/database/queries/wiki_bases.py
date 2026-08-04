@@ -142,6 +142,7 @@ async def list_wiki_base_retrieval_statuses(
         lambda: {
             RetrievalMode.LITE: [],
             RetrievalMode.PRO: [],
+            RetrievalMode.FACTS: [],
         }
     )
     for row in rows:
@@ -150,6 +151,9 @@ async def list_wiki_base_retrieval_statuses(
             IngestionStatus(row["lite_status"])
         )
         wiki_base_statuses[RetrievalMode.PRO].append(
+            IngestionStatus(row["pro_status"])
+        )
+        wiki_base_statuses[RetrievalMode.FACTS].append(
             IngestionStatus(row["pro_status"])
         )
 

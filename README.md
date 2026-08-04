@@ -54,6 +54,8 @@ The graph worker uses passage entity extraction followed by entity-guided OpenIE
 one mention-aware canonical JSONB graph and its pgvector entity and relationship index per
 document. It also builds conservative wiki-base synonym edges from persisted embeddings.
 Pro retrieval merges ready document graphs and synonym edges in memory before PageRank.
+Facts retrieval follows bounded canonical triples, ranks them semantically, and supplies
+the selected facts with their provenance passages to answer generation.
 
 Render one stored document graph, or export and visualize the merged graph for a wiki base:
 

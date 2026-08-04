@@ -8,6 +8,7 @@ class RetrievalMode(StrEnum):
 
     LITE = "lite"
     PRO = "pro"
+    FACTS = "facts"
 
 
 class RetrievalStrategy(StrEnum):
@@ -15,4 +16,5 @@ class RetrievalStrategy(StrEnum):
 
     VECTOR = "vector"
     GRAPH = "graph"
+    FACT_GRAPH = "fact_graph"
     VECTOR_FALLBACK = "vector_fallback"

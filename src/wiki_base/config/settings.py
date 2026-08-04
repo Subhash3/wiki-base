@@ -57,6 +57,9 @@ class Settings(BaseSettings):
     graph_entity_embedding_batch_size: int = Field(default=128, ge=1)
     graph_synonym_similarity_threshold: float = Field(default=0.95, ge=-1, le=1)
     graph_synonym_max_links: int = Field(default=3, ge=1)
+    graph_fact_max_depth: int = Field(default=2, ge=1)
+    graph_fact_max_candidates: int = Field(default=500, ge=1)
+    graph_fact_max_facts: int = Field(default=12, ge=1)
     cors_origins: str = "http://localhost:8080,http://127.0.0.1:8080"
 
     @property
