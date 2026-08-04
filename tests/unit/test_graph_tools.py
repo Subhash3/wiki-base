@@ -78,14 +78,17 @@ async def test_visualizes_stored_document_graph(tmp_path: Path) -> None:
     )
     output = tmp_path / "document.html"
 
-    result = await visualize_document(
+    output_json, output_html = await visualize_document(
         database,  # type: ignore[arg-type]
         document_id=DOCUMENT_ID,
         output=output,
     )
 
-    assert result == output
-    assert "Document 10000000" in output.read_text(encoding="utf-8")
+    assert output_json == output.with_suffix(".json")
+    assert output_html == output
+    exported = KnowledgeGraph.from_json(output_json.read_text(encoding="utf-8"))
+    assert exported.nodes == frozenset({"alice", "acme"})
+    assert "Document 10000000" in output_html.read_text(encoding="utf-8")
 
 
 async def test_merges_ready_wiki_base_graphs(tmp_path: Path) -> None:

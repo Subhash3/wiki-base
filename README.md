@@ -64,6 +64,9 @@ uv run graph-rag-visualize <document-id>
 uv run graph-rag-visualize-merge <wiki-base-id>
 ```
 
+Both commands write canonical JSON and interactive HTML files using the supplied ID as
+the filename.
+
 The API is then available at `http://localhost:8000`. Useful initial endpoints are:
 
 - `GET /health`

@@ -19,8 +19,8 @@ async def visualize_document(
     *,
     document_id: UUID,
     output: Path,
-) -> Path:
-    """Render one stored document graph as interactive HTML."""
+) -> tuple[Path, Path]:
+    """Export one stored document graph as canonical JSON and interactive HTML."""
 
     async with database.connection() as connection:
         payload = await get_document_graph(connection, document_id)
@@ -30,13 +30,15 @@ async def visualize_document(
     graph = KnowledgeGraph.from_dict(payload)
     visualizer = GraphVisualizer(graph)
     network = visualizer.build(document_id=document_id)
-    output = _require_suffix(output, ".html")
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(
+    html_output = _require_suffix(output, ".html")
+    json_output = html_output.with_suffix(".json")
+    html_output.parent.mkdir(parents=True, exist_ok=True)
+    json_output.write_text(graph.to_json(), encoding="utf-8")
+    html_output.write_text(
         visualizer.to_html(network, title=f"Graph RAG · {document_id}"),
         encoding="utf-8",
     )
-    return output
+    return json_output, html_output
 
 
 async def merge_wiki_base(
@@ -100,13 +102,14 @@ def run_visualizer() -> None:
     parser.add_argument("--output", type=Path, help="Output HTML path")
     arguments = parser.parse_args()
     output = arguments.output or Path(f"{arguments.document_id}.html")
-    result = asyncio.run(
+    output_json, output_html = asyncio.run(
         _visualize_from_settings(
             document_id=arguments.document_id,
             output=output,
         )
     )
-    print(result)
+    print(output_json)
+    print(output_html)
 
 
 def run_merger() -> None:
@@ -129,8 +132,10 @@ def run_merger() -> None:
     print(output_html)
 
 
-async def _visualize_from_settings(*, document_id: UUID, output: Path) -> Path:
-    """Render one graph using the configured database."""
+async def _visualize_from_settings(
+    *, document_id: UUID, output: Path
+) -> tuple[Path, Path]:
+    """Export one graph using the configured database."""
 
     settings = get_settings()
     database = Database(settings.database_url)

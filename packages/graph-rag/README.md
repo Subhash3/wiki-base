@@ -44,8 +44,8 @@ The NetworkX graph exists only in memory. The visual projection adds document no
 dashed `contains` edges for provenance. It also renders semantic synonym edges separately;
 visualization-only document links are not stored in canonical graph JSON.
 
-Render a document graph from PostgreSQL. By default, the HTML is written to the current
-directory using the document ID as its filename:
+Export and render a document graph from PostgreSQL. By default, canonical JSON and HTML
+are written to the current directory using the document ID as their filename:
 
 ```bash
 uv run graph-rag-visualize <document-id>
@@ -57,10 +57,10 @@ Merge all ready document graphs belonging to a wiki base and render the combined
 uv run graph-rag-visualize-merge <wiki-base-id>
 ```
 
-The merge command writes `<wiki-base-id>.json` and `<wiki-base-id>.html` to the current
-directory. Both commands accept `--output path/to/name.html` or
-`--output path/to/name.json`, respectively. The generated files are inspection artifacts;
-the canonical document graphs remain in PostgreSQL.
+The document command writes `<document-id>.json` and `<document-id>.html`. The merge
+command writes `<wiki-base-id>.json` and `<wiki-base-id>.html`. Both commands accept
+`--output path/to/name.html` or `--output path/to/name.json`, respectively. The generated
+files are inspection artifacts; the canonical document graphs remain in PostgreSQL.
 
 ## Retrieval
 
