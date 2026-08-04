@@ -31,8 +31,8 @@ class Settings(BaseSettings):
     embedding_batch_size: int = Field(default=16, ge=1)
     ollama_url: str = "http://127.0.0.1:11434"
     ollama_timeout_seconds: float = Field(default=120, gt=0)
-    extraction_model: str = "gemma3:270m"
-    answer_generation_model: str = "gemma3:270m"
+    extraction_model: str = "qwen3.5:2b"
+    answer_generation_model: str = "qwen3.5:2b"
     ocr_languages: str = "english"
     ocr_force_full_page: bool = False
     chunk_max_tokens: int = Field(default=700, ge=50)
