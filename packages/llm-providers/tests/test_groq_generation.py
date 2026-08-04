@@ -36,6 +36,61 @@ def make_limiter(
     )
 
 
+async def test_generates_an_answer_with_open_world_comparison_rules() -> None:
+    """Groq receives the shared rules for grounded comparisons."""
+
+    captured: dict[str, object] = {}
+
+    async def respond(request: httpx.Request) -> httpx.Response:
+        captured["payload"] = json.loads(request.content)
+        return httpx.Response(
+            200,
+            json={
+                "choices": [
+                    {
+                        "message": {
+                            "content": json.dumps(
+                                {
+                                    "answer": "Both sources describe the feature.",
+                                    "source_ids": ["S1", "S2"],
+                                }
+                            )
+                        }
+                    }
+                ],
+                "usage": {"total_tokens": 42},
+            },
+        )
+
+    async with httpx.AsyncClient(
+        base_url="https://api.groq.com/openai/v1",
+        transport=httpx.MockTransport(respond),
+    ) as client:
+        provider = GroqGenerationProvider(
+            api_key="test-key",
+            model="openai/gpt-oss-20b",
+            timeout_seconds=10,
+            rate_limiter=make_limiter(),
+            client=client,
+        )
+        answer = await provider.generate(
+            [ChatMessage(role="user", content="Which features differ?")],
+            "[S1] Slavia evidence\n[S2] Tiago evidence",
+        )
+
+    payload = captured["payload"]
+    assert isinstance(payload, dict)
+    system_prompt = payload["messages"][0]["content"]
+    assert "[S1] Slavia evidence" in system_prompt
+    assert "Do not interpret an unmentioned feature as absent" in system_prompt
+    assert "not mentioned for the second" in system_prompt
+    assert "Do not withhold supported facts" in system_prompt
+    assert "only when no supplied source contains any fact relevant" in system_prompt
+    assert "incomplete evidence" not in system_prompt.casefold()
+    assert answer.text == "Both sources describe the feature."
+    assert answer.source_ids == ("S1", "S2")
+
+
 async def test_generates_strict_structured_content() -> None:
     """Groq receives strict schema settings and returns decoded JSON."""
 

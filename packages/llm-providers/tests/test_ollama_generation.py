@@ -12,8 +12,14 @@ async def test_generates_a_structured_answer() -> None:
         body = json.loads(request.content)
         assert request.url.path == "/api/chat"
         assert body["model"] == "gemma3:270m"
-        assert "[S1] policy.pdf" in body["messages"][0]["content"]
-        assert "ignore unrelated sources" in body["messages"][0]["content"]
+        system_prompt = body["messages"][0]["content"]
+        assert "[S1] policy.pdf" in system_prompt
+        assert "ignore unrelated sources" in system_prompt
+        assert "Do not interpret an unmentioned feature as absent" in system_prompt
+        assert "not mentioned for the second" in system_prompt
+        assert "Do not withhold supported facts" in system_prompt
+        assert "only when no supplied source contains any fact relevant" in system_prompt
+        assert "incomplete evidence" not in system_prompt.casefold()
         return httpx.Response(
             200,
             json={
