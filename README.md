@@ -3,8 +3,6 @@
 A self-hosted service for creating immutable, vectorized document collections and
 answering questions from them with citations.
 
-The architecture and implementation roadmap are documented in [PLAN.md](PLAN.md).
-
 ## Development
 
 Requirements:
@@ -56,6 +54,89 @@ document. It also builds conservative wiki-base synonym edges from persisted emb
 Pro retrieval merges ready document graphs and synonym edges in memory before PageRank.
 Facts retrieval follows bounded canonical triples, ranks them semantically, and supplies
 the selected facts with their provenance passages to answer generation.
+
+## Retrieval modes
+
+### Lite
+
+Lite indexing parses each document, splits it into passages, and stores an embedding for
+every chunk.
+
+```mermaid
+flowchart LR
+    A[Document] --> B[Parse and OCR]
+    B --> C[Chunk passages]
+    C --> D[Embed chunks]
+    D --> E[(Chunks and vectors)]
+```
+
+Lite retrieval embeds the question and ranks stored chunks directly by vector similarity.
+
+```mermaid
+flowchart LR
+    A[Question] --> B[Embed question]
+    B --> C[Vector search]
+    C --> D[Ranked passages]
+```
+
+### Pro
+
+Pro indexing extends the Lite index with document graphs, embedded graph concepts, and
+high-confidence synonym links across the wiki base.
+
+```mermaid
+flowchart LR
+    A[Stored chunks] --> B[Extract entities]
+    B --> C[Extract triples]
+    C --> D[Build document graph]
+    D --> E[Embed graph concepts]
+    E --> F[(Graphs, concepts, and synonyms)]
+```
+
+Pro retrieval links question concepts to graph nodes, spreads relevance with Personalized
+PageRank, and projects node scores back to their source passages. It falls back to Lite
+vector retrieval when graph retrieval returns no passages.
+
+```mermaid
+flowchart LR
+    A[Question] --> B[Extract query concepts]
+    B --> C[Link graph nodes]
+    C --> D[Personalized PageRank]
+    D --> E[Rank provenance passages]
+    E --> F{Any passages?}
+    F -->|Yes| G[Ranked passages]
+    F -->|No| H[Lite vector retrieval]
+```
+
+### Facts
+
+Facts indexing uses the same graph index as Pro. Canonical triples retain their source
+passages, and relationship concepts are embedded for semantic fact ranking.
+
+```mermaid
+flowchart LR
+    A[Stored chunks] --> B[Extract entities]
+    B --> C[Extract canonical triples]
+    C --> D[Attach passage provenance]
+    D --> E[Embed entities and relationships]
+    E --> F[(Graphs, concept vectors, and synonyms)]
+```
+
+Facts retrieval traverses directed triples near linked entities, semantically ranks the
+candidate facts, and returns both facts and their supporting passages. It also falls back
+to Lite vector retrieval when no supporting passages are found.
+
+```mermaid
+flowchart LR
+    A[Question] --> B[Extract query concepts]
+    B --> C[Link entity seeds]
+    C --> D[Traverse nearby facts]
+    D --> E[Rank and select facts]
+    E --> F[Load provenance passages]
+    F --> G{Any passages?}
+    G -->|Yes| H[Ranked facts and passages]
+    G -->|No| I[Lite vector retrieval]
+```
 
 Render one stored document graph, or export and visualize the merged graph for a wiki base:
 
