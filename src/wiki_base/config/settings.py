@@ -1,7 +1,8 @@
 from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -31,18 +32,31 @@ class Settings(BaseSettings):
     embedding_batch_size: int = Field(default=16, ge=1)
     ollama_url: str = "http://127.0.0.1:11434"
     ollama_timeout_seconds: float = Field(default=120, gt=0)
-    extraction_model: str = "qwen3.5:2b"
-    answer_generation_model: str = "qwen3.5:2b"
+    extraction_provider: Literal["ollama", "groq"] = "ollama"
+    extraction_model: str = "gemma3:270m"
+    answer_generation_provider: Literal["ollama", "groq"] = "ollama"
+    answer_generation_model: str = "gemma3:270m"
+    groq_api_key: SecretStr | None = None
+    groq_url: str = "https://api.groq.com/openai/v1"
+    groq_timeout_seconds: float = Field(default=120, gt=0)
+    groq_requests_per_minute: int = Field(default=25, ge=1)
+    groq_tokens_per_minute: int = Field(default=7000, ge=1)
+    groq_requests_per_day: int = Field(default=900, ge=1)
+    groq_tokens_per_day: int = Field(default=180000, ge=1)
+    groq_max_retries: int = Field(default=1, ge=0)
+    groq_reasoning_effort: Literal["low", "medium", "high"] = "low"
     ocr_languages: str = "english"
     ocr_force_full_page: bool = False
     chunk_max_tokens: int = Field(default=700, ge=50)
     chunk_tokenizer_model: str = "BAAI/bge-m3"
     worker_poll_interval_seconds: float = Field(default=1, gt=0)
-    graph_index_version: str = "1"
+    graph_index_version: str = "3"
     graph_entity_similarity_threshold: float = Field(default=0.75, ge=-1, le=1)
     graph_relationship_similarity_threshold: float = Field(default=0.6, ge=-1, le=1)
     graph_entity_max_links: int = Field(default=1, ge=1)
     graph_entity_embedding_batch_size: int = Field(default=128, ge=1)
+    graph_synonym_similarity_threshold: float = Field(default=0.95, ge=-1, le=1)
+    graph_synonym_max_links: int = Field(default=3, ge=1)
     cors_origins: str = "http://localhost:8080,http://127.0.0.1:8080"
 
     @property

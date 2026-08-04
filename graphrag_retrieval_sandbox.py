@@ -20,10 +20,10 @@ from graph_rag import (
     RankedChunk,
 )
 from llm_providers.embeddings.ollama import OllamaEmbeddingProvider
-from llm_providers.generation.ollama import OllamaGenerationProvider
 
 from wiki_base.config.settings import get_settings
 from wiki_base.database.connection import Database
+from wiki_base.generation import create_generation_provider, create_groq_rate_limiter
 
 
 def parse_args() -> argparse.Namespace:
@@ -75,10 +75,11 @@ async def main(question: str, graph_json: Path, *, limit: int) -> None:
 
     settings = get_settings()
     graph = load_graph(graph_json)
-    extraction = OllamaGenerationProvider(
-        base_url=settings.ollama_url,
+    extraction = create_generation_provider(
+        settings,
+        provider=settings.extraction_provider,
         model=settings.extraction_model,
-        timeout_seconds=settings.ollama_timeout_seconds,
+        groq_rate_limiter=create_groq_rate_limiter(settings),
     )
     embeddings = OllamaEmbeddingProvider(
         base_url=settings.ollama_url,

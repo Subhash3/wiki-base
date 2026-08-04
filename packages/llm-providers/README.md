@@ -2,9 +2,11 @@
 
 Provider interfaces and implementations shared by projects in this workspace.
 
-The initial implementation supports Ollama for embeddings and structured,
-citation-aware generation. A provider-neutral reranking interface is also
-included.
+The package supports Ollama embeddings and Ollama or Groq structured,
+citation-aware generation. Groq generation uses strict JSON schemas, conservative
+free-tier throttling, and at most one retry for rate-limit responses. Structured
+generation `400` responses are classified without retrying. A
+provider-neutral reranking interface is also included.
 
 ## Development
 
