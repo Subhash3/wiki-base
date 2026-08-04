@@ -17,6 +17,7 @@ wheels/
 htmlcov/
 .wiki-base-staging/
 .wiki-base-graphs/
+logs/
 
 docs-for-testing/
 graph-visualization/

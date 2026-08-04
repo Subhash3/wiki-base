@@ -70,15 +70,37 @@ class GraphIndexingWorker:
         if job is None:
             return False
 
-        logger.info("indexing graph for document %s", job.document_id)
+        logger.info(
+            "indexing graph document_id=%s extraction_model=%s index_version=%s embedding_model=%s",
+            job.document_id,
+            self._extraction_model,
+            self._index_version,
+            self._embeddings.model_info.model,
+        )
         try:
             async with self._database.connection() as connection:
                 chunks = await load_graph_indexing_chunks(connection, job.document_id)
             if not chunks:
                 raise ValueError("Document has no chunks to index")
+            logger.debug(
+                "loaded graph indexing chunks document_id=%s chunk_count=%d chunk_ids=%s",
+                job.document_id,
+                len(chunks),
+                [str(item.chunk.id) for item in chunks],
+            )
 
             graph = await self._indexer.index(chunks)
             concepts = graph_concepts(graph)
+            logger.debug(
+                "prepared graph concepts document_id=%s nodes=%d "
+                "edges=%d concepts=%d entity_concepts=%d relationship_concepts=%d",
+                job.document_id,
+                len(graph.nodes),
+                sum(1 for _edge in graph.edges()),
+                len(concepts),
+                sum(concept.type.value == "entity" for concept in concepts),
+                sum(concept.type.value == "relationship" for concept in concepts),
+            )
             concept_embeddings = await self._embed_concepts(concepts)
             async with self._database.connection() as connection:
                 async with connection.transaction():
@@ -104,7 +126,14 @@ class GraphIndexingWorker:
                         similarity_threshold=self._synonym_similarity_threshold,
                         max_links_per_entity=self._synonym_max_links,
                     )
-            logger.info("indexed graph for document %s", job.document_id)
+            logger.info(
+                "indexed graph document_id=%s chunks=%d nodes=%d edges=%d concepts=%d",
+                job.document_id,
+                len(chunks),
+                len(graph.nodes),
+                sum(1 for _edge in graph.edges()),
+                len(concepts),
+            )
         except Exception as error:
             logger.exception("graph indexing failed for document %s", job.document_id)
             async with self._database.connection() as connection:
@@ -125,9 +154,7 @@ class GraphIndexingWorker:
         for start in range(0, len(concepts), self._embedding_batch_size):
             batch = concepts[start : start + self._embedding_batch_size]
             embeddings.extend(
-                await self._embeddings.embed_documents(
-                    [concept.text for concept in batch]
-                )
+                await self._embeddings.embed_documents([concept.text for concept in batch])
             )
         if len(embeddings) != len(concepts):
             raise ValueError("Embedding provider returned an unexpected vector count")

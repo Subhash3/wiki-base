@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 from graph_rag import HippoRAGIndexer, LLMPassageEntityExtractor, LLMTripleExtractor
 from llm_providers.embeddings.ollama import OllamaEmbeddingProvider
@@ -9,12 +10,32 @@ from wiki_base.database.connection import Database
 from wiki_base.generation import create_generation_provider, create_groq_rate_limiter
 from wiki_base.workers.graph_indexing import GraphIndexingWorker
 
+logger = logging.getLogger(__name__)
+
 
 async def run_worker() -> None:
     """Configure and run the graph indexing worker."""
 
     settings = get_settings()
-    configure_logging(settings.log_level)
+    configure_logging(
+        settings.log_level,
+        log_directory=settings.log_directory,
+        process_name="graph-indexing-worker",
+    )
+    logger.info(
+        "graph indexing worker configuration extraction_provider=%s "
+        "extraction_model=%s embedding_model=%s index_version=%s "
+        "embedding_batch_size=%d synonym_similarity_threshold=%.3f "
+        "synonym_max_links=%d poll_interval_seconds=%.3f",
+        settings.extraction_provider,
+        settings.extraction_model,
+        settings.embedding_model,
+        settings.graph_index_version,
+        settings.graph_entity_embedding_batch_size,
+        settings.graph_synonym_similarity_threshold,
+        settings.graph_synonym_max_links,
+        settings.worker_poll_interval_seconds,
+    )
     database = Database(settings.database_url)
     extraction = create_generation_provider(
         settings,

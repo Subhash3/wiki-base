@@ -73,6 +73,19 @@ The API is then available at `http://localhost:8000`. Useful initial endpoints a
 - `GET /querychunks`
 - `POST /query`
 
+Persistent debug logs are written to `logs/` by default:
+
+- `logs/api.log` records retrieval, ranked facts and chunks, complete answer context,
+  generated answers, and citation resolution.
+- `logs/ingestion-worker.log` records document parsing and chunk-ingestion activity.
+- `logs/graph-indexing-worker.log` records chunk-level entity and triple extraction,
+  graph construction, concept embedding, and indexing failures.
+
+Each file rotates at 20 MB and keeps five backups. Change the location with
+`WIKI_BASE_LOG_DIRECTORY`; set `WIKI_BASE_LOG_LEVEL=INFO` when full debug traces are not
+needed. Because debug logs contain document passages and model inputs, treat the directory
+as application data rather than publishing it.
+
 Run checks with:
 
 ```bash

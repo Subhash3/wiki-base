@@ -15,6 +15,7 @@ class Settings(BaseSettings):
 
     environment: str = "development"
     log_level: str = "DEBUG"
+    log_directory: Path = Path("logs")
     host: str = "0.0.0.0"
     port: int = Field(default=8000, ge=1, le=65535)
 

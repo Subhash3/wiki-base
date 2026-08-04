@@ -34,6 +34,14 @@ class HippoRAGIndexer:
                 document_id=indexed_chunk.document_id,
                 chunk_id=indexed_chunk.chunk.id,
             )
+            logger.debug(
+                "indexing graph chunk document_id=%s chunk_id=%s section=%r heading=%r content=%r",
+                indexed_chunk.document_id,
+                indexed_chunk.chunk.id,
+                indexed_chunk.chunk.section,
+                indexed_chunk.chunk.heading,
+                indexed_chunk.chunk.content,
+            )
             try:
                 entities = (
                     await self._entity_extractor.extract(indexed_chunk.chunk)
@@ -48,6 +56,12 @@ class HippoRAGIndexer:
                     error,
                 )
                 entities = []
+            logger.debug(
+                "passage entities document_id=%s chunk_id=%s entities=%s",
+                indexed_chunk.document_id,
+                indexed_chunk.chunk.id,
+                entities,
+            )
             for entity in entities:
                 normalized_entity = normalize_text(entity)
                 if normalized_entity:
@@ -66,8 +80,26 @@ class HippoRAGIndexer:
                     error,
                 )
                 continue
+            logger.debug(
+                "passage triples document_id=%s chunk_id=%s triples=%s",
+                indexed_chunk.document_id,
+                indexed_chunk.chunk.id,
+                [
+                    {
+                        "subject": triple.subject,
+                        "relation": triple.relation,
+                        "object": triple.object,
+                    }
+                    for triple in triples
+                ],
+            )
             for triple in triples:
                 normalized = normalize_triple(triple)
                 if normalized is not None:
                     graph.add_triple(normalized, provenance=provenance)
+        logger.debug(
+            "graph indexing completed nodes=%d edges=%d",
+            len(graph.nodes),
+            sum(1 for _edge in graph.edges()),
+        )
         return graph
