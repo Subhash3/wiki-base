@@ -7,7 +7,7 @@ from graph_rag.entity_linking import ExactEntityLinker
 from graph_rag.graph import KnowledgeGraph
 from graph_rag.models import Triple, TripleProvenance
 from graph_rag.query_extraction import QueryConcepts
-from graph_rag.retrieval import HippoRAGRetriever
+from graph_rag.retrieval import PageRankRetriever
 
 DOCUMENT_ONE = UUID("10000000-0000-0000-0000-000000000001")
 DOCUMENT_TWO = UUID("10000000-0000-0000-0000-000000000002")
@@ -64,7 +64,7 @@ async def test_retrieves_chunks_across_multiple_graph_hops(caplog) -> None:
     """A query seed retrieves evidence connected through shared entities."""
 
     extractor = StubEntityExtractor(["Alice"])
-    retriever = HippoRAGRetriever(
+    retriever = PageRankRetriever(
         entity_extractor=extractor,
         entity_linker=ExactEntityLinker(),
     )
@@ -87,7 +87,7 @@ async def test_retrieves_chunks_across_multiple_graph_hops(caplog) -> None:
 async def test_returns_empty_when_entities_do_not_link() -> None:
     """Unmatched entities do not trigger a global PageRank fallback."""
 
-    retriever = HippoRAGRetriever(
+    retriever = PageRankRetriever(
         entity_extractor=StubEntityExtractor(["Unknown"]),
         entity_linker=ExactEntityLinker(),
     )
@@ -109,7 +109,7 @@ async def test_retrieves_isolated_entity_mention_without_a_triple() -> None:
         "skoda slavia",
         provenance=TripleProvenance(document_id=DOCUMENT_ONE, chunk_id=CHUNK_ONE),
     )
-    retriever = HippoRAGRetriever(
+    retriever = PageRankRetriever(
         entity_extractor=StubEntityExtractor(["Skoda Slavia"]),
         entity_linker=ExactEntityLinker(),
     )
@@ -123,7 +123,7 @@ async def test_retrieves_isolated_entity_mention_without_a_triple() -> None:
 async def test_uses_graph_nodes_mentioned_in_question_when_extraction_is_wrong() -> None:
     """Explicit node mentions survive an incorrect LLM entity list."""
 
-    retriever = HippoRAGRetriever(
+    retriever = PageRankRetriever(
         entity_extractor=StubEntityExtractor(["Tesla Model 3", "Austin Powers"]),
         entity_linker=ExactEntityLinker(),
     )
@@ -159,7 +159,7 @@ async def test_uses_relationships_to_reach_disconnected_evidence() -> None:
             chunk_id=CHUNK_TWO,
         ),
     )
-    retriever = HippoRAGRetriever(
+    retriever = PageRankRetriever(
         entity_extractor=StubEntityExtractor(
             ["Honda Unicorn"],
             ["loan amount for"],
@@ -179,7 +179,7 @@ async def test_uses_relationships_to_reach_disconnected_evidence() -> None:
 async def test_applies_result_limit() -> None:
     """Only the requested number of ranked chunks is returned."""
 
-    retriever = HippoRAGRetriever(
+    retriever = PageRankRetriever(
         entity_extractor=StubEntityExtractor(["Alice"]),
         entity_linker=ExactEntityLinker(),
     )
@@ -196,7 +196,7 @@ async def test_applies_result_limit() -> None:
 async def test_rejects_nonpositive_limit() -> None:
     """Retrieval requires space for at least one result."""
 
-    retriever = HippoRAGRetriever(
+    retriever = PageRankRetriever(
         entity_extractor=StubEntityExtractor(["Alice"]),
         entity_linker=ExactEntityLinker(),
     )

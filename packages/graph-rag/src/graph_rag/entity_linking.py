@@ -46,6 +46,7 @@ class SemanticConceptSearch(Protocol):
         *,
         threshold: float,
         limit: int,
+        candidate_keys: frozenset[tuple[str, str, str]] | None = None,
     ) -> list[RelationshipConceptMatch]:
         """Return semantically similar relationship facts."""
 

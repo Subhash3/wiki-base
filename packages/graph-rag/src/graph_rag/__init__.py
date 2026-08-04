@@ -13,15 +13,20 @@ from graph_rag.extraction import (
     PassageEntityExtractor,
     TripleExtractor,
 )
+from graph_rag.fact_retrieval import FactRetriever
+from graph_rag.fact_traversal import GraphFactTraverser
 from graph_rag.graph import KnowledgeGraph
 from graph_rag.indexing import HippoRAGIndexer
 from graph_rag.models import (
     EntityConceptMatch,
+    FactRetrievalResult,
     GraphConcept,
     GraphConceptType,
     GraphEdge,
+    GraphFact,
     IndexedChunk,
     RankedChunk,
+    RankedFact,
     RelationshipConceptMatch,
     SynonymEdge,
     Triple,
@@ -38,18 +43,22 @@ from graph_rag.ranking import (
     build_ranking_graph,
     personalized_page_rank,
 )
-from graph_rag.retrieval import HippoRAGRetriever
+from graph_rag.retrieval import PageRankRetriever
 from graph_rag.visualization import GraphVisualizer
 
 __version__ = "0.1.0"
 
 __all__ = [
     "GraphEdge",
+    "GraphFact",
+    "GraphFactTraverser",
     "GraphConcept",
     "GraphConceptType",
     "GraphVisualizer",
     "HippoRAGIndexer",
-    "HippoRAGRetriever",
+    "PageRankRetriever",
+    "FactRetriever",
+    "FactRetrievalResult",
     "EmbeddingEntityLinker",
     "EntityConceptMatch",
     "EntityLinker",
@@ -66,6 +75,7 @@ __all__ = [
     "QueryEntityExtractor",
     "QueryConcepts",
     "RankedChunk",
+    "RankedFact",
     "RelationshipConceptMatch",
     "SemanticConceptSearch",
     "SynonymEdge",

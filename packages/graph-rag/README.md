@@ -67,19 +67,22 @@ the canonical document graphs remain in PostgreSQL.
 ```mermaid
 flowchart LR
     A[Question] --> B[Extract entities and relationships]
-    B --> C[Link nodes and edge labels]
-    C --> D[Personalized PageRank]
-    D --> E[Rank passages]
-    E --> F[Generate answer]
+    B --> C[Link entity nodes]
+    C --> D{Retrieval strategy}
+    D -->|Pro| E[Personalized PageRank]
+    D -->|Facts| F[Bounded fact traversal]
+    E --> G[Rank passages]
+    F --> G
+    G --> H[Generate answer]
 ```
 
 1. **Question:** Accept the user's question as the retrieval input.
 2. **Extract query concepts:** Identify important entities and relationships in the question.
-3. **Link graph concepts:** Match entities to nodes and relationships to edge labels. A matched
-   relationship contributes the subject and object of its matching edges as ranking seeds.
-4. **Personalized PageRank:** Spread relevance from the matched nodes through their graph connections.
-5. **Rank passages:** Score and select passages associated with the most relevant graph nodes.
-6. **Generate answer:** Ask an LLM to answer the question using the selected passages as evidence.
+3. **Link graph concepts:** Match query entities to canonical graph nodes.
+4. **Retrieve graph evidence:** Pro spreads relevance with Personalized PageRank. Facts follows
+   bounded directed triples and scores them using query relationships and the complete question.
+5. **Rank passages:** Project relevant nodes or facts through their chunk provenance.
+6. **Generate answer:** Use selected passages and, in Facts mode, cited triples as evidence.
 
 `LLMQueryEntityExtractor` implements query-concept extraction through the shared structured
 generation provider. It returns validated entity and relationship lists without answering
@@ -110,9 +113,14 @@ has no valid graph seeds.
 triple provenance. The same node/chunk association counts once at equal default weights. It
 returns deterministic `RankedChunk` results ordered by graph relevance.
 
-`HippoRAGRetriever` composes query extraction, entity linking, the ranking projection,
+`PageRankRetriever` composes query extraction, entity linking, the ranking projection,
 Personalized PageRank, and chunk aggregation. It returns ranked document/chunk IDs and
 does not depend on a database or chunk-content store.
+
+`GraphFactTraverser` follows canonical directed facts from linked query nodes with bounded
+depth and candidate counts. `FactRetriever` scores those facts against query relationships
+and the complete question, preserves coverage across seeds, and ranks chunks through fact
+provenance without running PageRank.
 
 ## Roadmap
 

@@ -14,9 +14,9 @@ from uuid import UUID
 
 from graph_rag import (
     EmbeddingEntityLinker,
-    HippoRAGRetriever,
     KnowledgeGraph,
     LLMQueryEntityExtractor,
+    PageRankRetriever,
     RankedChunk,
 )
 from llm_providers.embeddings.ollama import OllamaEmbeddingProvider
@@ -93,7 +93,7 @@ async def main(question: str, graph_json: Path, *, limit: int) -> None:
         max_size=settings.database_max_pool_size,
     )
     try:
-        retriever = HippoRAGRetriever(
+        retriever = PageRankRetriever(
             entity_extractor=LLMQueryEntityExtractor(generation=extraction),
             entity_linker=EmbeddingEntityLinker(
                 embeddings=embeddings,

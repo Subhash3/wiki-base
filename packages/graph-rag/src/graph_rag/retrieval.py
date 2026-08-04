@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 _PAGE_RANK_LOG_LIMIT = 20
 
 
-class HippoRAGRetriever:
+class PageRankRetriever:
     """Retrieve chunks through entity linking and Personalized PageRank."""
 
     def __init__(
@@ -56,7 +56,7 @@ class HippoRAGRetriever:
             concepts.entities,
             concepts.relationships,
         )
-        mentioned_nodes = _mentioned_nodes(question, graph)
+        mentioned_nodes = find_mentioned_nodes(question, graph)
         concepts = QueryConcepts(
             entities=[*mentioned_nodes, *concepts.entities],
             relationships=concepts.relationships,
@@ -95,7 +95,7 @@ class HippoRAGRetriever:
         return aggregate_chunk_scores(graph, node_scores)[:limit]
 
 
-def _mentioned_nodes(question: str, graph: KnowledgeGraph) -> list[str]:
+def find_mentioned_nodes(question: str, graph: KnowledgeGraph) -> list[str]:
     """Return graph nodes explicitly mentioned in the question."""
 
     normalized_question = normalize_text(question)

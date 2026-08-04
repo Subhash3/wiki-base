@@ -40,6 +40,34 @@ class RankedChunk:
 
 
 @dataclass(frozen=True, slots=True)
+class GraphFact:
+    """A canonical graph fact reached from one or more query nodes."""
+
+    subject: str
+    relation: str
+    object: str
+    provenance: frozenset[TripleProvenance]
+    depth: int
+    seeds: frozenset[str]
+
+
+@dataclass(frozen=True, slots=True)
+class RankedFact:
+    """A traversed graph fact ranked by query relevance."""
+
+    fact: GraphFact
+    score: float
+
+
+@dataclass(frozen=True, slots=True)
+class FactRetrievalResult:
+    """Ranked facts and their supporting chunks."""
+
+    facts: list[RankedFact]
+    chunks: list[RankedChunk]
+
+
+@dataclass(frozen=True, slots=True)
 class GraphEdge:
     """A normalized graph edge and the chunks that support it."""
 
