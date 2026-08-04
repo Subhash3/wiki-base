@@ -1,3 +1,4 @@
+from dataclasses import replace
 from typing import Any
 from uuid import UUID
 
@@ -59,6 +60,49 @@ async def test_extracts_triples_using_structured_generation() -> None:
         content="Alice works at Acme.",
     )
     assert generation.schema["properties"]["triples"]["type"] == "array"
+
+
+async def test_supplies_section_scope_for_fragmented_passages() -> None:
+    """A section can identify the omitted subject of an isolated value."""
+
+    generation = StubStructuredGeneration(
+        {
+            "triples": [
+                {
+                    "subject": "Skoda Slavia",
+                    "relation": "has price range",
+                    "object": "Rs. 10.00 - 18.19 Lakh",
+                }
+            ]
+        }
+    )
+    chunk = replace(
+        make_chunk(),
+        content="Rs. 10.00 - 18.19 Lakh",
+        embedding_content="Rs. 10.00 - 18.19 Lakh",
+        section="Skoda Slavia",
+        heading="Skoda Slavia",
+    )
+
+    triples = await LLMTripleExtractor(generation=generation).extract(chunk)
+
+    assert triples == [
+        Triple(
+            subject="Skoda Slavia",
+            relation="has price range",
+            object="Rs. 10.00 - 18.19 Lakh",
+        )
+    ]
+    assert generation.messages[-1] == ChatMessage(
+        role="user",
+        content=(
+            "SCOPE\n"
+            "Section: Skoda Slavia\n\n"
+            "PASSAGE\n"
+            "Rs. 10.00 - 18.19 Lakh"
+        ),
+    )
+    assert "scope metadata, not independent facts" in generation.messages[0].content
 
 
 @pytest.mark.parametrize(
