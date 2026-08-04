@@ -35,20 +35,25 @@ Start the graph indexing worker in another terminal:
 uv run wiki-base-graph-worker
 ```
 
-Structured extraction and final answers can use different Ollama models:
+Structured extraction and final answers can use different providers and models:
 
 ```env
-WIKI_BASE_EXTRACTION_MODEL=qwen3.5:0.8b
-WIKI_BASE_ANSWER_GENERATION_MODEL=qwen3.5:9b
+WIKI_BASE_EXTRACTION_PROVIDER=groq
+WIKI_BASE_EXTRACTION_MODEL=openai/gpt-oss-20b
+WIKI_BASE_GROQ_API_KEY=gsk_your_key_here
+WIKI_BASE_ANSWER_GENERATION_PROVIDER=ollama
+WIKI_BASE_ANSWER_GENERATION_MODEL=gemma3:270m
 ```
 
 The extraction model handles graph indexing and query-concept extraction. The answer model
-is used only after retrieval has selected supporting chunks.
+is used only after retrieval has selected supporting chunks. Groq defaults stay below the
+documented GPT-OSS free-tier minute and daily limits and stop locally when the daily budget
+is exhausted.
 
-The graph worker stores one canonical JSONB graph and its pgvector entity and relationship
-index per document in PostgreSQL. Graph-indexing jobs contain processing status and errors
-only; Pro retrieval loads ready document graphs, links unmatched query concepts through
-PostgreSQL similarity search, and merges the graphs in memory.
+The graph worker uses passage entity extraction followed by entity-guided OpenIE. It stores
+one mention-aware canonical JSONB graph and its pgvector entity and relationship index per
+document. It also builds conservative wiki-base synonym edges from persisted embeddings.
+Pro retrieval merges ready document graphs and synonym edges in memory before PageRank.
 
 Render one stored document graph, or export and visualize the merged graph for a wiki base:
 
@@ -72,6 +77,15 @@ Run checks with:
 uv run ruff check .
 uv run pytest
 ```
+
+Run the Lite and Pro retrieval benchmark against the development dataset:
+
+```bash
+uv run wiki-base-benchmark benchmarks/graphrag.json
+```
+
+See [`benchmarks/README.md`](benchmarks/README.md) for the dataset format, metrics, and
+baseline report options.
 
 ## Workspace projects
 

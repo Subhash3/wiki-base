@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "name": "GraphRAG development retrieval benchmark",
+  "cases": [
+    {
+      "id": "skoda-slavia-price",
+      "wiki_base_id": "ed7a9540-0b98-4f59-acc6-64568f7bc4f3",
+      "question": "What is the price range of the Skoda Slavia?",
+      "relevant_chunks": [
+        {
+          "id": "8e5560c7-5848-48ed-81b9-6dc577d410da",
+          "content_contains": "Rs. 10.00 - 18.19 Lakh"
+        }
+      ],
+      "expected_facts": ["The listed price range is Rs. 10.00–18.19 lakh."],
+      "tags": ["direct-fact", "relationship"]
+    },
+    {
+      "id": "tata-tiago-engines",
+      "wiki_base_id": "ed7a9540-0b98-4f59-acc6-64568f7bc4f3",
+      "question": "What engines are available for the Tata Tiago?",
+      "relevant_chunks": [
+        {
+          "id": "e74b597b-bc6f-4e11-86e6-aa6930005197",
+          "content_contains": "Tata Tiago is currently available in Petrol and CNG engines"
+        }
+      ],
+      "expected_facts": ["Tiago is listed with petrol and CNG engines."],
+      "tags": ["direct-fact", "multi-property"]
+    },
+    {
+      "id": "tiago-engine-alias",
+      "wiki_base_id": "ed7a9540-0b98-4f59-acc6-64568f7bc4f3",
+      "question": "What engine options does Tiago have?",
+      "relevant_chunks": [
+        {
+          "id": "e74b597b-bc6f-4e11-86e6-aa6930005197",
+          "content_contains": "Tata Tiago is currently available in Petrol and CNG engines"
+        }
+      ],
+      "expected_facts": ["Tiago is listed with petrol and CNG engines."],
+      "tags": ["direct-fact", "alias"]
+    },
+    {
+      "id": "slavia-tiago-engine-comparison",
+      "wiki_base_id": "ed7a9540-0b98-4f59-acc6-64568f7bc4f3",
+      "question": "Compare the engines available for the Skoda Slavia and Tata Tiago.",
+      "relevant_chunks": [
+        {
+          "id": "e5b2cdf8-0fb8-41a3-8a32-3f9f53876a53",
+          "content_contains": "Skoda Slavia is currently available in Petrol engine"
+        },
+        {
+          "id": "e74b597b-bc6f-4e11-86e6-aa6930005197",
+          "content_contains": "Tata Tiago is currently available in Petrol and CNG engines"
+        }
+      ],
+      "expected_facts": [
+        "Slavia is listed with a petrol engine.",
+        "Tiago is listed with petrol and CNG engines."
+      ],
+      "tags": ["comparison", "multi-entity"]
+    }
+  ]
+}

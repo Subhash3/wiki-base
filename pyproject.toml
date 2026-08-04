@@ -24,6 +24,7 @@ wiki-base-graph-worker = "wiki_base.workers.graph_indexing_main:run"
 wiki-base-worker = "wiki_base.workers.main:run"
 graph-rag-visualize = "wiki_base.graph_tools:run_visualizer"
 graph-rag-visualize-merge = "wiki_base.graph_tools:run_merger"
+wiki-base-benchmark = "wiki_base.benchmarking:run"
 
 [dependency-groups]
 dev = [

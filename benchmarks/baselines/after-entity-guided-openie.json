@@ -1,0 +1,476 @@
+{
+  "run_name": "after-entity-guided-openie",
+  "dataset_name": "GraphRAG development retrieval benchmark",
+  "dataset_path": "benchmarks/graphrag.json",
+  "created_at": "2026-08-04T07:33:43.662382Z",
+  "base_url": "http://127.0.0.1:8000",
+  "limit": 5,
+  "results": [
+    {
+      "case_id": "skoda-slavia-price",
+      "wiki_base_id": "ed7a9540-0b98-4f59-acc6-64568f7bc4f3",
+      "question": "What is the price range of the Skoda Slavia?",
+      "mode": "lite",
+      "retrieval_strategy": "vector",
+      "duration_ms": 287.77,
+      "chunks": [
+        {
+          "rank": 1,
+          "id": "8e5560c7-5848-48ed-81b9-6dc577d410da",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.7295015566650886,
+          "content_preview": "Rs. 10.00 - 18.19 Lakh Check On Road Price View August Offers"
+        },
+        {
+          "rank": 2,
+          "id": "e5b2cdf8-0fb8-41a3-8a32-3f9f53876a53",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.6926364072994897,
+          "content_preview": "Skoda Slavia is currently available in Petrol engine. The 1498 cc Petrol engine generates a power of 147.51bhp@5000-6000rpm and a torque of 250Nm@1600-3500rpm. Skoda Slavia is available in both Manual & Automatic transmission. Skoda Slavia "
+        },
+        {
+          "rank": 3,
+          "id": "a59b50cd-1dcc-4a85-9c05-66b2610c895b",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.6678790643719774,
+          "content_preview": "Seating Capacity Doors Boot Space 5 4 521 Liters Sign up to Zigwheels with Google × Continue with Google Skoda Slavia Exterior Dimensions, 1 = . Ground Clearance (Laden), 1 = 145 mm. Length*Width*Height, 1 = 4541*1752*1507 mm. Wheelbase, 1 "
+        },
+        {
+          "rank": 4,
+          "id": "d3c18944-0693-4688-bd55-f07f6ed7c4dc",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.667841672477124,
+          "content_preview": "BS VI 2.0 19.36 Kmpl 1498 cc Automatic Petrol 521 Liters Driver, Passenger and Side Front Yes Yes Front 5 Star Displacement, 1 = 1498 cc. Idle Start Stop System, 1 = Yes Sign up to Zigwheels with Google ×. Engine Type, 1 = 1.5 TSI Petrol Co"
+        },
+        {
+          "rank": 5,
+          "id": "ae7457b7-bd12-4195-a7c5-f16669448d33",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.6512545790509655,
+          "content_preview": "Petrol AT - 1498 cc Petrol - 999 cc Petrol AT - 999 cc Eg. alloy wheels.. Skoda Slavia Engine and Transmission"
+        }
+      ],
+      "metrics": {
+        "expected": 1,
+        "matched": 1,
+        "hit": true,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0
+      },
+      "error": null
+    },
+    {
+      "case_id": "skoda-slavia-price",
+      "wiki_base_id": "ed7a9540-0b98-4f59-acc6-64568f7bc4f3",
+      "question": "What is the price range of the Skoda Slavia?",
+      "mode": "pro",
+      "retrieval_strategy": "graph",
+      "duration_ms": 1176.6,
+      "chunks": [
+        {
+          "rank": 1,
+          "id": "8e5560c7-5848-48ed-81b9-6dc577d410da",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.5,
+          "content_preview": "Rs. 10.00 - 18.19 Lakh Check On Road Price View August Offers"
+        },
+        {
+          "rank": 2,
+          "id": "c4aa5e35-e649-4e52-90ec-c4293067553c",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.1925739740118047,
+          "content_preview": "I bought skoda slavia after my friend's advice as I was looking for a sedan with premium feeling and powerful performance. This car has a sleek and stylish body design which is very attractive. this car gives mileage of around 18-20 kmpl. I"
+        },
+        {
+          "rank": 3,
+          "id": "e5b2cdf8-0fb8-41a3-8a32-3f9f53876a53",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.1925739740118047,
+          "content_preview": "Skoda Slavia is currently available in Petrol engine. The 1498 cc Petrol engine generates a power of 147.51bhp@5000-6000rpm and a torque of 250Nm@1600-3500rpm. Skoda Slavia is available in both Manual & Automatic transmission. Skoda Slavia "
+        },
+        {
+          "rank": 4,
+          "id": "d4fc42b9-1ab5-4e99-aca5-0a240b8f290f",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.17548604990374703,
+          "content_preview": "OVERVIEW PRICE SPECS VARIANTS ▼ EXPERT REVIEWS USER REVIEWS Q&A SIMILAR CARS MORE ▼"
+        },
+        {
+          "rank": 5,
+          "id": "6bef78fa-4b14-4945-9a35-231728eb6ff1",
+          "document_id": "30397da8-36cf-4d42-84bc-3a18c4cacecb",
+          "document_name": "tiago.pdf",
+          "score": 0.17330819635893804,
+          "content_preview": "OVERVIEW PRICE SPECS VARIANTS ▼ USER REVIEWS Q&A SIMILAR CARS COLOURS MORE ▼"
+        }
+      ],
+      "metrics": {
+        "expected": 1,
+        "matched": 1,
+        "hit": true,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0
+      },
+      "error": null
+    },
+    {
+      "case_id": "tata-tiago-engines",
+      "wiki_base_id": "ed7a9540-0b98-4f59-acc6-64568f7bc4f3",
+      "question": "What engines are available for the Tata Tiago?",
+      "mode": "lite",
+      "retrieval_strategy": "vector",
+      "duration_ms": 237.12,
+      "chunks": [
+        {
+          "rank": 1,
+          "id": "e74b597b-bc6f-4e11-86e6-aa6930005197",
+          "document_id": "30397da8-36cf-4d42-84bc-3a18c4cacecb",
+          "document_name": "tiago.pdf",
+          "score": 0.7281409068025183,
+          "content_preview": "Tata Tiago is currently available in Petrol and CNG engines. The 1199 cc Petrol engine generates a power of 85bhp@6000rpm and a torque of 113Nm@3300rpm. The 1199 cc CNG engine generates a power of 74.46bhp@6000rpm and a torque of 96.5Nm@350"
+        },
+        {
+          "rank": 2,
+          "id": "182a45f2-8c42-4d62-9663-3e14fc2c0663",
+          "document_id": "30397da8-36cf-4d42-84bc-3a18c4cacecb",
+          "document_name": "tiago.pdf",
+          "score": 0.6921435503446722,
+          "content_preview": "Fuel Type Fuel Capacity 1199 cc 1.2L NA Revotron 1199 cc 85bhp@6000rpm 113Nm@3300rpm BS VI 2.0 3 Manual 4 5-Speed FWD Not Available in Tiago Not Available in Tiago Petrol 35 Liters Alloy Wheel Size Rear, = 15. steeringGearType, = Rack & Pin"
+        },
+        {
+          "rank": 3,
+          "id": "974334b3-3a5b-4aea-afb6-80c0cc5eff24",
+          "document_id": "30397da8-36cf-4d42-84bc-3a18c4cacecb",
+          "document_name": "tiago.pdf",
+          "score": 0.6815929359461734,
+          "content_preview": "Petrol - 1199 cc Petrol AT - 1199 cc CNG - 1199 cc CNG AT - 1199 cc Eg. alloy wheels.. Tata Tiago Engine and Transmission Displacement Engine Type Engine Displacement Max Power Max Torque Emission Norm Compliance No Of Cylinders Transmissio"
+        },
+        {
+          "rank": 4,
+          "id": "854505da-f78f-4bcc-8414-72e8a485e0aa",
+          "document_id": "30397da8-36cf-4d42-84bc-3a18c4cacecb",
+          "document_name": "tiago.pdf",
+          "score": 0.6568748202921003,
+          "content_preview": "Emission Norm Compliance, 1 = BS VI 2.0. Engine Displ., 1 = 1199 cc. Transmission, 1 = Automatic. Fuel Type, 1 = CNG. Boot Space, 1 = 242 Liters. Airbags, 1 = Driver, Passenger and Side Front. ABS, 1 = Yes. Central Locking, 1 = Yes. Fog Lam"
+        },
+        {
+          "rank": 5,
+          "id": "96ef877c-12e9-4cc6-9a33-64b3e947315b",
+          "document_id": "30397da8-36cf-4d42-84bc-3a18c4cacecb",
+          "document_name": "tiago.pdf",
+          "score": 0.6266471807289737,
+          "content_preview": "Doors, 5 = 5. Boot Space, 5 = 242 Liters Tata Tiago Exterior Dimensions, 1 = . Length*Width*Height, 1 = 3813*1684*1535 mm. Wheelbase, 1 = 2400 mm. No. Of Doors, 1 = 5 Interior, 1 = . Upholstery, 1 = Fabric. Digital Cluster, 1 = Yes. Air Con"
+        }
+      ],
+      "metrics": {
+        "expected": 1,
+        "matched": 1,
+        "hit": true,
+        "recall": 1.0,
+        "reciprocal_rank": 1.0
+      },
+      "error": null
+    },
+    {
+      "case_id": "tata-tiago-engines",
+      "wiki_base_id": "ed7a9540-0b98-4f59-acc6-64568f7bc4f3",
+      "question": "What engines are available for the Tata Tiago?",
+      "mode": "pro",
+      "retrieval_strategy": "graph",
+      "duration_ms": 1152.81,
+      "chunks": [
+        {
+          "rank": 1,
+          "id": "5d0fc916-8b5b-43a9-b137-d42ecad3adbd",
+          "document_id": "30397da8-36cf-4d42-84bc-3a18c4cacecb",
+          "document_name": "tiago.pdf",
+          "score": 0.5603011096432975,
+          "content_preview": "Download brochure for detailed information of specifications, features & variants prices"
+        },
+        {
+          "rank": 2,
+          "id": "d4fc42b9-1ab5-4e99-aca5-0a240b8f290f",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.48997503421768646,
+          "content_preview": "OVERVIEW PRICE SPECS VARIANTS ▼ EXPERT REVIEWS USER REVIEWS Q&A SIMILAR CARS MORE ▼"
+        },
+        {
+          "rank": 3,
+          "id": "6bef78fa-4b14-4945-9a35-231728eb6ff1",
+          "document_id": "30397da8-36cf-4d42-84bc-3a18c4cacecb",
+          "document_name": "tiago.pdf",
+          "score": 0.47511588845977293,
+          "content_preview": "OVERVIEW PRICE SPECS VARIANTS ▼ USER REVIEWS Q&A SIMILAR CARS COLOURS MORE ▼"
+        },
+        {
+          "rank": 4,
+          "id": "e74b597b-bc6f-4e11-86e6-aa6930005197",
+          "document_id": "30397da8-36cf-4d42-84bc-3a18c4cacecb",
+          "document_name": "tiago.pdf",
+          "score": 0.407835085633825,
+          "content_preview": "Tata Tiago is currently available in Petrol and CNG engines. The 1199 cc Petrol engine generates a power of 85bhp@6000rpm and a torque of 113Nm@3300rpm. The 1199 cc CNG engine generates a power of 74.46bhp@6000rpm and a torque of 96.5Nm@350"
+        }
+      ],
+      "metrics": {
+        "expected": 1,
+        "matched": 1,
+        "hit": true,
+        "recall": 1.0,
+        "reciprocal_rank": 0.25
+      },
+      "error": null
+    },
+    {
+      "case_id": "tiago-engine-alias",
+      "wiki_base_id": "ed7a9540-0b98-4f59-acc6-64568f7bc4f3",
+      "question": "What engine options does Tiago have?",
+      "mode": "lite",
+      "retrieval_strategy": "vector",
+      "duration_ms": 524.47,
+      "chunks": [
+        {
+          "rank": 1,
+          "id": "854505da-f78f-4bcc-8414-72e8a485e0aa",
+          "document_id": "30397da8-36cf-4d42-84bc-3a18c4cacecb",
+          "document_name": "tiago.pdf",
+          "score": 0.6831404289529857,
+          "content_preview": "Emission Norm Compliance, 1 = BS VI 2.0. Engine Displ., 1 = 1199 cc. Transmission, 1 = Automatic. Fuel Type, 1 = CNG. Boot Space, 1 = 242 Liters. Airbags, 1 = Driver, Passenger and Side Front. ABS, 1 = Yes. Central Locking, 1 = Yes. Fog Lam"
+        },
+        {
+          "rank": 2,
+          "id": "e74b597b-bc6f-4e11-86e6-aa6930005197",
+          "document_id": "30397da8-36cf-4d42-84bc-3a18c4cacecb",
+          "document_name": "tiago.pdf",
+          "score": 0.6694016057610993,
+          "content_preview": "Tata Tiago is currently available in Petrol and CNG engines. The 1199 cc Petrol engine generates a power of 85bhp@6000rpm and a torque of 113Nm@3300rpm. The 1199 cc CNG engine generates a power of 74.46bhp@6000rpm and a torque of 96.5Nm@350"
+        },
+        {
+          "rank": 3,
+          "id": "182a45f2-8c42-4d62-9663-3e14fc2c0663",
+          "document_id": "30397da8-36cf-4d42-84bc-3a18c4cacecb",
+          "document_name": "tiago.pdf",
+          "score": 0.6496158303204606,
+          "content_preview": "Fuel Type Fuel Capacity 1199 cc 1.2L NA Revotron 1199 cc 85bhp@6000rpm 113Nm@3300rpm BS VI 2.0 3 Manual 4 5-Speed FWD Not Available in Tiago Not Available in Tiago Petrol 35 Liters Alloy Wheel Size Rear, = 15. steeringGearType, = Rack & Pin"
+        },
+        {
+          "rank": 4,
+          "id": "974334b3-3a5b-4aea-afb6-80c0cc5eff24",
+          "document_id": "30397da8-36cf-4d42-84bc-3a18c4cacecb",
+          "document_name": "tiago.pdf",
+          "score": 0.6273533842492323,
+          "content_preview": "Petrol - 1199 cc Petrol AT - 1199 cc CNG - 1199 cc CNG AT - 1199 cc Eg. alloy wheels.. Tata Tiago Engine and Transmission Displacement Engine Type Engine Displacement Max Power Max Torque Emission Norm Compliance No Of Cylinders Transmissio"
+        },
+        {
+          "rank": 5,
+          "id": "9aa5bf4c-998e-48d6-a762-14054354df8a",
+          "document_id": "30397da8-36cf-4d42-84bc-3a18c4cacecb",
+          "document_name": "tiago.pdf",
+          "score": 0.5769403485131873,
+          "content_preview": "Bluetooth Yes Power Windows, 1 = Front & Rear. Speakers, 1 = Front & Rear. USB Charger, 1 = Front & Rear. Apple CarPlay, 1 = Yes. One Touch Operating Power Windows, 1 = Driver's Window. Adjustable Steering, 1 = 3. Cupholders, 1 = Front Only"
+        }
+      ],
+      "metrics": {
+        "expected": 1,
+        "matched": 1,
+        "hit": true,
+        "recall": 1.0,
+        "reciprocal_rank": 0.5
+      },
+      "error": null
+    },
+    {
+      "case_id": "tiago-engine-alias",
+      "wiki_base_id": "ed7a9540-0b98-4f59-acc6-64568f7bc4f3",
+      "question": "What engine options does Tiago have?",
+      "mode": "pro",
+      "retrieval_strategy": "graph",
+      "duration_ms": 2433.36,
+      "chunks": [
+        {
+          "rank": 1,
+          "id": "3f533edf-91cc-4609-8785-ebeb8f41cffc",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.6666666666666666,
+          "content_preview": "Emission Norm Compliance Mileage Engine Displ. Transmission Fuel Type Boot Space Airbags ABS Central Locking Fog Lamps Global NCAP Safety Rating 4.3/5 111 reviews Write a Review"
+        },
+        {
+          "rank": 2,
+          "id": "854505da-f78f-4bcc-8414-72e8a485e0aa",
+          "document_id": "30397da8-36cf-4d42-84bc-3a18c4cacecb",
+          "document_name": "tiago.pdf",
+          "score": 0.4327485380116959,
+          "content_preview": "Emission Norm Compliance, 1 = BS VI 2.0. Engine Displ., 1 = 1199 cc. Transmission, 1 = Automatic. Fuel Type, 1 = CNG. Boot Space, 1 = 242 Liters. Airbags, 1 = Driver, Passenger and Side Front. ABS, 1 = Yes. Central Locking, 1 = Yes. Fog Lam"
+        },
+        {
+          "rank": 3,
+          "id": "ae7457b7-bd12-4195-a7c5-f16669448d33",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.33333333333333326,
+          "content_preview": "Petrol AT - 1498 cc Petrol - 999 cc Petrol AT - 999 cc Eg. alloy wheels.. Skoda Slavia Engine and Transmission"
+        }
+      ],
+      "metrics": {
+        "expected": 1,
+        "matched": 0,
+        "hit": false,
+        "recall": 0.0,
+        "reciprocal_rank": 0.0
+      },
+      "error": null
+    },
+    {
+      "case_id": "slavia-tiago-engine-comparison",
+      "wiki_base_id": "ed7a9540-0b98-4f59-acc6-64568f7bc4f3",
+      "question": "Compare the engines available for the Skoda Slavia and Tata Tiago.",
+      "mode": "lite",
+      "retrieval_strategy": "vector",
+      "duration_ms": 631.77,
+      "chunks": [
+        {
+          "rank": 1,
+          "id": "ae7457b7-bd12-4195-a7c5-f16669448d33",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.6509880187483619,
+          "content_preview": "Petrol AT - 1498 cc Petrol - 999 cc Petrol AT - 999 cc Eg. alloy wheels.. Skoda Slavia Engine and Transmission"
+        },
+        {
+          "rank": 2,
+          "id": "e5b2cdf8-0fb8-41a3-8a32-3f9f53876a53",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.6497877567121256,
+          "content_preview": "Skoda Slavia is currently available in Petrol engine. The 1498 cc Petrol engine generates a power of 147.51bhp@5000-6000rpm and a torque of 250Nm@1600-3500rpm. Skoda Slavia is available in both Manual & Automatic transmission. Skoda Slavia "
+        },
+        {
+          "rank": 3,
+          "id": "d3c18944-0693-4688-bd55-f07f6ed7c4dc",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.6236235422415812,
+          "content_preview": "BS VI 2.0 19.36 Kmpl 1498 cc Automatic Petrol 521 Liters Driver, Passenger and Side Front Yes Yes Front 5 Star Displacement, 1 = 1498 cc. Idle Start Stop System, 1 = Yes Sign up to Zigwheels with Google ×. Engine Type, 1 = 1.5 TSI Petrol Co"
+        },
+        {
+          "rank": 4,
+          "id": "8e5560c7-5848-48ed-81b9-6dc577d410da",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.6097563098118137,
+          "content_preview": "Rs. 10.00 - 18.19 Lakh Check On Road Price View August Offers"
+        },
+        {
+          "rank": 5,
+          "id": "3f533edf-91cc-4609-8785-ebeb8f41cffc",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.6016877071263552,
+          "content_preview": "Emission Norm Compliance Mileage Engine Displ. Transmission Fuel Type Boot Space Airbags ABS Central Locking Fog Lamps Global NCAP Safety Rating 4.3/5 111 reviews Write a Review"
+        }
+      ],
+      "metrics": {
+        "expected": 2,
+        "matched": 1,
+        "hit": true,
+        "recall": 0.5,
+        "reciprocal_rank": 0.5
+      },
+      "error": null
+    },
+    {
+      "case_id": "slavia-tiago-engine-comparison",
+      "wiki_base_id": "ed7a9540-0b98-4f59-acc6-64568f7bc4f3",
+      "question": "Compare the engines available for the Skoda Slavia and Tata Tiago.",
+      "mode": "pro",
+      "retrieval_strategy": "graph",
+      "duration_ms": 1114.57,
+      "chunks": [
+        {
+          "rank": 1,
+          "id": "8e5560c7-5848-48ed-81b9-6dc577d410da",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.4,
+          "content_preview": "Rs. 10.00 - 18.19 Lakh Check On Road Price View August Offers"
+        },
+        {
+          "rank": 2,
+          "id": "5d0fc916-8b5b-43a9-b137-d42ecad3adbd",
+          "document_id": "30397da8-36cf-4d42-84bc-3a18c4cacecb",
+          "document_name": "tiago.pdf",
+          "score": 0.26618654533493147,
+          "content_preview": "Download brochure for detailed information of specifications, features & variants prices"
+        },
+        {
+          "rank": 3,
+          "id": "e74b597b-bc6f-4e11-86e6-aa6930005197",
+          "document_id": "30397da8-36cf-4d42-84bc-3a18c4cacecb",
+          "document_name": "tiago.pdf",
+          "score": 0.2135755714163828,
+          "content_preview": "Tata Tiago is currently available in Petrol and CNG engines. The 1199 cc Petrol engine generates a power of 85bhp@6000rpm and a torque of 113Nm@3300rpm. The 1199 cc CNG engine generates a power of 74.46bhp@6000rpm and a torque of 96.5Nm@350"
+        },
+        {
+          "rank": 4,
+          "id": "c4aa5e35-e649-4e52-90ec-c4293067553c",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.15404802445947793,
+          "content_preview": "I bought skoda slavia after my friend's advice as I was looking for a sedan with premium feeling and powerful performance. This car has a sleek and stylish body design which is very attractive. this car gives mileage of around 18-20 kmpl. I"
+        },
+        {
+          "rank": 5,
+          "id": "e5b2cdf8-0fb8-41a3-8a32-3f9f53876a53",
+          "document_id": "c95d9271-4b3b-42a6-a042-185ce7bf15a7",
+          "document_name": "slavia.pdf",
+          "score": 0.15404802445947793,
+          "content_preview": "Skoda Slavia is currently available in Petrol engine. The 1498 cc Petrol engine generates a power of 147.51bhp@5000-6000rpm and a torque of 250Nm@1600-3500rpm. Skoda Slavia is available in both Manual & Automatic transmission. Skoda Slavia "
+        }
+      ],
+      "metrics": {
+        "expected": 2,
+        "matched": 2,
+        "hit": true,
+        "recall": 1.0,
+        "reciprocal_rank": 0.3333333333333333
+      },
+      "error": null
+    }
+  ],
+  "summaries": [
+    {
+      "mode": "lite",
+      "cases": 4,
+      "successful": 4,
+      "errors": 0,
+      "hits": 4,
+      "hit_rate": 1.0,
+      "mean_recall": 0.875,
+      "mean_reciprocal_rank": 0.75,
+      "graph_responses": 0,
+      "vector_fallbacks": 0
+    },
+    {
+      "mode": "pro",
+      "cases": 4,
+      "successful": 4,
+      "errors": 0,
+      "hits": 3,
+      "hit_rate": 0.75,
+      "mean_recall": 0.75,
+      "mean_reciprocal_rank": 0.3958333333333333,
+      "graph_responses": 4,
+      "vector_fallbacks": 0
+    }
+  ]
+}

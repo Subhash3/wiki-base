@@ -20,3 +20,4 @@ htmlcov/
 
 docs-for-testing/
 graph-visualization/
+benchmarks/*.results.json
