@@ -21,5 +21,6 @@ logs/
 
 docs-for-testing/
 graph-visualization/
+graphrag-output/
 benchmarks/*.results.json
 PLAN.md
