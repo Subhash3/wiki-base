@@ -28,7 +28,7 @@ function getDocumentCount(wikiBase) {
 function renderWikiBases() {
   if (wikiBases.length === 0) {
     tableBody.innerHTML = `
-      <tr><td colspan="5" class="empty">No wiki bases found.</td></tr>
+      <tr><td colspan="6" class="empty">No wiki bases found.</td></tr>
     `;
   } else {
     tableBody.replaceChildren(
@@ -40,6 +40,7 @@ function renderWikiBases() {
           <td>${escapeHtml(String(getDocumentCount(wikiBase)))}</td>
           <td class="status">${escapeHtml(getRetrievalStatus(wikiBase, "lite"))}</td>
           <td class="status">${escapeHtml(getRetrievalStatus(wikiBase, "pro"))}</td>
+          <td class="status">${escapeHtml(getRetrievalStatus(wikiBase, "facts"))}</td>
         `;
         return row;
       }),
@@ -51,7 +52,7 @@ function renderWikiBases() {
   for (const wikiBase of wikiBases) {
     const option = document.createElement("option");
     option.value = wikiBase.id;
-    option.textContent = `${wikiBase.name} (Lite: ${getRetrievalStatus(wikiBase, "lite")}, Pro: ${getRetrievalStatus(wikiBase, "pro")})`;
+    option.textContent = `${wikiBase.name} (Lite: ${getRetrievalStatus(wikiBase, "lite")}, Pro: ${getRetrievalStatus(wikiBase, "pro")}, Facts: ${getRetrievalStatus(wikiBase, "facts")})`;
     wikiBaseSelect.append(option);
   }
   wikiBaseSelect.value = wikiBases.some((item) => item.id === selectedId) ? selectedId : "";
@@ -190,11 +191,15 @@ function renderChat() {
       const mode = document.createElement("span");
       const usedFallback = message.retrievalStrategy === "vector_fallback";
       mode.className = `retrieval-mode ${message.mode}${usedFallback ? " fallback" : ""}`;
+      const modeLabel =
+        message.mode === "facts" ? "Facts" : message.mode === "pro" ? "Pro" : "Lite";
       mode.textContent = usedFallback
-        ? "Pro · Vector fallback"
-        : message.mode === "pro"
-          ? "Pro · GraphRAG"
-          : "Lite · Vector";
+        ? `${modeLabel} · Vector fallback`
+        : message.mode === "facts"
+          ? "Facts · Graph traversal"
+          : message.mode === "pro"
+            ? "Pro · PageRank"
+            : "Lite · Vector";
       element.prepend(mode);
     }
 

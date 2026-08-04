@@ -18,17 +18,18 @@ The client uses the web page's hostname and API port 8000. For example, a page l
 Wiki bases are loaded from the API. Chat history is sent with each question but is kept only
 in memory and is lost when the page is reloaded.
 
-The chat offers two answering modes:
+The chat offers three answering modes:
 
 - **Lite** uses cosine-similarity chunk retrieval.
-- **Pro** uses the wiki base's ready document graphs for GraphRAG retrieval.
+- **Pro** uses Personalized PageRank over the wiki base's ready graphs.
+- **Facts** uses bounded graph traversal and ranked canonical facts.
 
 The selected mode is sent as the `mode` field of `POST /query`. Assistant messages show both
-the requested mode and the `retrieval_strategy` actually used. A Pro request that cannot
-produce graph-ranked chunks is labeled `Pro · Vector fallback`.
+the requested mode and the `retrieval_strategy` actually used. A graph request that cannot
+produce ranked chunks is labeled as a vector fallback.
 
-Wiki-base responses expose a `retrieval_statuses` map. The table displays Lite and Pro
-readiness separately, and modes that are not ready are disabled for the selected wiki base.
+Wiki-base responses expose a `retrieval_statuses` map. The table displays Lite, Pro, and
+Facts readiness separately, and unavailable modes are disabled for the selected wiki base.
 
 The client expects these API operations:
 

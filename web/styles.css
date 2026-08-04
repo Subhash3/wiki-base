@@ -200,6 +200,11 @@ td:first-child {
   background: #fff0c2;
 }
 
+.retrieval-mode.facts {
+  color: #174f3b;
+  background: #d7f5e8;
+}
+
 .retrieval-mode.fallback {
   color: #7a2e0b;
   background: #ffe0d1;
