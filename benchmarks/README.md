@@ -1,13 +1,13 @@
 # GraphRAG retrieval benchmark
 
-`graphrag.json` is the development retrieval benchmark used to compare Lite and Pro.
+`graphrag.json` is the development retrieval benchmark used to compare Lite, Pro, and Facts.
 Each case identifies the wiki base, question, expected evidence, and optional answer facts.
 
 A relevant chunk can be identified by UUID, document name, a stable content fragment, or a
 combination of them. Content fragments make labels resilient when documents are ingested
 again and receive new chunk UUIDs.
 
-Run both retrieval modes against a running Wiki Base API:
+Run all retrieval modes against a running Wiki Base API:
 
 ```bash
 uv run wiki-base-benchmark benchmarks/graphrag.json \
@@ -23,7 +23,7 @@ uv run wiki-base-benchmark benchmarks/graphrag.json \
   --output benchmarks/baselines/before-entity-guided-openie.json
 ```
 
-Use `--mode lite` or `--mode pro` to run one mode. By default, the runner executes both
+Use `--mode lite`, `--mode pro`, or `--mode facts` to run one mode. By default, the runner executes all
 sequentially and records:
 
 - ranked chunk IDs and previews;

@@ -120,7 +120,7 @@ class ModeSummary(BaseModel):
 
 
 class BenchmarkReport(BaseModel):
-    """Store one reproducible Lite and Pro benchmark run."""
+    """Store one reproducible retrieval benchmark run."""
 
     run_name: str
     dataset_name: str
@@ -269,7 +269,7 @@ def run() -> None:
     """Run the benchmark CLI."""
 
     parser = argparse.ArgumentParser(
-        description="Compare Lite and Pro retrieval against a labeled dataset."
+        description="Compare retrieval modes against a labeled dataset."
     )
     parser.add_argument("dataset", type=Path, help="Benchmark dataset JSON")
     parser.add_argument(
@@ -383,7 +383,9 @@ def _summarize_mode(
             sum(metric.reciprocal_rank for metric in metrics) / total if total else 0.0
         ),
         graph_responses=sum(
-            result.retrieval_strategy == RetrievalStrategy.GRAPH for result in selected
+            result.retrieval_strategy
+            in {RetrievalStrategy.GRAPH, RetrievalStrategy.FACT_GRAPH}
+            for result in selected
         ),
         vector_fallbacks=sum(
             result.retrieval_strategy == RetrievalStrategy.VECTOR_FALLBACK

@@ -105,7 +105,8 @@ def test_development_dataset_is_valid() -> None:
     dataset = load_dataset(path)
 
     assert dataset.version == 1
-    assert len(dataset.cases) == 4
+    assert len(dataset.cases) == 5
+    assert dataset.cases[-1].id == "tiago-slavia-feature-difference"
 
 
 async def test_runner_compares_modes_and_records_vector_fallback(tmp_path: Path) -> None:

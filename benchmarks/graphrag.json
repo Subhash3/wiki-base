@@ -60,6 +60,40 @@
         "Tiago is listed with petrol and CNG engines."
       ],
       "tags": ["comparison", "multi-entity"]
+    },
+    {
+      "id": "tiago-slavia-feature-difference",
+      "wiki_base_id": "ed7a9540-0b98-4f59-acc6-64568f7bc4f3",
+      "question": "What are some of the features that Tiago has but Slavia does not?",
+      "relevant_chunks": [
+        {
+          "document_name": "tiago.pdf",
+          "content_contains": "Fuel Type, 1 = CNG"
+        },
+        {
+          "document_name": "slavia.pdf",
+          "content_contains": "Petrol"
+        },
+        {
+          "document_name": "tiago.pdf",
+          "content_contains": "No. Of Doors, 1 = 5"
+        },
+        {
+          "document_name": "slavia.pdf",
+          "content_contains": "Seating Capacity Doors Boot Space 5 4 521 Liters"
+        }
+      ],
+      "expected_facts": [
+        "Tiago is listed with a CNG fuel option, while Slavia is listed with petrol.",
+        "Tiago has five doors, while Slavia has four doors."
+      ],
+      "tags": [
+        "comparison",
+        "set-difference",
+        "multi-entity",
+        "multi-document"
+      ],
+      "notes": "A correct answer must compare affirmative evidence from both vehicles. Missing facts are not evidence of absence. Tiago's 242-litre boot is smaller than Slavia's 521-litre boot, and the dataset does not establish that Slavia lacks a digital cluster."
     }
   ]
 }

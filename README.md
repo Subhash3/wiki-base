@@ -93,7 +93,7 @@ uv run ruff check .
 uv run pytest
 ```
 
-Run the Lite and Pro retrieval benchmark against the development dataset:
+Run the Lite, Pro, and Facts retrieval benchmark against the development dataset:
 
 ```bash
 uv run wiki-base-benchmark benchmarks/graphrag.json
