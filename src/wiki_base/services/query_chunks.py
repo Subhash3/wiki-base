@@ -14,6 +14,7 @@ from wiki_base.database.queries.chunks import load_chunks_by_ids, search_chunks
 from wiki_base.database.queries.document_graphs import (
     list_ready_wiki_base_graphs,
 )
+from wiki_base.database.queries.graph_synonyms import list_wiki_base_graph_synonyms
 from wiki_base.database.queries.wiki_bases import (
     get_wiki_base,
     list_wiki_base_retrieval_statuses,
@@ -60,12 +61,14 @@ class QueryChunksService:
         database: Database,
         embeddings: EmbeddingProvider,
         graph_retriever: HippoRAGRetriever,
+        synonym_similarity_threshold: float = 0.95,
     ) -> None:
         """Configure Lite and Pro retrieval dependencies."""
 
         self._database = database
         self._embeddings = embeddings
         self._graph_retriever = graph_retriever
+        self._synonym_similarity_threshold = synonym_similarity_threshold
 
     async def query(
         self,
@@ -192,12 +195,31 @@ class QueryChunksService:
 
         async with self._database.connection() as connection:
             stored_graphs = await list_ready_wiki_base_graphs(connection, wiki_base_id)
+            synonyms = await list_wiki_base_graph_synonyms(
+                connection,
+                wiki_base_id=wiki_base_id,
+                embedding_model=self._embeddings.model_info.model,
+                similarity_threshold=self._synonym_similarity_threshold,
+            )
         graph = KnowledgeGraph()
         for stored_graph in stored_graphs:
             graph = KnowledgeGraph.merge(
                 graph,
                 KnowledgeGraph.from_dict(stored_graph),
             )
+        added_synonyms = sum(
+            graph.add_synonym(
+                synonym.first,
+                synonym.second,
+                similarity=synonym.similarity,
+            )
+            for synonym in synonyms
+        )
+        logger.debug(
+            "Graph synonym edges loaded=%d added=%d",
+            len(synonyms),
+            added_synonyms,
+        )
 
         ranked = await self._graph_retriever.retrieve(
             question,

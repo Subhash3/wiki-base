@@ -101,6 +101,25 @@ async def test_returns_empty_when_entities_do_not_link() -> None:
     assert ranked == []
 
 
+async def test_retrieves_isolated_entity_mention_without_a_triple() -> None:
+    """A directly seeded passage entity can retrieve its associated chunk."""
+
+    graph = KnowledgeGraph()
+    graph.add_entity(
+        "skoda slavia",
+        provenance=TripleProvenance(document_id=DOCUMENT_ONE, chunk_id=CHUNK_ONE),
+    )
+    retriever = HippoRAGRetriever(
+        entity_extractor=StubEntityExtractor(["Skoda Slavia"]),
+        entity_linker=ExactEntityLinker(),
+    )
+
+    ranked = await retriever.retrieve("What is the Slavia price?", graph, limit=5)
+
+    assert ranked[0].chunk_id == CHUNK_ONE
+    assert ranked[0].score == pytest.approx(1.0)
+
+
 async def test_uses_graph_nodes_mentioned_in_question_when_extraction_is_wrong() -> None:
     """Explicit node mentions survive an incorrect LLM entity list."""
 

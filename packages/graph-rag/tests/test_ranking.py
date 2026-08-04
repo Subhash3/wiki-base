@@ -57,6 +57,24 @@ def test_collapses_multiple_relations_between_the_same_entities() -> None:
     assert ranking_graph.edges["alice", "acme"]["weight"] == 1.0
 
 
+def test_adds_weighted_synonym_connections() -> None:
+    """Semantic aliases connect otherwise separate factual neighborhoods."""
+
+    graph = KnowledgeGraph()
+    add_fact(graph, Triple(subject="glamour", relation="has", object="price"))
+    add_fact(
+        graph,
+        Triple(subject="honda glamour", relation="uses", object="engine"),
+    )
+    graph.add_synonym("glamour", "honda glamour", similarity=0.9)
+
+    ranking_graph = build_ranking_graph(graph)
+
+    assert ranking_graph.has_edge("glamour", "honda glamour")
+    assert ranking_graph.edges["glamour", "honda glamour"]["weight"] == 0.9
+    assert ranking_graph.edges["glamour", "honda glamour"]["kind"] == "synonym"
+
+
 def test_empty_knowledge_graph_builds_empty_ranking_graph() -> None:
     """An empty index produces an empty ranking graph."""
 
@@ -173,3 +191,21 @@ def test_aggregation_returns_empty_without_scores() -> None:
     """An empty score mapping produces no ranked chunks."""
 
     assert aggregate_chunk_scores(KnowledgeGraph(), {}) == []
+
+
+def test_aggregation_includes_entity_mentions_without_double_counting() -> None:
+    """A mention retrieves its chunk even without a triple and overlaps count once."""
+
+    graph = KnowledgeGraph()
+    provenance = TripleProvenance(document_id=DOCUMENT_ID, chunk_id=CHUNK_ID)
+    graph.add_entity("slavia", provenance=provenance)
+    graph.add_triple(
+        Triple(subject="slavia", relation="has", object="price"),
+        provenance=provenance,
+    )
+
+    ranked = aggregate_chunk_scores(graph, {"slavia": 0.4})
+
+    assert ranked == [
+        RankedChunk(document_id=DOCUMENT_ID, chunk_id=CHUNK_ID, score=0.4)
+    ]

@@ -45,10 +45,13 @@ class StubConnection:
         assert document_id == DOCUMENT_ID
         return self.payloads[0] if self.payloads else None
 
-    async def fetch(self, _query: str, wiki_base_id: UUID):
+    async def fetch(self, _query: str, wiki_base_id: UUID, *arguments: object):
         """Return all configured wiki-base graphs."""
 
         assert wiki_base_id == WIKI_BASE_ID
+        if arguments:
+            assert arguments == ("test-embedding", 0.95)
+            return []
         return [{"graph": payload} for payload in self.payloads]
 
 
@@ -100,6 +103,7 @@ async def test_merges_ready_wiki_base_graphs(tmp_path: Path) -> None:
         database,  # type: ignore[arg-type]
         wiki_base_id=WIKI_BASE_ID,
         output=output,
+        embedding_model="test-embedding",
     )
 
     merged = KnowledgeGraph.from_json(output_json.read_text(encoding="utf-8"))

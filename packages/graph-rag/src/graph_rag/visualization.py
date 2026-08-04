@@ -69,6 +69,19 @@ class GraphVisualizer:
                     provenance=self._serialize_provenance(provenance),
                     arrows="to",
                 )
+        for synonym in self._graph.synonyms():
+            if synonym.first in network and synonym.second in network:
+                network.add_edge(
+                    synonym.first,
+                    synonym.second,
+                    label="synonym",
+                    title=f"Semantic similarity: {synonym.similarity:.3f}",
+                    similarity=synonym.similarity,
+                    arrows="",
+                    dashes=True,
+                    color="#7c3aed",
+                    synonym=True,
+                )
         return network
 
     @staticmethod

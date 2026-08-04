@@ -92,6 +92,16 @@ CREATE TABLE IF NOT EXISTS document_graph_concepts (
     )
 );
 
+CREATE TABLE IF NOT EXISTS wiki_base_graph_synonyms (
+    wiki_base_id uuid NOT NULL REFERENCES wiki_bases(id) ON DELETE CASCADE,
+    embedding_model text NOT NULL,
+    first_entity text NOT NULL CHECK (length(trim(first_entity)) > 0),
+    second_entity text NOT NULL CHECK (length(trim(second_entity)) > 0),
+    similarity double precision NOT NULL CHECK (similarity >= -1 AND similarity <= 1),
+    PRIMARY KEY (wiki_base_id, embedding_model, first_entity, second_entity),
+    CHECK (first_entity < second_entity)
+);
+
 CREATE TABLE IF NOT EXISTS chunks (
     id uuid PRIMARY KEY,
     wiki_base_id uuid NOT NULL REFERENCES wiki_bases(id) ON DELETE CASCADE,
@@ -145,6 +155,8 @@ CREATE INDEX IF NOT EXISTS document_graph_concepts_scope_idx
     ON document_graph_concepts (wiki_base_id, concept_type, embedding_model);
 CREATE INDEX IF NOT EXISTS document_graph_concepts_embedding_hnsw_idx
     ON document_graph_concepts USING hnsw (embedding vector_cosine_ops);
+CREATE INDEX IF NOT EXISTS wiki_base_graph_synonyms_scope_idx
+    ON wiki_base_graph_synonyms (wiki_base_id, embedding_model);
 CREATE INDEX IF NOT EXISTS chunks_wiki_base_id_idx ON chunks (wiki_base_id);
 CREATE INDEX IF NOT EXISTS chunks_document_id_idx ON chunks (document_id);
 CREATE INDEX IF NOT EXISTS chunks_search_vector_idx ON chunks USING gin (search_vector);

@@ -12,6 +12,7 @@ from wiki_base.workers.graph_indexing import GraphIndexingWorker
 
 DOCUMENT_ID = UUID("10000000-0000-0000-0000-000000000001")
 CHUNK_ID = UUID("00000000-0000-0000-0000-000000000001")
+WIKI_BASE_ID = UUID("20000000-0000-0000-0000-000000000001")
 
 
 class StubDatabase:
@@ -110,6 +111,7 @@ async def test_worker_indexes_and_completes_one_job(
     job = GraphIndexingJobRecord(document_id=DOCUMENT_ID)
     stored: dict[str, object] = {}
     stored_concepts: dict[str, object] = {}
+    stored_synonyms: dict[str, object] = {}
     completed = False
 
     async def claim(_connection):
@@ -128,6 +130,10 @@ async def test_worker_indexes_and_completes_one_job(
 
     async def store_concepts(_connection, **values):
         stored_concepts.update(values)
+        return WIKI_BASE_ID
+
+    async def store_synonyms(_connection, **values):
+        stored_synonyms.update(values)
 
     monkeypatch.setattr(graph_indexing, "claim_next_graph_indexing_job", claim)
     monkeypatch.setattr(graph_indexing, "load_graph_indexing_chunks", load)
@@ -138,6 +144,11 @@ async def test_worker_indexes_and_completes_one_job(
         store_concepts,
     )
     monkeypatch.setattr(graph_indexing, "complete_graph_indexing_job", complete)
+    monkeypatch.setattr(
+        graph_indexing,
+        "replace_wiki_base_graph_synonyms",
+        store_synonyms,
+    )
     embeddings = StubEmbeddings()
     worker = GraphIndexingWorker(
         database=StubDatabase(),  # type: ignore[arg-type]
@@ -146,6 +157,8 @@ async def test_worker_indexes_and_completes_one_job(
         extraction_model="test-model",
         index_version="1",
         embedding_batch_size=2,
+        synonym_similarity_threshold=0.85,
+        synonym_max_links=3,
         poll_interval_seconds=1,
     )
 
@@ -166,6 +179,12 @@ async def test_worker_indexes_and_completes_one_job(
     assert stored_concepts["embedding_model"] == "test-embedding"
     assert len(stored_concepts["concepts"]) == 3
     assert len(stored_concepts["embeddings"]) == 3
+    assert stored_synonyms == {
+        "wiki_base_id": WIKI_BASE_ID,
+        "embedding_model": "test-embedding",
+        "similarity_threshold": 0.85,
+        "max_links_per_entity": 3,
+    }
 
 
 async def test_worker_marks_failed_job(monkeypatch) -> None:
@@ -193,6 +212,8 @@ async def test_worker_marks_failed_job(monkeypatch) -> None:
         extraction_model="test-model",
         index_version="1",
         embedding_batch_size=2,
+        synonym_similarity_threshold=0.85,
+        synonym_max_links=3,
         poll_interval_seconds=1,
     )
 

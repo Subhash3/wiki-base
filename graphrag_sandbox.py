@@ -4,12 +4,11 @@ Run from the repository root:
 
     uv run --package graph-rag python graphrag_sandbox.py path/to/documents
 
-Optionally set OLLAMA_URL and OLLAMA_MODEL to override the defaults.
+Generation settings are loaded from the repository's Wiki Base environment.
 """
 
 import argparse
 import asyncio
-import os
 from pathlib import Path
 from uuid import UUID, uuid4
 
@@ -27,9 +26,12 @@ from graph_rag import (
     HippoRAGIndexer,
     IndexedChunk,
     KnowledgeGraph,
+    LLMPassageEntityExtractor,
     LLMTripleExtractor,
 )
-from llm_providers.generation.ollama import OllamaGenerationProvider
+
+from wiki_base.config.settings import get_settings
+from wiki_base.generation import create_generation_provider, create_groq_rate_limiter
 
 MEDIA_TYPES = {
     ".pdf": "application/pdf",
@@ -123,6 +125,7 @@ def save_graph(
 
 
 async def main(directory: Path, *, max_tokens: int, output_dir: Path) -> None:
+    settings = get_settings()
     documents = find_documents(directory)
     registry, chunker = build_document_processors(max_tokens=max_tokens)
     document_chunks: list[tuple[UUID, list[IndexedChunk]]] = []
@@ -138,14 +141,18 @@ async def main(directory: Path, *, max_tokens: int, output_dir: Path) -> None:
     if not any(indexed_chunks for _document_id, indexed_chunks in document_chunks):
         raise ValueError("The documents did not contain any usable text")
 
-    generation = OllamaGenerationProvider(
-        base_url=os.getenv("OLLAMA_URL", "http://127.0.0.1:11434"),
-        model=os.getenv("OLLAMA_MODEL", "gemma3:270m"),
-        timeout_seconds=120,
+    generation = create_generation_provider(
+        settings,
+        provider=settings.extraction_provider,
+        model=settings.extraction_model,
+        groq_rate_limiter=create_groq_rate_limiter(settings),
     )
 
     try:
-        indexer = HippoRAGIndexer(extractor=LLMTripleExtractor(generation=generation))
+        indexer = HippoRAGIndexer(
+            extractor=LLMTripleExtractor(generation=generation),
+            entity_extractor=LLMPassageEntityExtractor(generation=generation),
+        )
         document_graphs = [
             (document_id, await indexer.index(indexed_chunks))
             for document_id, indexed_chunks in document_chunks

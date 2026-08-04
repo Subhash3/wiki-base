@@ -13,6 +13,7 @@ from wiki_base.database.queries.graph_indexing_jobs import (
     fail_graph_indexing_job,
     load_graph_indexing_chunks,
 )
+from wiki_base.database.queries.graph_synonyms import replace_wiki_base_graph_synonyms
 
 logger = logging.getLogger(__name__)
 
@@ -29,12 +30,18 @@ class GraphIndexingWorker:
         extraction_model: str,
         index_version: str,
         embedding_batch_size: int,
+        synonym_similarity_threshold: float,
+        synonym_max_links: int,
         poll_interval_seconds: float,
     ) -> None:
         """Configure the graph indexing worker."""
 
         if embedding_batch_size < 1:
             raise ValueError("embedding_batch_size must be positive")
+        if not -1 <= synonym_similarity_threshold <= 1:
+            raise ValueError("synonym_similarity_threshold must be between -1 and 1")
+        if synonym_max_links < 1:
+            raise ValueError("synonym_max_links must be positive")
 
         self._database = database
         self._indexer = indexer
@@ -42,6 +49,8 @@ class GraphIndexingWorker:
         self._extraction_model = extraction_model
         self._index_version = index_version
         self._embedding_batch_size = embedding_batch_size
+        self._synonym_similarity_threshold = synonym_similarity_threshold
+        self._synonym_max_links = synonym_max_links
         self._poll_interval_seconds = poll_interval_seconds
 
     async def run(self) -> None:
@@ -80,7 +89,7 @@ class GraphIndexingWorker:
                         extraction_model=self._extraction_model,
                         index_version=self._index_version,
                     )
-                    await replace_document_graph_concepts(
+                    wiki_base_id = await replace_document_graph_concepts(
                         connection,
                         document_id=job.document_id,
                         concepts=concepts,
@@ -88,6 +97,13 @@ class GraphIndexingWorker:
                         embedding_model=self._embeddings.model_info.model,
                     )
                     await complete_graph_indexing_job(connection, job)
+                    await replace_wiki_base_graph_synonyms(
+                        connection,
+                        wiki_base_id=wiki_base_id,
+                        embedding_model=self._embeddings.model_info.model,
+                        similarity_threshold=self._synonym_similarity_threshold,
+                        max_links_per_entity=self._synonym_max_links,
+                    )
             logger.info("indexed graph for document %s", job.document_id)
         except Exception as error:
             logger.exception("graph indexing failed for document %s", job.document_id)

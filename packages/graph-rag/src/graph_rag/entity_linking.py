@@ -21,6 +21,8 @@ _RELATIONSHIP_STOP_WORDS = frozenset(
     {"a", "an", "and", "at", "by", "for", "from", "in", "is", "of", "on", "or", "the", "to", "with"}
 )
 _LEXICAL_RELATIONSHIP_BONUS = 0.15
+_LEXICAL_ENTITY_BONUS = 0.1
+_ENTITY_CONTEXT_RELATIONSHIP_BONUS = 0.2
 _SEMANTIC_SEARCH_LIMIT = 20
 
 
@@ -91,7 +93,14 @@ class ExactEntityLinker:
         relation_lookup = _relation_lookup(graph)
         exact_relationships: list[tuple[str, str]] = []
         for relationship in concepts.relationships:
-            for relation in relation_lookup.get(normalize_text(relationship), []):
+            normalized = normalize_text(relationship)
+            if normalized in graph.nodes:
+                if normalized not in seen:
+                    linked.append(normalized)
+                    seen.add(normalized)
+                    exact_entities.append((relationship, normalized))
+                continue
+            for relation in relation_lookup.get(normalized, []):
                 exact_relationships.append((relationship, relation))
                 _append_relation_endpoints(linked, seen, graph, relation)
         logger.debug(
@@ -150,8 +159,8 @@ class EmbeddingEntityLinker:
         linked: list[str] = []
         seen: set[str] = set()
         exact_entities: list[tuple[str, str]] = []
-        unmatched_entities: list[str] = []
-        unmatched_entity_keys: set[str] = set()
+        semantic_entities: list[str] = []
+        semantic_entity_keys: set[str] = set()
         for entity in concepts.entities:
             normalized = normalize_text(entity)
             if not normalized:
@@ -161,9 +170,11 @@ class EmbeddingEntityLinker:
                     linked.append(normalized)
                     seen.add(normalized)
                     exact_entities.append((entity, normalized))
-            elif normalized not in unmatched_entity_keys:
-                unmatched_entities.append(entity.strip())
-                unmatched_entity_keys.add(normalized)
+                if not _has_longer_lexical_candidate(normalized, graph.nodes):
+                    continue
+            if normalized not in semantic_entity_keys:
+                semantic_entities.append(entity.strip())
+                semantic_entity_keys.add(normalized)
 
         relation_lookup = _relation_lookup(graph)
         exact_relationships: list[tuple[str, str]] = []
@@ -172,6 +183,12 @@ class EmbeddingEntityLinker:
         for relationship in concepts.relationships:
             normalized = normalize_text(relationship)
             if not normalized:
+                continue
+            if normalized in graph.nodes:
+                if normalized not in seen:
+                    linked.append(normalized)
+                    seen.add(normalized)
+                    exact_entities.append((relationship, normalized))
                 continue
             exact_relations = relation_lookup.get(normalized)
             if exact_relations:
@@ -190,7 +207,7 @@ class EmbeddingEntityLinker:
 
         if semantic_search is not None:
             await self._link_stored_concepts(
-                unmatched_entities,
+                semantic_entities,
                 unmatched_relationships,
                 graph,
                 semantic_search,
@@ -199,7 +216,7 @@ class EmbeddingEntityLinker:
             )
         else:
             await self._link_in_memory(
-                unmatched_entities,
+                semantic_entities,
                 unmatched_relationships,
                 graph,
                 linked,
@@ -216,32 +233,39 @@ class EmbeddingEntityLinker:
         linked: list[str],
         seen: set[str],
     ) -> None:
-        """Link unmatched concepts through persisted embeddings."""
+        """Link semantic concepts through persisted embeddings."""
 
         for entity in entities:
             query_embedding = await self._embeddings.embed_query(entity)
             matches = await semantic_search.search_entities(
                 query_embedding,
-                threshold=self._similarity_threshold,
+                threshold=max(
+                    -1.0,
+                    self._similarity_threshold - _LEXICAL_ENTITY_BONUS,
+                ),
                 limit=max(_SEMANTIC_SEARCH_LIMIT, self._max_links_per_entity),
             )
             accepted = 0
             for match in matches:
-                if match.similarity < self._similarity_threshold:
+                score = match.similarity + _entity_bonus(entity, match.entity)
+                if score < self._similarity_threshold:
                     logger.debug(
                         "Rejected PostgreSQL entity match %r -> %r "
-                        "(similarity=%.3f threshold=%.3f)",
+                        "(similarity=%.3f score=%.3f threshold=%.3f)",
                         entity,
                         match.entity,
                         match.similarity,
+                        score,
                         self._similarity_threshold,
                     )
                     continue
                 logger.debug(
-                    "PostgreSQL entity match %r -> %r (similarity=%.3f)",
+                    "PostgreSQL entity match %r -> %r "
+                    "(similarity=%.3f score=%.3f)",
                     entity,
                     match.entity,
                     match.similarity,
+                    score,
                 )
                 if match.entity in graph.nodes and match.entity not in seen:
                     linked.append(match.entity)
@@ -252,8 +276,11 @@ class EmbeddingEntityLinker:
 
         candidate_threshold = max(
             -1.0,
-            self._relationship_similarity_threshold - _LEXICAL_RELATIONSHIP_BONUS,
+            self._relationship_similarity_threshold
+            - _LEXICAL_RELATIONSHIP_BONUS
+            - _ENTITY_CONTEXT_RELATIONSHIP_BONUS,
         )
+        context_nodes = set(seen)
         for relationship in relationships:
             query_embedding = await self._embeddings.embed_query(relationship)
             candidates = await semantic_search.search_relationships(
@@ -265,13 +292,28 @@ class EmbeddingEntityLinker:
                 (
                     (
                         candidate.similarity
-                        + _relationship_bonus(relationship, candidate.text),
+                        + _relationship_bonus(relationship, candidate.text)
+                        + _relationship_context_bonus(candidate, context_nodes),
                         candidate,
                     )
                     for candidate in candidates
                 ),
                 key=lambda item: (-item[0], item[1].text),
             )
+            if context_nodes:
+                ranked = [
+                    item
+                    for item in ranked
+                    if _relationship_has_context(item[1], context_nodes)
+                ]
+                if not ranked:
+                    logger.debug(
+                        "Skipped relationship link %r: no candidates connect to "
+                        "entity seeds=%s",
+                        relationship,
+                        sorted(context_nodes),
+                    )
+                    continue
             matches = 0
             for score, candidate in ranked:
                 if score < self._relationship_similarity_threshold:
@@ -303,19 +345,20 @@ class EmbeddingEntityLinker:
         linked: list[str],
         seen: set[str],
     ) -> None:
-        """Link unmatched concepts using the standalone in-memory index."""
+        """Link semantic concepts using the standalone in-memory index."""
 
-        nodes = sorted(graph.nodes)
-        for _, node in await self._semantic_matches(
-            entities,
-            nodes,
-            self._node_embeddings,
-            threshold=self._similarity_threshold,
-            kind="entity",
-        ):
-            if node not in seen:
-                linked.append(node)
-                seen.add(node)
+        for entity in entities:
+            nodes = sorted(graph.nodes - seen)
+            for _, node in await self._semantic_matches(
+                [entity],
+                nodes,
+                self._node_embeddings,
+                threshold=self._similarity_threshold,
+                kind="entity",
+            ):
+                if node not in seen:
+                    linked.append(node)
+                    seen.add(node)
 
         edge_lookup = {
             edge_text(edge.subject, edge.relation, edge.object): edge
@@ -323,9 +366,24 @@ class EmbeddingEntityLinker:
         }
         edge_texts = sorted(edge_lookup)
         for relationship in relationships:
+            candidates_in_context = [
+                candidate
+                for candidate in edge_texts
+                if not seen
+                or edge_lookup[candidate].subject in seen
+                or edge_lookup[candidate].object in seen
+            ]
+            if not candidates_in_context:
+                logger.debug(
+                    "Skipped relationship link %r: no candidates connect to "
+                    "entity seeds=%s",
+                    relationship,
+                    sorted(seen),
+                )
+                continue
             candidates, bonus = _focus_relationship_candidates(
                 relationship,
-                edge_texts,
+                candidates_in_context,
             )
             matches = await self._semantic_matches(
                 [relationship],
@@ -501,6 +559,50 @@ def _relationship_bonus(query: str, candidate: str) -> float:
         _LEXICAL_RELATIONSHIP_BONUS
         if _content_tokens(query) & _content_tokens(candidate)
         else 0.0
+    )
+
+
+def _entity_bonus(query: str, candidate: str) -> float:
+    """Boost entity aliases that share an exact meaningful token."""
+
+    return (
+        _LEXICAL_ENTITY_BONUS
+        if _content_tokens(query) & _content_tokens(candidate)
+        else 0.0
+    )
+
+
+def _relationship_context_bonus(
+    candidate: RelationshipConceptMatch,
+    context_nodes: set[str],
+) -> float:
+    """Prefer relationship facts connected to already-linked query entities."""
+
+    return (
+        _ENTITY_CONTEXT_RELATIONSHIP_BONUS
+        if _relationship_has_context(candidate, context_nodes)
+        else 0.0
+    )
+
+
+def _relationship_has_context(
+    candidate: RelationshipConceptMatch,
+    context_nodes: set[str],
+) -> bool:
+    """Return whether a relationship fact touches a linked query entity."""
+
+    return candidate.subject in context_nodes or candidate.object in context_nodes
+
+
+def _has_longer_lexical_candidate(
+    entity: str,
+    graph_nodes: frozenset[str],
+) -> bool:
+    """Return whether an exact short name has a longer graph alias candidate."""
+
+    entity_tokens = _content_tokens(entity)
+    return bool(entity_tokens) and any(
+        entity_tokens < _content_tokens(node) for node in graph_nodes
     )
 
 

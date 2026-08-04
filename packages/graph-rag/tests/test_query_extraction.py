@@ -1,7 +1,7 @@
 from typing import Any
 
 import pytest
-from llm_providers.generation.base import ChatMessage
+from llm_providers.generation.base import ChatMessage, RecoverableGenerationError
 
 from graph_rag.query_extraction import LLMQueryEntityExtractor, QueryConcepts
 
@@ -54,9 +54,11 @@ async def test_extracts_distinct_query_concepts() -> None:
         role="user",
         content="Where is Alice's employer Acme headquartered?",
     )
-    assert generation.schema["properties"]["entities"]["maxItems"] == 12
-    assert generation.schema["properties"]["relationships"]["maxItems"] == 12
+    assert "maxItems" not in generation.schema["properties"]["entities"]
+    assert "maxItems" not in generation.schema["properties"]["relationships"]
     assert generation.max_tokens == 256
+    assert "every item in a comparison" in generation.messages[0].content
+    assert "engine options" in generation.messages[0].content
 
 
 async def test_empty_question_skips_generation() -> None:
@@ -70,6 +72,46 @@ async def test_empty_question_skips_generation() -> None:
 
     assert concepts == QueryConcepts(entities=[], relationships=[])
     assert generation.messages == []
+
+
+async def test_recoverable_generation_failure_returns_empty_concepts() -> None:
+    """A rejected structured response allows vector fallback without retrying."""
+
+    class FailingGeneration(StubStructuredGeneration):
+        async def generate_structured(
+            self,
+            messages: list[ChatMessage],
+            schema: dict[str, Any],
+            *,
+            max_tokens: int = 4096,
+        ) -> dict[str, Any]:
+            raise RecoverableGenerationError("structured output rejected")
+
+    concepts = await LLMQueryEntityExtractor(
+        generation=FailingGeneration({}),
+    ).extract("Where does Alice work?")
+
+    assert concepts == QueryConcepts(entities=[], relationships=[])
+
+
+async def test_truncates_oversized_query_concepts_locally() -> None:
+    """Query concept limits do not require schema-level rejection or retry."""
+
+    generation = StubStructuredGeneration(
+        {
+            "entities": [f"Entity {index}" for index in range(20)],
+            "relationships": [f"Relation {index}" for index in range(20)],
+        }
+    )
+
+    concepts = await LLMQueryEntityExtractor(generation=generation).extract(
+        "Compare many entities"
+    )
+
+    assert len(concepts.entities) == 12
+    assert concepts.entities[-1] == "Entity 11"
+    assert len(concepts.relationships) == 12
+    assert concepts.relationships[-1] == "Relation 11"
 
 
 @pytest.mark.parametrize(

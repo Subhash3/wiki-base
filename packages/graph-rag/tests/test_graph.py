@@ -74,3 +74,47 @@ def test_canonical_dict_round_trip_preserves_graph() -> None:
 
     assert loaded.nodes == graph.nodes
     assert list(loaded.edges()) == list(graph.edges())
+
+
+def test_round_trip_preserves_isolated_entity_mentions_and_synonyms() -> None:
+    """Canonical version 2 retains passage associations and semantic edges."""
+
+    graph = KnowledgeGraph()
+    provenance = TripleProvenance(document_id=DOCUMENT_ONE, chunk_id=CHUNK_ONE)
+    graph.add_entity("glamour", provenance=provenance)
+    graph.add_entity("honda glamour", provenance=provenance)
+    assert graph.add_synonym("glamour", "honda glamour", similarity=0.91)
+
+    payload = graph.to_dict()
+    loaded = KnowledgeGraph.from_dict(payload)
+
+    assert payload["version"] == 2
+    assert loaded.nodes == frozenset({"glamour", "honda glamour"})
+    assert loaded.entity_provenance_for_node("glamour") == frozenset({provenance})
+    assert list(loaded.synonyms())[0].similarity == 0.91
+
+
+def test_loads_legacy_version_one_graphs() -> None:
+    """Existing edge-only document graphs remain readable during re-indexing."""
+
+    graph = KnowledgeGraph.from_dict(
+        {
+            "version": 1,
+            "edges": [
+                {
+                    "subject": "alice",
+                    "relation": "works at",
+                    "object": "acme",
+                    "provenance": [
+                        {
+                            "document_id": str(DOCUMENT_ONE),
+                            "chunk_id": str(CHUNK_ONE),
+                        }
+                    ],
+                }
+            ],
+        }
+    )
+
+    assert graph.nodes == frozenset({"alice", "acme"})
+    assert graph.entity_provenance_for_node("alice") == frozenset()

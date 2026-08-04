@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from uuid import UUID
 
-from graph_rag import KnowledgeGraph, RankedChunk, Triple, TripleProvenance
+from graph_rag import KnowledgeGraph, RankedChunk, SynonymEdge, Triple, TripleProvenance
 from llm_providers.embeddings.base import EmbeddingModelInfo
 
 from wiki_base.database.queries.chunks import StoredChunk
@@ -118,6 +118,14 @@ async def test_pro_retrieval_merges_wiki_base_graphs_and_preserves_rank(
     async def list_graphs(_connection, _wiki_base_id):
         return [first_graph, second_graph]
 
+    async def list_synonyms(_connection, **values):
+        assert values == {
+            "wiki_base_id": WIKI_BASE_ID,
+            "embedding_model": "test-model",
+            "similarity_threshold": 0.95,
+        }
+        return [SynonymEdge(first="Alice", second="Paris", similarity=0.9)]
+
     async def load_chunks(_connection, *, wiki_base_id, chunk_ids):
         assert wiki_base_id == WIKI_BASE_ID
         assert chunk_ids == [CHUNK_TWO, CHUNK_ONE]
@@ -155,6 +163,11 @@ async def test_pro_retrieval_merges_wiki_base_graphs_and_preserves_rank(
         "list_ready_wiki_base_graphs",
         list_graphs,
     )
+    monkeypatch.setattr(
+        query_chunks,
+        "list_wiki_base_graph_synonyms",
+        list_synonyms,
+    )
     monkeypatch.setattr(query_chunks, "load_chunks_by_ids", load_chunks)
 
     retriever = StubGraphRetriever()
@@ -172,6 +185,9 @@ async def test_pro_retrieval_merges_wiki_base_graphs_and_preserves_rank(
 
     assert retriever.graph is not None
     assert retriever.graph.nodes == frozenset({"Alice", "Acme", "Paris"})
+    assert list(retriever.graph.synonyms()) == [
+        SynonymEdge(first="Alice", second="Paris", similarity=0.9)
+    ]
     assert [chunk.id for chunk in result.chunks] == [CHUNK_TWO, CHUNK_ONE]
     assert [chunk.score for chunk in result.chunks] == [0.8, 0.6]
     assert result.mode == RetrievalMode.PRO

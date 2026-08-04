@@ -15,6 +15,7 @@ from graph_rag.query_extraction import QueryConcepts
 
 DOCUMENT_ID = UUID("10000000-0000-0000-0000-000000000001")
 CHUNK_ID = UUID("00000000-0000-0000-0000-000000000001")
+PROVENANCE = TripleProvenance(document_id=DOCUMENT_ID, chunk_id=CHUNK_ID)
 
 
 def concepts(
@@ -307,7 +308,9 @@ async def test_embedding_linker_uses_persisted_entity_search() -> None:
     assert nodes == ["acme"]
     assert embeddings.document_batches == []
     assert embeddings.queries == ["the company"]
-    assert search.entity_searches == [([1.0, 0.0], 0.8, 20)]
+    assert search.entity_searches[0][0] == [1.0, 0.0]
+    assert search.entity_searches[0][1] == pytest.approx(0.7)
+    assert search.entity_searches[0][2] == 20
 
 
 async def test_embedding_linker_rechecks_persisted_entity_threshold() -> None:
@@ -329,6 +332,89 @@ async def test_embedding_linker_rechecks_persisted_entity_threshold() -> None:
     )
 
     assert nodes == []
+
+
+async def test_persisted_entity_link_uses_lexical_alias_bonus() -> None:
+    """A shared name token can promote a near-threshold entity alias."""
+
+    graph = KnowledgeGraph()
+    graph.add_triple(
+        Triple(subject="tata tiago", relation="uses", object="petrol engine"),
+        provenance=PROVENANCE,
+    )
+    embeddings = StubEmbeddings({"Tiago": [1.0, 0.0]})
+    search = StubSemanticSearch(
+        entities=[EntityConceptMatch(entity="tata tiago", similarity=0.744)]
+    )
+    linker = EmbeddingEntityLinker(
+        embeddings=embeddings,
+        similarity_threshold=0.75,
+    )
+
+    nodes = await linker.link(
+        concepts(["Tiago"]),
+        graph,
+        semantic_search=search,
+    )
+
+    assert nodes == ["tata tiago"]
+    assert search.entity_searches[0][0] == [1.0, 0.0]
+    assert search.entity_searches[0][1] == pytest.approx(0.65)
+    assert search.entity_searches[0][2] == 20
+
+
+async def test_exact_short_entity_also_links_longer_alias() -> None:
+    """An exact short node can expand to a more specific lexical alias."""
+
+    graph = KnowledgeGraph()
+    graph.add_entity("tiago", provenance=PROVENANCE)
+    graph.add_triple(
+        Triple(subject="tata tiago", relation="uses", object="petrol engine"),
+        provenance=PROVENANCE,
+    )
+    embeddings = StubEmbeddings({"Tiago": [1.0, 0.0]})
+    search = StubSemanticSearch(
+        entities=[
+            EntityConceptMatch(entity="tiago", similarity=0.88),
+            EntityConceptMatch(entity="tata tiago", similarity=0.744),
+        ]
+    )
+    linker = EmbeddingEntityLinker(
+        embeddings=embeddings,
+        similarity_threshold=0.75,
+    )
+
+    nodes = await linker.link(
+        concepts(["Tiago"]),
+        graph,
+        semantic_search=search,
+    )
+
+    assert nodes == ["tiago", "tata tiago"]
+    assert embeddings.queries == ["Tiago"]
+
+
+async def test_exact_full_entity_does_not_expand_to_shorter_name() -> None:
+    """A complete exact entity does not add a less-specific graph node."""
+
+    graph = KnowledgeGraph()
+    graph.add_entity("tiago", provenance=PROVENANCE)
+    graph.add_triple(
+        Triple(subject="tata tiago", relation="uses", object="petrol engine"),
+        provenance=PROVENANCE,
+    )
+    embeddings = StubEmbeddings({})
+    search = StubSemanticSearch()
+    linker = EmbeddingEntityLinker(embeddings=embeddings)
+
+    nodes = await linker.link(
+        concepts(["Tata Tiago"]),
+        graph,
+        semantic_search=search,
+    )
+
+    assert nodes == ["tata tiago"]
+    assert search.entity_searches == []
 
 
 async def test_persisted_relationship_match_uses_contextual_bonus() -> None:
@@ -359,5 +445,91 @@ async def test_persisted_relationship_match_uses_contextual_bonus() -> None:
 
     assert nodes == ["alice", "acme"]
     assert search.relationship_searches[0][0] == [1.0, 0.0]
-    assert search.relationship_searches[0][1] == pytest.approx(0.45)
+    assert search.relationship_searches[0][1] == pytest.approx(0.25)
     assert search.relationship_searches[0][2] == 20
+
+
+async def test_relationship_link_prefers_facts_connected_to_entity_seed() -> None:
+    """Entity context outranks a slightly stronger unrelated relationship match."""
+
+    graph = make_graph()
+    graph.add_triple(
+        Triple(subject="paris", relation="offers", object="france"),
+        provenance=PROVENANCE,
+    )
+    embeddings = StubEmbeddings({"engine options": [1.0, 0.0]})
+    search = StubSemanticSearch(
+        relationships=[
+            RelationshipConceptMatch(
+                text="paris engine options france",
+                subject="paris",
+                relationship="engine options",
+                object="france",
+                similarity=0.7,
+            ),
+            RelationshipConceptMatch(
+                text="alice engine options acme",
+                subject="alice",
+                relationship="engine options",
+                object="acme",
+                similarity=0.55,
+            ),
+        ]
+    )
+    linker = EmbeddingEntityLinker(
+        embeddings=embeddings,
+        relationship_similarity_threshold=0.6,
+    )
+
+    nodes = await linker.link(
+        concepts(["alice"], relationships=["engine options"]),
+        graph,
+        semantic_search=search,
+    )
+
+    assert nodes == ["alice", "acme"]
+
+
+async def test_relationship_link_skips_facts_outside_entity_context() -> None:
+    """An unrelated semantic relationship cannot jump to another subgraph."""
+
+    graph = make_graph()
+    graph.add_triple(
+        Triple(subject="paris", relation="has price", object="price range"),
+        provenance=PROVENANCE,
+    )
+    embeddings = StubEmbeddings({"engine options": [1.0, 0.0]})
+    search = StubSemanticSearch(
+        relationships=[
+            RelationshipConceptMatch(
+                text="paris engine price range",
+                subject="paris",
+                relationship="has price",
+                object="price range",
+                similarity=0.8,
+            )
+        ]
+    )
+    linker = EmbeddingEntityLinker(
+        embeddings=embeddings,
+        relationship_similarity_threshold=0.6,
+    )
+
+    nodes = await linker.link(
+        concepts(["alice"], relationships=["engine options"]),
+        graph,
+        semantic_search=search,
+    )
+
+    assert nodes == ["alice"]
+
+
+async def test_treats_node_misclassified_as_relationship_as_entity() -> None:
+    """A named graph node does not trigger noisy relationship matching."""
+
+    nodes = await ExactEntityLinker().link(
+        concepts(relationships=["Alice"]),
+        make_graph(),
+    )
+
+    assert nodes == ["alice"]

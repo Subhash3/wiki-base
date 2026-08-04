@@ -35,3 +35,19 @@ def test_builds_entity_and_contextual_relationship_concepts() -> None:
     assert concepts[-1].subject == "honda unicorn"
     assert concepts[-1].relationship == "offers"
     assert concepts[-1].object == "loan amount"
+
+
+def test_includes_entities_without_relationships() -> None:
+    """Passage-only concepts receive persisted embeddings too."""
+
+    graph = KnowledgeGraph()
+    graph.add_entity(
+        "skoda slavia",
+        provenance=TripleProvenance(document_id=DOCUMENT_ID, chunk_id=CHUNK_ID),
+    )
+
+    concepts = graph_concepts(graph)
+
+    assert len(concepts) == 1
+    assert concepts[0].type == GraphConceptType.ENTITY
+    assert concepts[0].text == "skoda slavia"

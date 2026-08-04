@@ -11,6 +11,7 @@ from wiki_base.database.queries.document_graphs import (
     get_document_graph,
     list_ready_wiki_base_graphs,
 )
+from wiki_base.database.queries.graph_synonyms import list_wiki_base_graph_synonyms
 
 
 async def visualize_document(
@@ -43,17 +44,35 @@ async def merge_wiki_base(
     *,
     wiki_base_id: UUID,
     output: Path,
+    embedding_model: str | None = None,
+    synonym_similarity_threshold: float = 0.95,
 ) -> tuple[Path, Path]:
     """Merge ready graphs for a wiki base and write JSON and HTML artifacts."""
 
     async with database.connection() as connection:
         payloads = await list_ready_wiki_base_graphs(connection, wiki_base_id)
+        synonyms = (
+            await list_wiki_base_graph_synonyms(
+                connection,
+                wiki_base_id=wiki_base_id,
+                embedding_model=embedding_model,
+                similarity_threshold=synonym_similarity_threshold,
+            )
+            if embedding_model is not None
+            else []
+        )
     if not payloads:
         raise ValueError(f"No ready graphs found for wiki base {wiki_base_id}")
 
     graph = KnowledgeGraph()
     for payload in payloads:
         graph = KnowledgeGraph.merge(graph, KnowledgeGraph.from_dict(payload))
+    for synonym in synonyms:
+        graph.add_synonym(
+            synonym.first,
+            synonym.second,
+            similarity=synonym.similarity,
+        )
 
     output = _require_suffix(output, ".json")
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -141,6 +160,10 @@ async def _merge_from_settings(
             database,
             wiki_base_id=wiki_base_id,
             output=output,
+            embedding_model=settings.embedding_model,
+            synonym_similarity_threshold=(
+                settings.graph_synonym_similarity_threshold
+            ),
         )
     finally:
         await database.disconnect()

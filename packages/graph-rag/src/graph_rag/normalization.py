@@ -22,4 +22,6 @@ def normalize_triple(triple: Triple) -> Triple | None:
     object_ = normalize_text(triple.object)
     if not subject or not relation or not object_:
         return None
+    if subject == object_ or relation in {subject, object_}:
+        return None
     return Triple(subject=subject, relation=relation, object=object_)

@@ -60,3 +60,19 @@ def test_renders_interactive_pyvis_html() -> None:
 
     assert "vis-network" in html
     assert "Test graph" in html
+
+
+def test_visualizes_synonym_edges_separately() -> None:
+    """Semantic edges are distinguishable from factual relationships."""
+
+    graph = make_graph()
+    graph.add_synonym("alice", "paris", similarity=0.92)
+
+    network = GraphVisualizer(graph).build()
+    synonym_edges = [
+        data for _source, _target, data in network.edges(data=True) if data.get("synonym")
+    ]
+
+    assert synonym_edges[0]["label"] == "synonym"
+    assert synonym_edges[0]["similarity"] == 0.92
+    assert synonym_edges[0]["dashes"] is True

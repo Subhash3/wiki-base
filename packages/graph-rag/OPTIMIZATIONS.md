@@ -12,13 +12,13 @@ This file tracks retrieval improvements worth evaluating after the initial imple
 
 ## Evaluation
 
-- [ ] Create a representative question set with expected entities, documents, and chunks.
-- [ ] Measure entity-link recall and chunk Recall@5 and Recall@10.
+- [x] Create a development question set with expected chunks and answer facts.
+- [x] Measure chunk hit rate, Recall@K, MRR, fallback use, and request time.
 - [ ] Include both single-hop and multi-hop questions.
 
 ## Retrieval quality
 
-- [ ] Add conservative synonym edges or entity canonicalization during indexing.
+- [x] Add conservative pgvector synonym edges during indexing.
 - [ ] Fuse graph-ranked and vector-ranked chunks using Reciprocal Rank Fusion.
 - [ ] Rerank the fused candidates before answer generation.
 - [ ] Compare sum, maximum, and length-normalized chunk score aggregation.
@@ -27,4 +27,6 @@ This file tracks retrieval improvements worth evaluating after the initial imple
 
 - Keep normalized exact entity matches as the highest-confidence path.
 - [x] Persist graph entity and relationship embeddings for pgvector concept search.
+- [x] Prefer relationship matches connected to already-linked query entities.
+- [x] Reject degenerate OpenIE self-facts before graph construction.
 - Calibrate entity similarity thresholds against the evaluation set.

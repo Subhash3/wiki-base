@@ -7,7 +7,12 @@ from graph_rag.entity_linking import (
     ExactEntityLinker,
     SemanticConceptSearch,
 )
-from graph_rag.extraction import LLMTripleExtractor, TripleExtractor
+from graph_rag.extraction import (
+    LLMPassageEntityExtractor,
+    LLMTripleExtractor,
+    PassageEntityExtractor,
+    TripleExtractor,
+)
 from graph_rag.graph import KnowledgeGraph
 from graph_rag.indexing import HippoRAGIndexer
 from graph_rag.models import (
@@ -18,6 +23,7 @@ from graph_rag.models import (
     IndexedChunk,
     RankedChunk,
     RelationshipConceptMatch,
+    SynonymEdge,
     Triple,
     TripleProvenance,
 )
@@ -49,17 +55,20 @@ __all__ = [
     "EntityLinker",
     "ExactEntityLinker",
     "IndexedChunk",
+    "LLMPassageEntityExtractor",
     "LLMTripleExtractor",
     "LLMQueryEntityExtractor",
     "KnowledgeGraph",
     "Triple",
     "TripleExtractor",
     "TripleProvenance",
+    "PassageEntityExtractor",
     "QueryEntityExtractor",
     "QueryConcepts",
     "RankedChunk",
     "RelationshipConceptMatch",
     "SemanticConceptSearch",
+    "SynonymEdge",
     "aggregate_chunk_scores",
     "build_ranking_graph",
     "personalized_page_rank",

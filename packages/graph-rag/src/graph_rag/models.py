@@ -49,6 +49,15 @@ class GraphEdge:
     provenance: frozenset[TripleProvenance]
 
 
+@dataclass(frozen=True, slots=True)
+class SynonymEdge:
+    """A semantic connection between two entity nodes."""
+
+    first: str
+    second: str
+    similarity: float
+
+
 class GraphConceptType(StrEnum):
     """The searchable type of a graph concept."""
 

@@ -9,10 +9,20 @@ def build_ranking_graph(graph: KnowledgeGraph) -> nx.Graph:
 
     ranking_graph = nx.Graph()
     ranking_graph.add_nodes_from(graph.nodes)
-    ranking_graph.add_edges_from(
-        (edge.subject, edge.object, {"weight": 1.0})
-        for edge in graph.edges()
-    )
+    for edge in graph.edges():
+        ranking_graph.add_edge(edge.subject, edge.object, weight=1.0, kind="fact")
+    for synonym in graph.synonyms():
+        existing_weight = (
+            ranking_graph.edges[synonym.first, synonym.second].get("weight", 0.0)
+            if ranking_graph.has_edge(synonym.first, synonym.second)
+            else 0.0
+        )
+        ranking_graph.add_edge(
+            synonym.first,
+            synonym.second,
+            weight=max(existing_weight, synonym.similarity),
+            kind="synonym" if not existing_weight else "fact",
+        )
     return ranking_graph
 
 
@@ -56,15 +66,31 @@ def personalized_page_rank(
 def aggregate_chunk_scores(
     graph: KnowledgeGraph,
     node_scores: dict[str, float],
+    *,
+    entity_weight: float = 1.0,
+    triple_weight: float = 1.0,
 ) -> list[RankedChunk]:
-    """Sum positive node scores across their source chunks."""
+    """Project node scores through entity mentions and triple provenance."""
+
+    if entity_weight < 0 or triple_weight < 0:
+        raise ValueError("provenance weights cannot be negative")
 
     chunk_scores: dict[TripleProvenance, float] = {}
     for node, score in node_scores.items():
         if score <= 0:
             continue
-        for provenance in graph.provenance_for_node(node):
-            chunk_scores[provenance] = chunk_scores.get(provenance, 0.0) + score
+        provenance_weights: dict[TripleProvenance, float] = {}
+        for provenance in graph.entity_provenance_for_node(node):
+            provenance_weights[provenance] = entity_weight
+        for provenance in graph.triple_provenance_for_node(node):
+            provenance_weights[provenance] = max(
+                triple_weight,
+                provenance_weights.get(provenance, 0.0),
+            )
+        for provenance, weight in provenance_weights.items():
+            chunk_scores[provenance] = (
+                chunk_scores.get(provenance, 0.0) + score * weight
+            )
 
     ranked = [
         RankedChunk(

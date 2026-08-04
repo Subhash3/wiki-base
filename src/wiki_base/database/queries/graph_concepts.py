@@ -15,7 +15,7 @@ async def replace_document_graph_concepts(
     concepts: list[GraphConcept],
     embeddings: list[list[float]],
     embedding_model: str,
-) -> None:
+) -> UUID:
     """Replace the searchable concepts stored for one document graph."""
 
     if len(concepts) != len(embeddings):
@@ -33,7 +33,7 @@ async def replace_document_graph_concepts(
         document_id,
     )
     if not concepts:
-        return
+        return wiki_base_id
 
     await connection.executemany(
         """
@@ -59,6 +59,7 @@ async def replace_document_graph_concepts(
             for concept, embedding in zip(concepts, embeddings, strict=True)
         ],
     )
+    return wiki_base_id
 
 
 async def search_graph_entities(

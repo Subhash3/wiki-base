@@ -92,6 +92,7 @@ def get_query_chunks_service(
     embeddings: EmbeddingProviderDependency,
     extraction: ExtractionProviderDependency,
     entity_linker: EntityLinkerDependency,
+    settings: SettingsDependency,
 ) -> QueryChunksService:
     return QueryChunksService(
         database=database,
@@ -100,6 +101,7 @@ def get_query_chunks_service(
             entity_extractor=LLMQueryEntityExtractor(generation=extraction),
             entity_linker=entity_linker,
         ),
+        synonym_similarity_threshold=settings.graph_synonym_similarity_threshold,
     )
 
 
