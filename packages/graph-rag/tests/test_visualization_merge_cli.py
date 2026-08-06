@@ -69,3 +69,18 @@ def test_directory_scan_ignores_existing_merged_json(tmp_path: Path) -> None:
     files = find_json_files([tmp_path])
 
     assert files == [tmp_path / "one.json"]
+
+
+def test_merge_files_optionally_writes_3d_html(tmp_path: Path) -> None:
+    source = tmp_path / "one.json"
+    write_graph(
+        source,
+        source="alice",
+        target="acme",
+        document_id=UUID("10000000-0000-0000-0000-000000000001"),
+        chunk_id=UUID("00000000-0000-0000-0000-000000000001"),
+    )
+
+    merge_files([source], export_3d=True)
+
+    assert (tmp_path / "merged-3d.html").is_file()

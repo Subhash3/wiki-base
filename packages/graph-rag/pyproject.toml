@@ -8,6 +8,7 @@ dependencies = [
     "document-processing",
     "llm-providers",
     "networkx>=3.4",
+    "plotly>=6.0",
     "pyvis>=0.3.2",
 ]
 

@@ -106,9 +106,7 @@ def test_preserves_all_nodes_edges_and_labels_during_color_conversion() -> None:
     assert entity_colors["acme"]["background"] == "#2563eb"
     assert entity_colors["alice"]["background"] == "#0d9488"
     assert all(
-        "group" not in node
-        for node in visualization.nodes
-        if node.get("connectivity") is not None
+        "group" not in node for node in visualization.nodes if node.get("connectivity") is not None
     )
     assert {node["id"] for node in visualization.nodes} == expected_node_ids
     assert len(visualization.edges) == expected_edges
@@ -130,6 +128,31 @@ def test_renders_interactive_pyvis_html() -> None:
     assert 'network.once("stabilizationIterationsDone"' in html
     assert "network.storePositions();" in html
     assert "network.setOptions({physics: {enabled: false}});" in html
+
+
+def test_renders_self_contained_3d_plotly_html() -> None:
+    network = GraphVisualizer(make_graph()).build()
+
+    html = GraphVisualizer.to_3d_html(network, title="Test graph · 3D")
+
+    assert "plotly.js" in html
+    assert "scatter3d" in html
+    assert "Test graph" in html
+    assert "works at" in html
+    assert "alice" in html
+    assert "plotly_relayout" in html
+    assert "initialEyeDistance / eyeDistance" in html
+    assert "animateNodeSizes(baseSizes.map(size => size * zoomScale), zoomScale)" in html
+    assert "clearTimeout(zoomTimer)" in html
+    assert "setTimeout(function()" in html
+    assert "requestAnimationFrame(renderFrame)" in html
+    assert "easedProgress" in html
+    assert "'textfont.size'" in html
+
+
+def test_scales_3d_node_sizes() -> None:
+    assert GraphVisualizer._3d_node_size({"size": 12}) == 10.8
+    assert GraphVisualizer._3d_node_size({"size": 48}) == 32.4
 
 
 def test_groups_tooltip_chunks_by_document() -> None:

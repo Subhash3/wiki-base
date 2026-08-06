@@ -5,6 +5,7 @@ from typing import Any
 from uuid import UUID
 
 import networkx as nx
+import plotly.graph_objects as go
 from pyvis.network import Network
 
 from graph_rag.graph import KnowledgeGraph
@@ -12,6 +13,75 @@ from graph_rag.models import TripleProvenance
 
 _BASE_ENTITY_SIZE = 12.0
 _MAX_ENTITY_SIZE = 48.0
+_3D_NODE_SIZE_SCALE = 1.8
+_3D_MIN_ZOOM_SCALE = 0.75
+_3D_MAX_ZOOM_SCALE = 2.5
+_3D_CAMERA_EYE = 1.25
+_3D_ZOOM_DEBOUNCE_MS = 200
+_3D_SIZE_ANIMATION_MS = 250
+_3D_SIZE_ANIMATION_FRAME_MS = 33
+_3D_LABEL_FONT_SIZE = 12.0
+_3D_ZOOM_SCRIPT = f"""
+const graph = document.getElementById('{{plot_id}}');
+const nodeTraceIndex = 2;
+const baseSizes = graph.data[nodeTraceIndex].marker.size.slice();
+let currentSizes = baseSizes.slice();
+let currentZoomScale = 1;
+const initialEyeDistance = Math.sqrt(3 * Math.pow({_3D_CAMERA_EYE}, 2));
+let zoomTimer;
+let sizeAnimationFrame;
+
+function animateNodeSizes(targetSizes, targetZoomScale) {{
+  cancelAnimationFrame(sizeAnimationFrame);
+  const startSizes = currentSizes.slice();
+  const startZoomScale = currentZoomScale;
+  let startTime;
+  let lastFrameTime = -Infinity;
+
+  function renderFrame(timestamp) {{
+    if (startTime === undefined) startTime = timestamp;
+    const elapsed = timestamp - startTime;
+    const progress = Math.min(1, elapsed / {_3D_SIZE_ANIMATION_MS});
+    const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+    if (timestamp - lastFrameTime >= {_3D_SIZE_ANIMATION_FRAME_MS} || progress === 1) {{
+      currentSizes = startSizes.map(
+        (size, index) => size + (targetSizes[index] - size) * easedProgress
+      );
+      currentZoomScale = startZoomScale
+        + (targetZoomScale - startZoomScale) * easedProgress;
+      Plotly.restyle(
+        graph,
+        {{
+          'marker.size': [currentSizes],
+          'textfont.size': [{_3D_LABEL_FONT_SIZE} * currentZoomScale]
+        }},
+        [nodeTraceIndex]
+      );
+      lastFrameTime = timestamp;
+    }}
+
+    if (progress < 1) sizeAnimationFrame = requestAnimationFrame(renderFrame);
+  }}
+
+  sizeAnimationFrame = requestAnimationFrame(renderFrame);
+}}
+
+graph.on('plotly_relayout', function(event) {{
+  const eye = event['scene.camera']?.eye || event['scene.camera.eye'];
+  if (!eye) return;
+
+  clearTimeout(zoomTimer);
+  zoomTimer = setTimeout(function() {{
+    const eyeDistance = Math.sqrt(eye.x ** 2 + eye.y ** 2 + eye.z ** 2);
+    const zoomScale = Math.max(
+      {_3D_MIN_ZOOM_SCALE},
+      Math.min({_3D_MAX_ZOOM_SCALE}, initialEyeDistance / eyeDistance)
+    );
+    animateNodeSizes(baseSizes.map(size => size * zoomScale), zoomScale);
+  }}, {_3D_ZOOM_DEBOUNCE_MS});
+}});
+"""
 _NETWORK_INITIALIZATION = "network = new vis.Network(container, data, options);"
 _AFTER_NETWORK_INITIALIZATION = """
                   const enableHtmlTooltips = function (dataSet) {
@@ -168,6 +238,102 @@ class GraphVisualizer:
         )
 
     @staticmethod
+    def to_3d_html(network: nx.MultiDiGraph, *, title: str = "Graph RAG") -> str:
+        """Render a self-contained interactive 3D HTML visualization."""
+
+        positions = nx.spring_layout(network, dim=3, seed=42, weight=None)
+        edge_x: list[float | None] = []
+        edge_y: list[float | None] = []
+        edge_z: list[float | None] = []
+        edge_midpoints: list[tuple[float, float, float]] = []
+        edge_titles: list[str] = []
+        for source, target, attributes in network.edges(data=True):
+            source_position = positions[source]
+            target_position = positions[target]
+            edge_x.extend((source_position[0], target_position[0], None))
+            edge_y.extend((source_position[1], target_position[1], None))
+            edge_z.extend((source_position[2], target_position[2], None))
+            edge_midpoints.append(
+                tuple((source_position[index] + target_position[index]) / 2 for index in range(3))
+            )
+            edge_titles.append(attributes.get("title", attributes.get("label", "")))
+
+        edge_trace = go.Scatter3d(
+            x=edge_x,
+            y=edge_y,
+            z=edge_z,
+            mode="lines",
+            hoverinfo="skip",
+            line={"color": "#94a3b8", "width": 2},
+        )
+        edge_hover_trace = go.Scatter3d(
+            x=[position[0] for position in edge_midpoints],
+            y=[position[1] for position in edge_midpoints],
+            z=[position[2] for position in edge_midpoints],
+            mode="markers",
+            hovertext=edge_titles,
+            hoverinfo="text",
+            marker={"color": "#94a3b8", "size": 4, "opacity": 0.15},
+        )
+        nodes = list(network.nodes(data=True))
+        node_sizes = [GraphVisualizer._3d_node_size(attributes) for _node, attributes in nodes]
+        node_labels = [attributes.get("label", str(node)) for node, attributes in nodes]
+        node_trace = go.Scatter3d(
+            x=[positions[node][0] for node, _attributes in nodes],
+            y=[positions[node][1] for node, _attributes in nodes],
+            z=[positions[node][2] for node, _attributes in nodes],
+            mode="markers+text",
+            text=node_labels,
+            textposition="top center",
+            textfont={"size": _3D_LABEL_FONT_SIZE},
+            hovertext=[attributes.get("title", str(node)) for node, attributes in nodes],
+            hoverinfo="text",
+            marker={
+                "color": [GraphVisualizer._node_color(attributes) for _node, attributes in nodes],
+                "size": node_sizes,
+                "line": {"color": "#ffffff", "width": 0.5},
+                "opacity": 0.9,
+            },
+        )
+        figure = go.Figure(data=[edge_trace, edge_hover_trace, node_trace])
+        figure.update_layout(
+            title=title,
+            showlegend=False,
+            paper_bgcolor="#f8fafc",
+            margin={"l": 0, "r": 0, "t": 48, "b": 0},
+            scene={
+                "xaxis": {"visible": False},
+                "yaxis": {"visible": False},
+                "zaxis": {"visible": False},
+                "bgcolor": "#f8fafc",
+                "camera": {
+                    "eye": {
+                        "x": _3D_CAMERA_EYE,
+                        "y": _3D_CAMERA_EYE,
+                        "z": _3D_CAMERA_EYE,
+                    }
+                },
+            },
+        )
+        return figure.to_html(
+            full_html=True,
+            include_plotlyjs=True,
+            post_script=_3D_ZOOM_SCRIPT,
+        )
+
+    @staticmethod
+    def _node_color(attributes: dict[str, Any]) -> str:
+        if attributes.get("group") == "document":
+            return "#f59e0b"
+        color = attributes.get("color", "#2563eb")
+        return color.get("background", "#2563eb") if isinstance(color, dict) else color
+
+    @staticmethod
+    def _3d_node_size(attributes: dict[str, Any]) -> float:
+        base_size = max(5.0, min(18.0, float(attributes.get("size", 12)) / 2))
+        return base_size * _3D_NODE_SIZE_SCALE
+
+    @staticmethod
     def _style_entity_nodes(network: nx.MultiDiGraph) -> None:
         """Scale and color entities by their unique entity neighbors."""
 
@@ -182,9 +348,7 @@ class GraphVisualizer:
         sorted_counts = sorted(connection_counts.values())
         hub_threshold = max(
             3,
-            sorted_counts[math.ceil(len(sorted_counts) * 0.9) - 1]
-            if sorted_counts
-            else 3,
+            sorted_counts[math.ceil(len(sorted_counts) * 0.9) - 1] if sorted_counts else 3,
         )
         for node, connection_count in connection_counts.items():
             attributes = network.nodes[node]

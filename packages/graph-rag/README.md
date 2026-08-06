@@ -58,7 +58,8 @@ uv run graph-rag-visualize-merge <wiki-base-id>
 ```
 
 The document command writes `<document-id>.json` and `<document-id>.html`. The merge
-command writes `<wiki-base-id>.json` and `<wiki-base-id>.html`. Both commands accept
+command writes `<wiki-base-id>.json` and `<wiki-base-id>.html`. Pass `--3d` to either
+command to also write a self-contained `<name>-3d.html` visualization. Both commands accept
 `--output path/to/name.html` or `--output path/to/name.json`, respectively. The generated
 files are inspection artifacts; the canonical document graphs remain in PostgreSQL.
 

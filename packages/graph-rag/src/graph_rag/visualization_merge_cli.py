@@ -15,6 +15,7 @@ def parse_args() -> argparse.Namespace:
         nargs="+",
         help="Graph JSON files or directories containing graph JSON files",
     )
+    parser.add_argument("--3d", dest="export_3d", action="store_true", help="Also export 3D HTML")
     parser.add_argument(
         "--output",
         type=Path,
@@ -27,11 +28,7 @@ def find_json_files(inputs: list[Path]) -> list[Path]:
     files: set[Path] = set()
     for input_path in inputs:
         if input_path.is_dir():
-            files.update(
-                path
-                for path in input_path.glob("*.json")
-                if path.name != "merged.json"
-            )
+            files.update(path for path in input_path.glob("*.json") if path.name != "merged.json")
         elif input_path.is_file() and input_path.suffix.lower() == ".json":
             files.add(input_path)
         else:
@@ -41,7 +38,9 @@ def find_json_files(inputs: list[Path]) -> list[Path]:
     return sorted(files)
 
 
-def merge_files(inputs: list[Path], *, output: Path | None = None) -> tuple[Path, Path]:
+def merge_files(
+    inputs: list[Path], *, output: Path | None = None, export_3d: bool = False
+) -> tuple[Path, Path]:
     json_files = find_json_files(inputs)
     output_json = output or json_files[0].parent / "merged.json"
     if output_json.suffix.lower() != ".json":
@@ -67,11 +66,21 @@ def merge_files(inputs: list[Path], *, output: Path | None = None) -> tuple[Path
         visualizer.to_html(network, title="Graph RAG · Merged"),
         encoding="utf-8",
     )
+    if export_3d:
+        output_3d = output_json.with_name(f"{output_json.stem}-3d.html")
+        output_3d.write_text(
+            visualizer.to_3d_html(network, title="Graph RAG · Merged · 3D"),
+            encoding="utf-8",
+        )
     return output_json, output_html
 
 
 def run() -> None:
     arguments = parse_args()
-    output_json, output_html = merge_files(arguments.inputs, output=arguments.output)
+    output_json, output_html = merge_files(
+        arguments.inputs, output=arguments.output, export_3d=arguments.export_3d
+    )
     print(output_json)
     print(output_html)
+    if arguments.export_3d:
+        print(output_json.with_name(f"{output_json.stem}-3d.html"))

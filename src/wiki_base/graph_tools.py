@@ -19,6 +19,7 @@ async def visualize_document(
     *,
     document_id: UUID,
     output: Path,
+    export_3d: bool = False,
 ) -> tuple[Path, Path]:
     """Export one stored document graph as canonical JSON and interactive HTML."""
 
@@ -38,6 +39,12 @@ async def visualize_document(
         visualizer.to_html(network, title=f"Graph RAG · {document_id}"),
         encoding="utf-8",
     )
+    if export_3d:
+        html_3d_output = html_output.with_name(f"{html_output.stem}-3d.html")
+        html_3d_output.write_text(
+            visualizer.to_3d_html(network, title=f"Graph RAG · {document_id} · 3D"),
+            encoding="utf-8",
+        )
     return json_output, html_output
 
 
@@ -48,6 +55,7 @@ async def merge_wiki_base(
     output: Path,
     embedding_model: str | None = None,
     synonym_similarity_threshold: float = 0.95,
+    export_3d: bool = False,
 ) -> tuple[Path, Path]:
     """Merge ready graphs for a wiki base and write JSON and HTML artifacts."""
 
@@ -89,6 +97,14 @@ async def merge_wiki_base(
         ),
         encoding="utf-8",
     )
+    if export_3d:
+        html_3d_output = html_output.with_name(f"{html_output.stem}-3d.html")
+        html_3d_output.write_text(
+            visualizer.to_3d_html(
+                visualizer.build(), title=f"Graph RAG · Wiki Base {wiki_base_id} · 3D"
+            ),
+            encoding="utf-8",
+        )
     return output, html_output
 
 
@@ -100,16 +116,20 @@ def run_visualizer() -> None:
     )
     parser.add_argument("document_id", type=UUID, help="Document UUID")
     parser.add_argument("--output", type=Path, help="Output HTML path")
+    parser.add_argument("--3d", dest="export_3d", action="store_true", help="Also export 3D HTML")
     arguments = parser.parse_args()
     output = arguments.output or Path(f"{arguments.document_id}.html")
     output_json, output_html = asyncio.run(
         _visualize_from_settings(
             document_id=arguments.document_id,
             output=output,
+            export_3d=arguments.export_3d,
         )
     )
     print(output_json)
     print(output_html)
+    if arguments.export_3d:
+        print(output_html.with_name(f"{output_html.stem}-3d.html"))
 
 
 def run_merger() -> None:
@@ -120,20 +140,24 @@ def run_merger() -> None:
     )
     parser.add_argument("wiki_base_id", type=UUID, help="Wiki base UUID")
     parser.add_argument("--output", type=Path, help="Output canonical JSON path")
+    parser.add_argument("--3d", dest="export_3d", action="store_true", help="Also export 3D HTML")
     arguments = parser.parse_args()
     output = arguments.output or Path(f"{arguments.wiki_base_id}.json")
     output_json, output_html = asyncio.run(
         _merge_from_settings(
             wiki_base_id=arguments.wiki_base_id,
             output=output,
+            export_3d=arguments.export_3d,
         )
     )
     print(output_json)
     print(output_html)
+    if arguments.export_3d:
+        print(output_html.with_name(f"{output_html.stem}-3d.html"))
 
 
 async def _visualize_from_settings(
-    *, document_id: UUID, output: Path
+    *, document_id: UUID, output: Path, export_3d: bool = False
 ) -> tuple[Path, Path]:
     """Export one graph using the configured database."""
 
@@ -145,6 +169,7 @@ async def _visualize_from_settings(
             database,
             document_id=document_id,
             output=output,
+            export_3d=export_3d,
         )
     finally:
         await database.disconnect()
@@ -154,6 +179,7 @@ async def _merge_from_settings(
     *,
     wiki_base_id: UUID,
     output: Path,
+    export_3d: bool = False,
 ) -> tuple[Path, Path]:
     """Merge ready graphs using the configured database."""
 
@@ -166,9 +192,8 @@ async def _merge_from_settings(
             wiki_base_id=wiki_base_id,
             output=output,
             embedding_model=settings.embedding_model,
-            synonym_similarity_threshold=(
-                settings.graph_synonym_similarity_threshold
-            ),
+            synonym_similarity_threshold=(settings.graph_synonym_similarity_threshold),
+            export_3d=export_3d,
         )
     finally:
         await database.disconnect()
