@@ -277,7 +277,10 @@ class GraphVisualizer:
         )
         nodes = list(network.nodes(data=True))
         node_sizes = [GraphVisualizer._3d_node_size(attributes) for _node, attributes in nodes]
-        node_labels = [attributes.get("label", str(node)) for node, attributes in nodes]
+        node_labels = [
+            GraphVisualizer._3d_node_label(node, attributes)
+            for node, attributes in nodes
+        ]
         node_trace = go.Scatter3d(
             x=[positions[node][0] for node, _attributes in nodes],
             y=[positions[node][1] for node, _attributes in nodes],
@@ -332,6 +335,14 @@ class GraphVisualizer:
     def _3d_node_size(attributes: dict[str, Any]) -> float:
         base_size = max(5.0, min(18.0, float(attributes.get("size", 12)) / 2))
         return base_size * _3D_NODE_SIZE_SCALE
+
+    @staticmethod
+    def _3d_node_label(node: object, attributes: dict[str, Any]) -> str:
+        """Show persistent labels only for hub nodes; others use hover text."""
+
+        if attributes.get("connectivity") != "hub":
+            return ""
+        return str(attributes.get("label", node))
 
     @staticmethod
     def _style_entity_nodes(network: nx.MultiDiGraph) -> None:

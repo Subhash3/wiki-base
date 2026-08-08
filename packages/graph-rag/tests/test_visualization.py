@@ -155,6 +155,13 @@ def test_scales_3d_node_sizes() -> None:
     assert GraphVisualizer._3d_node_size({"size": 48}) == 32.4
 
 
+def test_only_hubs_receive_persistent_3d_labels() -> None:
+    assert GraphVisualizer._3d_node_label("alice", {"connectivity": "leaf"}) == ""
+    assert GraphVisualizer._3d_node_label(
+        "acme", {"connectivity": "hub", "label": "Acme Corp"}
+    ) == "Acme Corp"
+
+
 def test_groups_tooltip_chunks_by_document() -> None:
     """Provenance tooltips display each document identifier once."""
 
