@@ -4,12 +4,13 @@ from llm_providers.generation.groq import (
     GroqGenerationProvider,
     GroqRateLimiter,
 )
+from llm_providers.generation.llama_cpp import LlamaCppGenerationProvider
 from llm_providers.generation.ollama import OllamaGenerationProvider
 
 from wiki_base.config.settings import Settings
 
-GenerationProviderName = Literal["ollama", "groq"]
-GenerationProvider = OllamaGenerationProvider | GroqGenerationProvider
+GenerationProviderName = Literal["ollama", "groq", "llama-cpp"]
+GenerationProvider = OllamaGenerationProvider | GroqGenerationProvider | LlamaCppGenerationProvider
 
 
 def create_groq_rate_limiter(settings: Settings) -> GroqRateLimiter:
@@ -30,13 +31,20 @@ def create_generation_provider(
     model: str,
     groq_rate_limiter: GroqRateLimiter,
 ) -> GenerationProvider:
-    """Create an Ollama or Groq generation provider."""
+    """Create the selected generation provider."""
 
     if provider == "ollama":
         return OllamaGenerationProvider(
             base_url=settings.ollama_url,
             model=model,
             timeout_seconds=settings.ollama_timeout_seconds,
+        )
+
+    if provider == "llama-cpp":
+        return LlamaCppGenerationProvider(
+            base_url=settings.llama_cpp_url,
+            model=model,
+            timeout_seconds=settings.llama_cpp_timeout_seconds,
         )
 
     if settings.groq_api_key is None:

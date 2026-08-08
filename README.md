@@ -43,6 +43,16 @@ WIKI_BASE_ANSWER_GENERATION_PROVIDER=ollama
 WIKI_BASE_ANSWER_GENERATION_MODEL=gemma3:270m
 ```
 
+Both generation roles also support a local llama.cpp server through its
+OpenAI-compatible API:
+
+```env
+WIKI_BASE_ANSWER_GENERATION_PROVIDER=llama-cpp
+WIKI_BASE_ANSWER_GENERATION_MODEL=local-model
+WIKI_BASE_LLAMA_CPP_URL=http://127.0.0.1:8080
+WIKI_BASE_LLAMA_CPP_TIMEOUT_SECONDS=120
+```
+
 The extraction model handles graph indexing and query-concept extraction. The answer model
 is used only after retrieval has selected supporting chunks. Groq defaults stay below the
 documented GPT-OSS free-tier minute and daily limits and stop locally when the daily budget

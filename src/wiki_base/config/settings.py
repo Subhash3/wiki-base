@@ -33,10 +33,12 @@ class Settings(BaseSettings):
     embedding_batch_size: int = Field(default=16, ge=1)
     ollama_url: str = "http://127.0.0.1:11434"
     ollama_timeout_seconds: float = Field(default=120, gt=0)
-    extraction_provider: Literal["ollama", "groq"] = "ollama"
+    extraction_provider: Literal["ollama", "groq", "llama-cpp"] = "ollama"
     extraction_model: str = "gemma3:270m"
-    answer_generation_provider: Literal["ollama", "groq"] = "ollama"
+    answer_generation_provider: Literal["ollama", "groq", "llama-cpp"] = "ollama"
     answer_generation_model: str = "gemma3:270m"
+    llama_cpp_url: str = "http://127.0.0.1:8080"
+    llama_cpp_timeout_seconds: float = Field(default=120, gt=0)
     groq_api_key: SecretStr | None = None
     groq_url: str = "https://api.groq.com/openai/v1"
     groq_timeout_seconds: float = Field(default=120, gt=0)
