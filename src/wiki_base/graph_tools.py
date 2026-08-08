@@ -59,6 +59,46 @@ async def merge_wiki_base(
 ) -> tuple[Path, Path]:
     """Merge ready graphs for a wiki base and write JSON and HTML artifacts."""
 
+    graph = await load_merged_wiki_base_graph(
+        database,
+        wiki_base_id=wiki_base_id,
+        embedding_model=embedding_model,
+        synonym_similarity_threshold=synonym_similarity_threshold,
+    )
+
+    output = _require_suffix(output, ".json")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(graph.to_json(), encoding="utf-8")
+
+    visualizer = GraphVisualizer(graph)
+    html_output = output.with_suffix(".html")
+    html_output.write_text(
+        visualizer.to_html(
+            visualizer.build(),
+            title=f"Graph RAG · Wiki Base {wiki_base_id}",
+        ),
+        encoding="utf-8",
+    )
+    if export_3d:
+        html_3d_output = html_output.with_name(f"{html_output.stem}-3d.html")
+        html_3d_output.write_text(
+            visualizer.to_3d_html(
+                visualizer.build(), title=f"Graph RAG · Wiki Base {wiki_base_id} · 3D"
+            ),
+            encoding="utf-8",
+        )
+    return output, html_output
+
+
+async def load_merged_wiki_base_graph(
+    database: Database,
+    *,
+    wiki_base_id: UUID,
+    embedding_model: str | None = None,
+    synonym_similarity_threshold: float = 0.95,
+) -> KnowledgeGraph:
+    """Load and merge all ready document graphs for a wiki base."""
+
     async with database.connection() as connection:
         payloads = await list_ready_wiki_base_graphs(connection, wiki_base_id)
         synonyms = (
@@ -83,29 +123,7 @@ async def merge_wiki_base(
             synonym.second,
             similarity=synonym.similarity,
         )
-
-    output = _require_suffix(output, ".json")
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(graph.to_json(), encoding="utf-8")
-
-    visualizer = GraphVisualizer(graph)
-    html_output = output.with_suffix(".html")
-    html_output.write_text(
-        visualizer.to_html(
-            visualizer.build(),
-            title=f"Graph RAG · Wiki Base {wiki_base_id}",
-        ),
-        encoding="utf-8",
-    )
-    if export_3d:
-        html_3d_output = html_output.with_name(f"{html_output.stem}-3d.html")
-        html_3d_output.write_text(
-            visualizer.to_3d_html(
-                visualizer.build(), title=f"Graph RAG · Wiki Base {wiki_base_id} · 3D"
-            ),
-            encoding="utf-8",
-        )
-    return output, html_output
+    return graph
 
 
 def run_visualizer() -> None:

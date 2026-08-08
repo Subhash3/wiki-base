@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wiki Base · Graph visualization</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="importmap">
+      {"imports":{"d3-force-3d":"https://cdn.jsdelivr.net/npm/d3-force-3d@3.0.6/+esm"}}
+    </script>
+  </head>
+  <body>
+    <header class="toolbar">
+      <a href="../" class="brand">Wiki Base</a>
+      <label for="wiki-base-select">Knowledge graph</label>
+      <select id="wiki-base-select">
+        <option value="">Select a wiki base</option>
+      </select>
+      <button id="reset-view" type="button">Reset view</button>
+      <p id="stats" class="stats"></p>
+    </header>
+    <main id="viewport">
+      <canvas id="graph" aria-label="Interactive 3D knowledge graph"></canvas>
+      <p id="message" class="message" aria-live="polite">Select a wiki base to view its graph.</p>
+      <div id="tooltip" class="tooltip" hidden></div>
+      <aside id="node-panel" class="node-panel" hidden>
+        <section class="widget">
+          <button id="close-panel" class="close" type="button" aria-label="Close node details">×</button>
+          <p class="eyebrow">Selected node</p>
+          <h2 id="node-name">Node info</h2>
+          <div id="node-info" class="widget-content"></div>
+        </section>
+        <section class="widget">
+          <p class="eyebrow">Knowledge graph</p>
+          <h2>Facts about the node</h2>
+          <div id="node-facts" class="widget-content"></div>
+        </section>
+      </aside>
+      <div class="legend">
+        <span><i class="fact"></i> Relationship</span>
+        <span><i class="synonym"></i> Synonym</span>
+        <span>Drag to move · Ctrl + drag to rotate · Drag nodes to reposition · Scroll to zoom</span>
+      </div>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

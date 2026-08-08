@@ -1,5 +1,7 @@
+from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from io import BytesIO
+from types import SimpleNamespace
 from uuid import UUID
 
 import pytest
@@ -8,9 +10,13 @@ from starlette.datastructures import Headers
 
 from wiki_base.api.routes.wiki_bases import (
     create_wiki_base,
+    get_wiki_base_graph,
+    get_wiki_base_graph_node,
+    get_wiki_base_graph_node_facts,
     get_wiki_base_status,
     list_wiki_bases,
 )
+from wiki_base.config.settings import Settings
 from wiki_base.database.queries.wiki_bases import _aggregate_status
 from wiki_base.database.records import IngestionStatus
 from wiki_base.retrieval import RetrievalMode
@@ -158,6 +164,77 @@ async def test_list_wiki_bases_returns_summaries() -> None:
     assert response[0].retrieval_statuses[RetrievalMode.PRO] == "processing"
     assert response[0].retrieval_statuses[RetrievalMode.FACTS] == "processing"
     assert response[0].document_count == 2
+
+
+async def test_get_wiki_base_graph_returns_merged_canonical_graph(monkeypatch) -> None:
+    from graph_rag import KnowledgeGraph, Triple, TripleProvenance
+
+    wiki_base_id = UUID("0190f3a0-7d83-7a41-a27c-b7314f5ae705")
+    graph = KnowledgeGraph()
+    graph.add_triple(
+        Triple(subject="alice", relation="works at", object="acme"),
+        provenance=TripleProvenance(
+            document_id=UUID("0190f3a0-b096-7af5-8392-cc61de46f6de"),
+            chunk_id=UUID("0190f3a1-a0ee-77ac-a76b-fb191cb0f8a0"),
+        ),
+    )
+
+    async def load(_database, **arguments):
+        assert arguments["wiki_base_id"] == wiki_base_id
+        return graph
+
+    monkeypatch.setattr("wiki_base.api.routes.wiki_bases.load_merged_wiki_base_graph", load)
+    response = await get_wiki_base_graph(
+        wiki_base_id=wiki_base_id,
+        database=object(),
+        settings=Settings(),
+    )
+
+    assert response["version"] == 2
+    assert response["edges"][0]["relation"] == "works at"
+
+
+async def test_graph_node_endpoints_return_metadata_and_direct_facts(monkeypatch) -> None:
+    from graph_rag import KnowledgeGraph, Triple, TripleProvenance
+
+    wiki_base_id = UUID("0190f3a0-7d83-7a41-a27c-b7314f5ae705")
+    document_id = UUID("0190f3a0-b096-7af5-8392-cc61de46f6de")
+    graph = KnowledgeGraph()
+    graph.add_triple(
+        Triple(subject="alice", relation="works at", object="acme"),
+        provenance=TripleProvenance(
+            document_id=document_id,
+            chunk_id=UUID("0190f3a1-a0ee-77ac-a76b-fb191cb0f8a0"),
+        ),
+    )
+
+    async def load(_database, **_arguments):
+        return graph
+
+    async def documents(_connection, _wiki_base_id):
+        return [SimpleNamespace(id=document_id, name="handbook.pdf")]
+
+    class StubDatabase:
+        @asynccontextmanager
+        async def connection(self):
+            yield object()
+
+    monkeypatch.setattr("wiki_base.api.routes.wiki_bases.load_merged_wiki_base_graph", load)
+    monkeypatch.setattr("wiki_base.api.routes.wiki_bases.list_wiki_base_documents", documents)
+    arguments = {
+        "wiki_base_id": wiki_base_id,
+        "database": StubDatabase(),
+        "settings": Settings(),
+        "name": "alice",
+    }
+
+    info = await get_wiki_base_graph_node(**arguments)
+    facts = await get_wiki_base_graph_node_facts(**arguments)
+
+    assert info.link_count == 1
+    assert info.documents[0].name == "handbook.pdf"
+    assert facts.facts[0].relation == "works at"
+    assert facts.facts[0].document_names == ["handbook.pdf"]
 
 
 @pytest.mark.parametrize(

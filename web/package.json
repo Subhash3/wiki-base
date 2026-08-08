@@ -1,0 +1,8 @@
+{
+  "name": "wiki-base-web",
+  "private": true,
+  "type": "module",
+  "scripts": { "check": "tsc --noEmit" },
+  "dependencies": { "d3-force-3d": "^3.0.6" },
+  "devDependencies": { "typescript": "^5.9.2" }
+}
