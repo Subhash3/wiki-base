@@ -2,9 +2,11 @@
 
 Provider interfaces and implementations shared by projects in this workspace.
 
-The package supports Ollama embeddings and Ollama, llama.cpp, or Groq structured,
-citation-aware generation. The llama.cpp provider uses the server's OpenAI-compatible
-chat completions API with JSON-schema constrained output. Groq generation uses strict
+The package supports Ollama and OpenAI-compatible embeddings, plus Ollama, llama.cpp, or
+Groq structured, citation-aware generation. OpenAI-compatible embeddings work with services
+such as OpenAI and llama.cpp's `/v1/embeddings` endpoint. The llama.cpp generation provider
+uses the server's OpenAI-compatible chat completions API with JSON-schema constrained output.
+Groq generation uses strict
 JSON schemas, conservative free-tier throttling, and at most one retry for rate-limit
 responses. Structured generation `400` responses are classified without retrying. A
 provider-neutral reranking interface is also included.

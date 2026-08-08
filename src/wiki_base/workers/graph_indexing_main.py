@@ -2,11 +2,11 @@ import asyncio
 import logging
 
 from graph_rag import HippoRAGIndexer, LLMPassageEntityExtractor, LLMTripleExtractor
-from llm_providers.embeddings.ollama import OllamaEmbeddingProvider
 
 from wiki_base.config.logging import configure_logging
 from wiki_base.config.settings import get_settings
 from wiki_base.database.connection import Database
+from wiki_base.embeddings import create_embedding_provider
 from wiki_base.generation import create_generation_provider, create_groq_rate_limiter
 from wiki_base.workers.graph_indexing import GraphIndexingWorker
 
@@ -24,11 +24,12 @@ async def run_worker() -> None:
     )
     logger.info(
         "graph indexing worker configuration extraction_provider=%s "
-        "extraction_model=%s embedding_model=%s index_version=%s "
+        "extraction_model=%s embedding_provider=%s embedding_model=%s index_version=%s "
         "embedding_batch_size=%d synonym_similarity_threshold=%.3f "
         "synonym_max_links=%d poll_interval_seconds=%.3f",
         settings.extraction_provider,
         settings.extraction_model,
+        settings.embedding_provider,
         settings.embedding_model,
         settings.graph_index_version,
         settings.graph_entity_embedding_batch_size,
@@ -43,12 +44,7 @@ async def run_worker() -> None:
         model=settings.extraction_model,
         groq_rate_limiter=create_groq_rate_limiter(settings),
     )
-    embeddings = OllamaEmbeddingProvider(
-        base_url=settings.ollama_url,
-        model=settings.embedding_model,
-        dimensions=settings.embedding_dimensions,
-        timeout_seconds=settings.ollama_timeout_seconds,
-    )
+    embeddings = create_embedding_provider(settings)
     worker = GraphIndexingWorker(
         database=database,
         indexer=HippoRAGIndexer(

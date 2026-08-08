@@ -5,11 +5,11 @@ from document_processing.chunking.docling import DoclingDocumentChunker
 from document_processing.parsing import DocxDocumentParser, PdfDocumentParser, PptxDocumentParser
 from document_processing.parsing.docling_converter import DoclingConverter
 from document_processing.parsing.registry import ParserRegistry
-from llm_providers.embeddings.ollama import OllamaEmbeddingProvider
 
 from wiki_base.config.logging import configure_logging
 from wiki_base.config.settings import get_settings
 from wiki_base.database.connection import Database
+from wiki_base.embeddings import create_embedding_provider
 from wiki_base.ingestion.pipeline import IngestionPipeline
 from wiki_base.workers.ingestion import IngestionWorker
 
@@ -24,9 +24,11 @@ async def run_worker() -> None:
         process_name="ingestion-worker",
     )
     logger.info(
-        "ingestion worker configuration embedding_model=%s embedding_batch_size=%d "
+        "ingestion worker configuration embedding_provider=%s embedding_model=%s "
+        "embedding_batch_size=%d "
         "chunk_max_tokens=%d chunk_tokenizer_model=%s ocr_languages=%s "
         "ocr_force_full_page=%s poll_interval_seconds=%.3f",
+        settings.embedding_provider,
         settings.embedding_model,
         settings.embedding_batch_size,
         settings.chunk_max_tokens,
@@ -37,12 +39,7 @@ async def run_worker() -> None:
     )
 
     database = Database(settings.database_url)
-    provider = OllamaEmbeddingProvider(
-        base_url=settings.ollama_url,
-        model=settings.embedding_model,
-        dimensions=settings.embedding_dimensions,
-        timeout_seconds=settings.ollama_timeout_seconds,
-    )
+    provider = create_embedding_provider(settings)
     converter = DoclingConverter(
         ocr_languages=settings.parsed_ocr_languages,
         force_full_page_ocr=settings.ocr_force_full_page,

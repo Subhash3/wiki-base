@@ -53,6 +53,18 @@ WIKI_BASE_LLAMA_CPP_URL=http://127.0.0.1:8080
 WIKI_BASE_LLAMA_CPP_TIMEOUT_SECONDS=120
 ```
 
+Embeddings can use Ollama, a llama.cpp embedding server, or another OpenAI-compatible API:
+
+```env
+WIKI_BASE_EMBEDDING_PROVIDER=llama-cpp
+WIKI_BASE_EMBEDDING_MODEL=bge-m3
+WIKI_BASE_EMBEDDING_DIMENSIONS=1024
+WIKI_BASE_LLAMA_CPP_URL=http://127.0.0.1:8080
+```
+
+For another compatible service, select `openai-compatible` and configure
+`WIKI_BASE_EMBEDDING_BASE_URL` plus the optional `WIKI_BASE_EMBEDDING_API_KEY`.
+
 The extraction model handles graph indexing and query-concept extraction. The answer model
 is used only after retrieval has selected supporting chunks. Groq defaults stay below the
 documented GPT-OSS free-tier minute and daily limits and stop locally when the daily budget

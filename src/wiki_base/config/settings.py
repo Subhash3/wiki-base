@@ -28,9 +28,14 @@ class Settings(BaseSettings):
     max_document_size_bytes: int = Field(default=50 * 1024 * 1024, ge=1)
     max_request_size_bytes: int = Field(default=500 * 1024 * 1024, ge=1)
 
+    embedding_provider: Literal["ollama", "llama-cpp", "openai-compatible"] = "ollama"
     embedding_model: str = "bge-m3:latest"
     embedding_dimensions: int = Field(default=1024, ge=1)
     embedding_batch_size: int = Field(default=16, ge=1)
+    embedding_max_tokens: int = Field(default=8192, ge=1)
+    embedding_base_url: str | None = None
+    embedding_api_key: SecretStr | None = None
+    embedding_timeout_seconds: float = Field(default=120, gt=0)
     ollama_url: str = "http://127.0.0.1:11434"
     ollama_timeout_seconds: float = Field(default=120, gt=0)
     extraction_provider: Literal["ollama", "groq", "llama-cpp"] = "ollama"
@@ -53,7 +58,7 @@ class Settings(BaseSettings):
     chunk_max_tokens: int = Field(default=700, ge=50)
     chunk_tokenizer_model: str = "BAAI/bge-m3"
     worker_poll_interval_seconds: float = Field(default=1, gt=0)
-    graph_index_version: str = "3"
+    graph_index_version: str = "4"
     graph_entity_similarity_threshold: float = Field(default=0.75, ge=-1, le=1)
     graph_relationship_similarity_threshold: float = Field(default=0.6, ge=-1, le=1)
     graph_entity_max_links: int = Field(default=1, ge=1)

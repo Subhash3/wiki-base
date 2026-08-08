@@ -6,13 +6,13 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from graph_rag import EmbeddingEntityLinker
-from llm_providers.embeddings.ollama import OllamaEmbeddingProvider
 
 from wiki_base.api.errors import ServiceError, service_error_handler
 from wiki_base.api.routes import router
 from wiki_base.config.logging import configure_logging
 from wiki_base.config.settings import get_settings
 from wiki_base.database.connection import Database
+from wiki_base.embeddings import create_embedding_provider
 from wiki_base.generation import (
     create_generation_provider,
     create_groq_rate_limiter,
@@ -30,12 +30,13 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         process_name="api",
     )
     logger.info(
-        "API configuration environment=%s embedding_model=%s "
+        "API configuration environment=%s embedding_provider=%s embedding_model=%s "
         "extraction_provider=%s extraction_model=%s "
         "answer_generation_provider=%s answer_generation_model=%s "
         "entity_similarity_threshold=%.3f relationship_similarity_threshold=%.3f "
         "fact_max_depth=%d fact_max_candidates=%d fact_max_facts=%d",
         settings.environment,
+        settings.embedding_provider,
         settings.embedding_model,
         settings.extraction_provider,
         settings.extraction_model,
@@ -54,12 +55,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         max_size=settings.database_max_pool_size,
     )
     app.state.database = database
-    embedding_provider = OllamaEmbeddingProvider(
-        base_url=settings.ollama_url,
-        model=settings.embedding_model,
-        dimensions=settings.embedding_dimensions,
-        timeout_seconds=settings.ollama_timeout_seconds,
-    )
+    embedding_provider = create_embedding_provider(settings)
     app.state.embedding_provider = embedding_provider
     app.state.entity_linker = EmbeddingEntityLinker(
         embeddings=embedding_provider,
