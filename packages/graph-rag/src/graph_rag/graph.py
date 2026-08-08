@@ -1,11 +1,12 @@
 import json
 from collections.abc import Iterator
 from typing import Any
-from uuid import UUID
+from uuid import UUID, uuid5
 
 from graph_rag.models import GraphEdge, SynonymEdge, Triple, TripleProvenance
 
 EdgeKey = tuple[str, str, str]
+NODE_ID_NAMESPACE = UUID("32ad6069-90c3-4b8f-b1cc-81837cfcae7d")
 
 
 class KnowledgeGraph:
@@ -80,12 +81,15 @@ class KnowledgeGraph:
     def to_dict(self) -> dict[str, Any]:
         """Return the canonical graph as a JSON-compatible mapping."""
 
-        entities = [
+        nodes = [
             {
-                "entity": entity,
-                "provenance": self._serialize_provenance(provenance),
+                "id": self.node_id(entity),
+                "name": entity,
+                "provenance": self._serialize_provenance(
+                    self.entity_provenance_for_node(entity)
+                ),
             }
-            for entity, provenance in sorted(self._entity_provenance.items())
+            for entity in sorted(self.nodes)
         ]
         edges = []
         for edge in sorted(
@@ -94,16 +98,16 @@ class KnowledgeGraph:
         ):
             edges.append(
                 {
-                    "subject": edge.subject,
+                    "source": self.node_id(edge.subject),
                     "relation": edge.relation,
-                    "object": edge.object,
+                    "target": self.node_id(edge.object),
                     "provenance": self._serialize_provenance(edge.provenance),
                 }
             )
         synonyms = [
             {
-                "first": synonym.first,
-                "second": synonym.second,
+                "source": self.node_id(synonym.first),
+                "target": self.node_id(synonym.second),
                 "similarity": synonym.similarity,
             }
             for synonym in sorted(
@@ -112,8 +116,8 @@ class KnowledgeGraph:
             )
         ]
         return {
-            "version": 2,
-            "entities": entities,
+            "version": 3,
+            "nodes": nodes,
             "edges": edges,
             "synonyms": synonyms,
         }
@@ -128,8 +132,10 @@ class KnowledgeGraph:
     def from_dict(cls, payload: Any) -> "KnowledgeGraph":
         """Load a canonical graph from a JSON-compatible mapping."""
 
-        if not isinstance(payload, dict) or payload.get("version") not in {1, 2}:
+        if not isinstance(payload, dict) or payload.get("version") not in {1, 2, 3}:
             raise ValueError("Unsupported knowledge graph JSON")
+        if payload.get("version") == 3:
+            return cls._from_version_three(payload)
         edges = payload.get("edges")
         if not isinstance(edges, list):
             raise ValueError("Knowledge graph JSON has invalid edges")
@@ -152,6 +158,65 @@ class KnowledgeGraph:
         for synonym in synonyms:
             first, second, similarity = cls._parse_synonym(synonym)
             graph.add_synonym(first, second, similarity=similarity)
+        return graph
+
+    @classmethod
+    def _from_version_three(cls, payload: dict[str, Any]) -> "KnowledgeGraph":
+        """Load a node-ID-based canonical graph."""
+
+        nodes = payload.get("nodes")
+        edges = payload.get("edges")
+        synonyms = payload.get("synonyms", [])
+        if not isinstance(nodes, list) or not isinstance(edges, list):
+            raise ValueError("Knowledge graph JSON has invalid nodes or edges")
+        if not isinstance(synonyms, list):
+            raise ValueError("Knowledge graph JSON has invalid synonyms")
+
+        graph = cls()
+        names_by_id: dict[str, str] = {}
+        for node in nodes:
+            if not isinstance(node, dict):
+                raise ValueError("Knowledge graph JSON has an invalid node")
+            node_id = node.get("id")
+            name = node.get("name")
+            if (
+                not isinstance(node_id, str)
+                or not isinstance(name, str)
+                or node_id != graph.node_id(name)
+                or node_id in names_by_id
+            ):
+                raise ValueError("Knowledge graph JSON has an invalid node")
+            names_by_id[node_id] = name
+            for source in cls._parse_provenance(node.get("provenance")):
+                graph.add_entity(name, provenance=source)
+
+        for edge in edges:
+            if not isinstance(edge, dict):
+                raise ValueError("Knowledge graph JSON has an invalid edge")
+            source = names_by_id.get(edge.get("source"))
+            target = names_by_id.get(edge.get("target"))
+            relation = edge.get("relation")
+            if source is None or target is None or not isinstance(relation, str):
+                raise ValueError("Knowledge graph JSON has an invalid edge reference")
+            for provenance in cls._parse_provenance(edge.get("provenance")):
+                graph.add_triple(
+                    Triple(subject=source, relation=relation, object=target),
+                    provenance=provenance,
+                )
+
+        for synonym in synonyms:
+            if not isinstance(synonym, dict):
+                raise ValueError("Knowledge graph JSON has an invalid synonym")
+            source = names_by_id.get(synonym.get("source"))
+            target = names_by_id.get(synonym.get("target"))
+            similarity = synonym.get("similarity")
+            if (
+                source is None
+                or target is None
+                or not isinstance(similarity, int | float)
+            ):
+                raise ValueError("Knowledge graph JSON has an invalid synonym reference")
+            graph.add_synonym(source, target, similarity=float(similarity))
         return graph
 
     @staticmethod
@@ -247,6 +312,17 @@ class KnowledgeGraph:
         """Return all entity nodes."""
 
         return frozenset(self._entity_provenance | self._triple_node_provenance)
+
+    @staticmethod
+    def node_id(entity: str) -> str:
+        """Return the stable canonical identifier for an entity name."""
+
+        return str(uuid5(NODE_ID_NAMESPACE, entity))
+
+    def node_name(self, node_id: str) -> str | None:
+        """Resolve a canonical node identifier to its entity name."""
+
+        return next((name for name in self.nodes if self.node_id(name) == node_id), None)
 
     def edges(self) -> Iterator[GraphEdge]:
         """Iterate over factual edges."""

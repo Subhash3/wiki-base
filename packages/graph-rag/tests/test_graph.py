@@ -77,7 +77,7 @@ def test_canonical_dict_round_trip_preserves_graph() -> None:
 
 
 def test_round_trip_preserves_isolated_entity_mentions_and_synonyms() -> None:
-    """Canonical version 2 retains passage associations and semantic edges."""
+    """Canonical version 3 retains passage associations and semantic edges."""
 
     graph = KnowledgeGraph()
     provenance = TripleProvenance(document_id=DOCUMENT_ONE, chunk_id=CHUNK_ONE)
@@ -88,10 +88,33 @@ def test_round_trip_preserves_isolated_entity_mentions_and_synonyms() -> None:
     payload = graph.to_dict()
     loaded = KnowledgeGraph.from_dict(payload)
 
-    assert payload["version"] == 2
+    assert payload["version"] == 3
+    assert {node["name"] for node in payload["nodes"]} == {
+        "glamour",
+        "honda glamour",
+    }
+    assert payload["synonyms"][0]["source"] in {
+        node["id"] for node in payload["nodes"]
+    }
     assert loaded.nodes == frozenset({"glamour", "honda glamour"})
     assert loaded.entity_provenance_for_node("glamour") == frozenset({provenance})
     assert list(loaded.synonyms())[0].similarity == 0.91
+
+
+def test_node_ids_are_stable_and_edges_reference_them() -> None:
+    graph = KnowledgeGraph()
+    graph.add_triple(
+        Triple(subject="alice", relation="works at", object="acme"),
+        provenance=TripleProvenance(document_id=DOCUMENT_ONE, chunk_id=CHUNK_ONE),
+    )
+
+    payload = graph.to_dict()
+    nodes = {node["name"]: node["id"] for node in payload["nodes"]}
+
+    assert nodes["alice"] == graph.node_id("alice")
+    assert KnowledgeGraph().node_id("alice") == nodes["alice"]
+    assert payload["edges"][0]["source"] == nodes["alice"]
+    assert payload["edges"][0]["target"] == nodes["acme"]
 
 
 def test_loads_legacy_version_one_graphs() -> None:

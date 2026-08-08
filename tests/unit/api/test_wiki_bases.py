@@ -190,7 +190,8 @@ async def test_get_wiki_base_graph_returns_merged_canonical_graph(monkeypatch) -
         settings=Settings(),
     )
 
-    assert response["version"] == 2
+    assert response["version"] == 3
+    assert response["nodes"][0]["id"]
     assert response["edges"][0]["relation"] == "works at"
 
 
@@ -223,17 +224,19 @@ async def test_graph_node_endpoints_return_metadata_and_direct_facts(monkeypatch
     monkeypatch.setattr("wiki_base.api.routes.wiki_bases.list_wiki_base_documents", documents)
     arguments = {
         "wiki_base_id": wiki_base_id,
+        "node_id": UUID(graph.node_id("alice")),
         "database": StubDatabase(),
         "settings": Settings(),
-        "name": "alice",
     }
 
     info = await get_wiki_base_graph_node(**arguments)
     facts = await get_wiki_base_graph_node_facts(**arguments)
 
     assert info.link_count == 1
+    assert info.id == UUID(graph.node_id("alice"))
     assert info.documents[0].name == "handbook.pdf"
     assert facts.facts[0].relation == "works at"
+    assert facts.facts[0].subject_id == UUID(graph.node_id("alice"))
     assert facts.facts[0].document_names == ["handbook.pdf"]
 
 

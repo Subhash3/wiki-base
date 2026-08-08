@@ -31,8 +31,8 @@ and `LLMTripleExtractor` uses those concepts for schema-constrained OpenIE. Node
 entity-mention and triple provenance separately, while edges retain supporting triples.
 If a provider rejects one structured passage output as recoverable, indexing logs the
 document and chunk, skips that extraction result without retrying, and continues.
-Canonical graph version 2 serializes isolated entity mentions and remains able to read
-version 1 edge-only graphs during migration.
+Canonical graph version 3 assigns stable IDs to nodes and references those IDs from edges
+and synonyms. Versions 1 and 2 remain readable for imported or transitional graphs.
 
 `KnowledgeGraph.merge(first, second)` combines independently indexed document graphs into
 a new corpus graph without mutating either input. Duplicate facts and provenance are

@@ -1,7 +1,7 @@
 from typing import Annotated, Any
 from uuid import UUID
 
-from fastapi import APIRouter, File, Form, Query, UploadFile, status
+from fastapi import APIRouter, File, Form, UploadFile, status
 
 from wiki_base.api.dependencies import (
     DatabaseDependency,
@@ -77,17 +77,17 @@ async def get_wiki_base_graph(
     return graph.to_dict()
 
 
-@router.get("/{wiki_base_id}/graph/node", response_model=GraphNodeInfoResponse)
+@router.get("/{wiki_base_id}/graph/nodes/{node_id}", response_model=GraphNodeInfoResponse)
 async def get_wiki_base_graph_node(
     wiki_base_id: UUID,
+    node_id: UUID,
     database: DatabaseDependency,
     settings: SettingsDependency,
-    name: Annotated[str, Query(min_length=1)],
 ) -> GraphNodeInfoResponse:
     """Return connectivity and source-document metadata for one graph node."""
 
     graph = await _load_graph(database, settings, wiki_base_id)
-    _require_graph_node(graph.nodes, name)
+    name = _require_graph_node(graph, node_id)
     provenance = graph.provenance_for_node(name)
     chunk_counts: dict[UUID, int] = {}
     for source in provenance:
@@ -107,6 +107,7 @@ async def get_wiki_base_graph_node(
     facts = [edge for edge in graph.edges() if name in {edge.subject, edge.object}]
     synonyms = [edge for edge in graph.synonyms() if name in {edge.first, edge.second}]
     return GraphNodeInfoResponse(
+        id=node_id,
         name=name,
         link_count=len(facts) + len(synonyms),
         fact_count=len(facts),
@@ -116,24 +117,29 @@ async def get_wiki_base_graph_node(
     )
 
 
-@router.get("/{wiki_base_id}/graph/node/facts", response_model=GraphNodeFactsResponse)
+@router.get(
+    "/{wiki_base_id}/graph/nodes/{node_id}/facts",
+    response_model=GraphNodeFactsResponse,
+)
 async def get_wiki_base_graph_node_facts(
     wiki_base_id: UUID,
+    node_id: UUID,
     database: DatabaseDependency,
     settings: SettingsDependency,
-    name: Annotated[str, Query(min_length=1)],
 ) -> GraphNodeFactsResponse:
     """Return direct canonical facts involving one graph node."""
 
     graph = await _load_graph(database, settings, wiki_base_id)
-    _require_graph_node(graph.nodes, name)
+    name = _require_graph_node(graph, node_id)
     async with database.connection() as connection:
         documents = await list_wiki_base_documents(connection, wiki_base_id)
     document_names = {document.id: document.name for document in documents}
     facts = [
         GraphNodeFactResponse(
+            subject_id=UUID(graph.node_id(edge.subject)),
             subject=edge.subject,
             relation=edge.relation,
+            object_id=UUID(graph.node_id(edge.object)),
             object=edge.object,
             document_names=sorted(
                 {
@@ -149,7 +155,7 @@ async def get_wiki_base_graph_node_facts(
             key=lambda edge: (edge.subject, edge.relation, edge.object),
         )
     ]
-    return GraphNodeFactsResponse(name=name, facts=facts)
+    return GraphNodeFactsResponse(id=node_id, name=name, facts=facts)
 
 
 async def _load_graph(database, settings, wiki_base_id: UUID):
@@ -168,10 +174,12 @@ async def _load_graph(database, settings, wiki_base_id: UUID):
         ) from error
 
 
-def _require_graph_node(nodes: frozenset[str], name: str) -> None:
-    if name not in nodes:
+def _require_graph_node(graph, node_id: UUID) -> str:
+    name = graph.node_name(str(node_id))
+    if name is None:
         raise ServiceError(
             code="graph_node_not_found",
-            message=f"Graph node {name!r} was not found.",
+            message=f"Graph node {node_id} was not found.",
             status_code=status.HTTP_404_NOT_FOUND,
         )
+    return name

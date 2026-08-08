@@ -41,22 +41,21 @@ async function readJson(response) {
 
 function graphData(payload) {
   const nodesById = new Map();
-  for (const item of payload.entities ?? []) {
-    nodesById.set(item.entity, {
-      id: item.entity,
+  for (const item of payload.nodes ?? []) {
+    nodesById.set(item.id, {
+      id: item.id,
+      name: item.name,
       kind: item.kind ?? item.type ?? "entity",
       linkCount: 0,
     });
   }
-  for (const edge of payload.edges ?? []) {
-    if (!nodesById.has(edge.subject)) nodesById.set(edge.subject, { id: edge.subject, kind: "entity", linkCount: 0 });
-    if (!nodesById.has(edge.object)) nodesById.set(edge.object, { id: edge.object, kind: "entity", linkCount: 0 });
-  }
-  const links = (payload.edges ?? []).map((edge) => ({
-    source: edge.subject, target: edge.object, label: edge.relation, kind: "fact",
-  }));
+  const links = (payload.edges ?? [])
+    .filter((edge) => nodesById.has(edge.source) && nodesById.has(edge.target))
+    .map((edge) => ({
+      source: edge.source, target: edge.target, label: edge.relation, kind: "fact",
+    }));
   for (const edge of payload.synonyms ?? []) links.push({
-    source: edge.first, target: edge.second,
+    source: edge.source, target: edge.target,
     label: `synonym · ${edge.similarity.toFixed(2)}`, kind: "synonym",
   });
   for (const link of links) {
@@ -123,11 +122,13 @@ function draw() {
   }
   context.setLineDash([]);
   projectedNodes = [...points.values()].sort((a, b) => b.depth - a.depth);
+  const maxLinkCount = Math.max(1, ...graph.nodes
+    .filter((node) => !isDocumentNode(node))
+    .map((node) => node.linkCount));
   for (const point of projectedNodes) {
     const radius = screenRadius(point);
-    const light = Math.max(48, Math.min(76, 65 - point.depth / 8));
     context.beginPath(); context.arc(point.x, point.y, radius, 0, Math.PI * 2);
-    context.fillStyle = `hsl(218 90% ${light}%)`; context.fill();
+    context.fillStyle = nodeColor(point.node, maxLinkCount); context.fill();
     if (point.node.id === selectedNodeId) {
       context.beginPath(); context.arc(point.x, point.y, radius + 4, 0, Math.PI * 2);
       context.strokeStyle = "#fff"; context.lineWidth = 1.5; context.stroke();
@@ -184,7 +185,7 @@ canvas.addEventListener("pointerdown", (event) => {
   if (event.ctrlKey) {
     dragStart = { type: "orbit", x: event.clientX, y: event.clientY, yaw, pitch };
   } else if (point) {
-    selectNode(point.node.id);
+    selectNode(point.node);
     dragStart = {
       type: "node",
       x: event.clientX,
@@ -229,8 +230,8 @@ canvas.addEventListener("pointermove", (event) => {
   tooltip.hidden = !nodeHit && !edgeHit;
   if (nodeHit || edgeHit) {
     tooltip.textContent = nodeHit
-      ? `${nodeHit.node.id} · ${nodeHit.node.linkCount} ${nodeHit.node.linkCount === 1 ? "link" : "links"}`
-      : `${nodeId(edgeHit.link.source)} — ${edgeHit.link.label} → ${nodeId(edgeHit.link.target)}`;
+      ? `${nodeHit.node.name} · ${nodeHit.node.linkCount} ${nodeHit.node.linkCount === 1 ? "link" : "links"}`
+      : `${nodeNameOf(edgeHit.link.source)} — ${edgeHit.link.label} → ${nodeNameOf(edgeHit.link.target)}`;
     tooltip.style.left = `${x + 14}px`;
     tooltip.style.top = `${y + 14}px`;
   }
@@ -268,8 +269,9 @@ function distanceToSegment(x, y, start, end) {
   return Math.hypot(x - (start.x + amount * dx), y - (start.y + amount * dy));
 }
 
-function nodeId(node) {
-  return typeof node === "object" && node !== null ? node.id : node;
+function nodeNameOf(node) {
+  if (typeof node === "object" && node !== null) return node.name;
+  return graph.nodes.find((candidate) => candidate.id === node)?.name ?? node;
 }
 
 function findNodeAt(x, y) {
@@ -285,6 +287,15 @@ function screenRadius(point) {
 
 function isDocumentNode(node) {
   return String(node.kind).toLowerCase() === "document";
+}
+
+function nodeColor(node, maxLinkCount) {
+  if (isDocumentNode(node)) return "hsl(220 12% 55%)";
+  const intensity = Math.log1p(node.linkCount) / Math.log1p(maxLinkCount);
+  const hue = 222 - intensity * 28;
+  const saturation = 48 + intensity * 47;
+  const lightness = 38 + intensity * 30;
+  return `hsl(${hue} ${saturation}% ${lightness}%)`;
 }
 
 function moveNodeInViewPlane(point, screenDx, screenDy) {
@@ -309,19 +320,18 @@ function finishDrag() {
   dragStart = undefined;
 }
 
-async function selectNode(id) {
-  selectedNodeId = id;
+async function selectNode(node) {
+  selectedNodeId = node.id;
   draw();
   nodePanel.hidden = false;
-  nodeName.textContent = String(id);
+  nodeName.textContent = node.name;
   nodeInfo.innerHTML = '<p class="loading">Loading node information…</p>';
   nodeFacts.innerHTML = '<p class="loading">Loading facts…</p>';
   const request = ++nodeRequest;
-  const name = encodeURIComponent(String(id));
   try {
     const [info, facts] = await Promise.all([
-      readJson(await fetch(`${API_BASE_URL}/wiki-bases/${select.value}/graph/node?name=${name}`)),
-      readJson(await fetch(`${API_BASE_URL}/wiki-bases/${select.value}/graph/node/facts?name=${name}`)),
+      readJson(await fetch(`${API_BASE_URL}/wiki-bases/${select.value}/graph/nodes/${node.id}`)),
+      readJson(await fetch(`${API_BASE_URL}/wiki-bases/${select.value}/graph/nodes/${node.id}/facts`)),
     ]);
     if (request !== nodeRequest) return;
     renderNodeInfo(info);

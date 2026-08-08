@@ -37,8 +37,8 @@ The client expects these API operations:
 - `GET /wiki-bases`
 - `GET /wiki-bases/{id}/status`
 - `GET /wiki-bases/{id}/graph`
-- `GET /wiki-bases/{id}/graph/node?name={entity}`
-- `GET /wiki-bases/{id}/graph/node/facts?name={entity}`
+- `GET /wiki-bases/{id}/graph/nodes/{node_id}`
+- `GET /wiki-bases/{id}/graph/nodes/{node_id}/facts`
 - `POST /query`
 
 The development API accepts browser requests from localhost, `127.0.0.1`, and `0.0.0.0` on

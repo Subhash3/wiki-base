@@ -35,4 +35,5 @@ canvas:active { cursor: grabbing; }
 .legend { position: absolute; left: 16px; bottom: 14px; display: flex; gap: 18px; color: #8f9bb5; font-size: .75rem; background: #0d1220cc; padding: 8px 10px; border-radius: 8px; }
 .legend i { display: inline-block; width: 17px; height: 2px; margin: 0 5px 3px 0; background: #63779d; }
 .legend i.synonym { background: #c27cff; border-top: 1px dashed #c27cff; }
+.legend .degree-key i { width: 42px; height: 7px; border-radius: 5px; background: linear-gradient(90deg, hsl(222 48% 38%), hsl(194 95% 68%)); }
 @media (max-width: 720px) { .toolbar label, .stats { display: none; } select { min-width: 0; flex: 1; } .legend { right: 16px; flex-wrap: wrap; } .node-panel { top: 8px; right: 8px; width: calc(100vw - 16px); max-height: calc(100% - 16px); } }
