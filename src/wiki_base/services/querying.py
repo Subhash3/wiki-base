@@ -4,13 +4,32 @@ from uuid import UUID
 
 import httpx
 from graph_rag import RankedFact
-from llm_providers.generation.base import ChatMessage, GenerationProvider
+from llm_providers.generation.base import (
+    ChatMessage,
+    GenerationProvider,
+    StructuredGenerationProvider,
+)
 
 from wiki_base.api.errors import ServiceError
 from wiki_base.retrieval import RetrievalMode, RetrievalStrategy
 from wiki_base.services.query_chunks import QueryChunksService, RetrievedChunk
 
 logger = logging.getLogger(__name__)
+
+_CONTEXTUALIZATION_PROMPT = (
+    "Rewrite the latest user question as a standalone search query using the "
+    "conversation history. Resolve pronouns, omitted subjects, and references such "
+    "as 'that', 'it', or 'the second one'. Preserve the user's intent and all "
+    "constraints. Do not answer the question, add facts, or broaden its scope. If "
+    "the question already stands alone, return it unchanged."
+)
+
+_CONTEXTUALIZATION_SCHEMA = {
+    "type": "object",
+    "properties": {"standalone_question": {"type": "string"}},
+    "required": ["standalone_question"],
+    "additionalProperties": False,
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -42,9 +61,11 @@ class QueryService:
         *,
         chunks: QueryChunksService,
         generation: GenerationProvider,
+        contextualization: StructuredGenerationProvider | None = None,
     ) -> None:
         self._chunks = chunks
         self._generation = generation
+        self._contextualization = contextualization
 
     async def query(
         self,
@@ -57,16 +78,18 @@ class QueryService:
     ) -> QueryAnswer:
         """Retrieve evidence and generate an answer."""
 
+        normalized_question = question.strip()
+        retrieval_question = await self._contextualize(normalized_question, history)
         retrieval = await self._chunks.query(
             wiki_base_id=wiki_base_id,
-            question=question,
+            question=retrieval_question,
             limit=limit,
             mode=mode,
         )
         if not retrieval.chunks:
             return QueryAnswer(
                 wiki_base_id=wiki_base_id,
-                question=retrieval.question,
+                question=normalized_question,
                 answer="The available documents do not provide enough information.",
                 citations=[],
                 mode=retrieval.mode,
@@ -120,7 +143,7 @@ class QueryService:
             wiki_base_id,
             context,
         )
-        messages = [*history, ChatMessage(role="user", content=retrieval.question)]
+        messages = [*history, ChatMessage(role="user", content=normalized_question)]
         try:
             generated = await self._generation.generate(messages, context)
         except (httpx.HTTPError, ValueError) as error:
@@ -165,12 +188,52 @@ class QueryService:
             )
         return QueryAnswer(
             wiki_base_id=wiki_base_id,
-            question=retrieval.question,
+            question=normalized_question,
             answer=generated.text,
             citations=[self._citation(chunk) for chunk in cited_chunks],
             mode=retrieval.mode,
             retrieval_strategy=retrieval.retrieval_strategy,
         )
+
+    async def _contextualize(
+        self,
+        question: str,
+        history: list[ChatMessage],
+    ) -> str:
+        """Turn a conversational follow-up into a standalone retrieval query."""
+
+        if not history or self._contextualization is None:
+            return question
+
+        messages = [
+            ChatMessage(role="system", content=_CONTEXTUALIZATION_PROMPT),
+            *history,
+            ChatMessage(role="user", content=question),
+        ]
+        try:
+            result = await self._contextualization.generate_structured(
+                messages,
+                _CONTEXTUALIZATION_SCHEMA,
+                max_tokens=256,
+            )
+            standalone_question = result.get("standalone_question")
+            if not isinstance(standalone_question, str) or not standalone_question.strip():
+                raise ValueError("contextualization returned an invalid question")
+        except (httpx.HTTPError, ValueError) as error:
+            logger.warning(
+                "query contextualization failed; using original question question=%r error=%s",
+                question,
+                error,
+            )
+            return question
+
+        contextualized = standalone_question.strip()
+        logger.info(
+            "query contextualized original_question=%r retrieval_question=%r",
+            question,
+            contextualized,
+        )
+        return contextualized
 
     @staticmethod
     def _format_source(source_id: str, chunk: RetrievedChunk) -> str:

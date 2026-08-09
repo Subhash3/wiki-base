@@ -130,8 +130,13 @@ QueryChunksServiceDependency = Annotated[
 def get_query_service(
     chunks: QueryChunksServiceDependency,
     answer_provider: AnswerProviderDependency,
+    extraction: ExtractionProviderDependency,
 ) -> QueryService:
-    return QueryService(chunks=chunks, generation=answer_provider)
+    return QueryService(
+        chunks=chunks,
+        generation=answer_provider,
+        contextualization=extraction,
+    )
 
 
 QueryServiceDependency = Annotated[QueryService, Depends(get_query_service)]
