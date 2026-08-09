@@ -15,6 +15,7 @@ from wiki_base.api.routes.wiki_bases import (
     get_wiki_base_graph_node_facts,
     get_wiki_base_status,
     list_wiki_bases,
+    summarize_wiki_base_graph_node,
 )
 from wiki_base.config.settings import Settings
 from wiki_base.database.queries.wiki_bases import _aggregate_status
@@ -208,6 +209,13 @@ async def test_graph_node_endpoints_return_metadata_and_direct_facts(monkeypatch
             chunk_id=UUID("0190f3a1-a0ee-77ac-a76b-fb191cb0f8a0"),
         ),
     )
+    graph.add_triple(
+        Triple(subject="acme", relation="based in", object="pune"),
+        provenance=TripleProvenance(
+            document_id=document_id,
+            chunk_id=UUID("0190f3a1-a0ee-77ac-a76b-fb191cb0f8a1"),
+        ),
+    )
 
     async def load(_database, **_arguments):
         return graph
@@ -236,8 +244,33 @@ async def test_graph_node_endpoints_return_metadata_and_direct_facts(monkeypatch
     assert info.id == UUID(graph.node_id("alice"))
     assert info.documents[0].name == "handbook.pdf"
     assert facts.facts[0].relation == "works at"
+    assert facts.facts[0].depth == 1
     assert facts.facts[0].subject_id == UUID(graph.node_id("alice"))
     assert facts.facts[0].document_names == ["handbook.pdf"]
+
+    deeper_facts = await get_wiki_base_graph_node_facts(**arguments, max_depth=2)
+
+    assert [(fact.relation, fact.depth) for fact in deeper_facts.facts] == [
+        ("works at", 1),
+        ("based in", 2),
+    ]
+
+    class StubGeneration:
+        async def generate(self, messages, context):
+            assert "Summarize alice" in messages[0].content
+            assert "[F1] alice works at acme." in context
+            assert "[F2] acme based in pune." in context
+            return SimpleNamespace(text="Alice works at Acme, which is based in Pune.")
+
+    summary = await summarize_wiki_base_graph_node(
+        **arguments,
+        generation=StubGeneration(),
+        max_depth=2,
+    )
+
+    assert summary.max_depth == 2
+    assert summary.fact_count == 2
+    assert summary.summary == "Alice works at Acme, which is based in Pune."
 
 
 @pytest.mark.parametrize(

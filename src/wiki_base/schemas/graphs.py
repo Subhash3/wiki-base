@@ -24,20 +24,31 @@ class GraphNodeInfoResponse(BaseModel):
 
 
 class GraphNodeFactResponse(BaseModel):
-    """One direct fact involving a graph node."""
+    """One fact reachable from a graph node."""
 
     subject_id: UUID
     subject: str
     relation: str
     object_id: UUID
     object: str
+    depth: int
     document_names: list[str]
     evidence_count: int
 
 
 class GraphNodeFactsResponse(BaseModel):
-    """Direct facts involving one graph node."""
+    """Facts reachable from one graph node."""
 
     id: UUID
     name: str
     facts: list[GraphNodeFactResponse]
+
+
+class GraphNodeSummaryResponse(BaseModel):
+    """LLM summary of facts reachable from one graph node."""
+
+    id: UUID
+    name: str
+    max_depth: int
+    fact_count: int
+    summary: str

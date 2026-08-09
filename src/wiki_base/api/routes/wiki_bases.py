@@ -1,9 +1,13 @@
 from typing import Annotated, Any
 from uuid import UUID
 
-from fastapi import APIRouter, File, Form, UploadFile, status
+import httpx
+from fastapi import APIRouter, File, Form, Query, UploadFile, status
+from graph_rag import GraphFactTraverser
+from llm_providers.generation.base import ChatMessage
 
 from wiki_base.api.dependencies import (
+    AnswerProviderDependency,
     DatabaseDependency,
     SettingsDependency,
     WikiBaseServiceDependency,
@@ -16,6 +20,7 @@ from wiki_base.schemas.graphs import (
     GraphNodeFactResponse,
     GraphNodeFactsResponse,
     GraphNodeInfoResponse,
+    GraphNodeSummaryResponse,
 )
 from wiki_base.schemas.wiki_bases import (
     WikiBaseQueuedResponse,
@@ -126,36 +131,93 @@ async def get_wiki_base_graph_node_facts(
     node_id: UUID,
     database: DatabaseDependency,
     settings: SettingsDependency,
+    max_depth: Annotated[int, Query(ge=1, le=3)] = 1,
 ) -> GraphNodeFactsResponse:
-    """Return direct canonical facts involving one graph node."""
+    """Return canonical facts reachable from one graph node."""
 
     graph = await _load_graph(database, settings, wiki_base_id)
     name = _require_graph_node(graph, node_id)
     async with database.connection() as connection:
         documents = await list_wiki_base_documents(connection, wiki_base_id)
     document_names = {document.id: document.name for document in documents}
+    traversed_facts = GraphFactTraverser(max_depth=max_depth).traverse(graph, [name])
     facts = [
         GraphNodeFactResponse(
-            subject_id=UUID(graph.node_id(edge.subject)),
-            subject=edge.subject,
-            relation=edge.relation,
-            object_id=UUID(graph.node_id(edge.object)),
-            object=edge.object,
+            subject_id=UUID(graph.node_id(fact.subject)),
+            subject=fact.subject,
+            relation=fact.relation,
+            object_id=UUID(graph.node_id(fact.object)),
+            object=fact.object,
+            depth=fact.depth,
             document_names=sorted(
                 {
                     document_names[source.document_id]
-                    for source in edge.provenance
+                    for source in fact.provenance
                     if source.document_id in document_names
                 }
             ),
-            evidence_count=len(edge.provenance),
+            evidence_count=len(fact.provenance),
         )
-        for edge in sorted(
-            (edge for edge in graph.edges() if name in {edge.subject, edge.object}),
-            key=lambda edge: (edge.subject, edge.relation, edge.object),
-        )
+        for fact in traversed_facts
     ]
     return GraphNodeFactsResponse(id=node_id, name=name, facts=facts)
+
+
+@router.get(
+    "/{wiki_base_id}/graph/nodes/{node_id}/summarize-node",
+    response_model=GraphNodeSummaryResponse,
+)
+async def summarize_wiki_base_graph_node(
+    wiki_base_id: UUID,
+    node_id: UUID,
+    database: DatabaseDependency,
+    settings: SettingsDependency,
+    generation: AnswerProviderDependency,
+    max_depth: Annotated[int, Query(alias="maxDepth", ge=1, le=3)] = 1,
+) -> GraphNodeSummaryResponse:
+    """Summarize canonical facts reachable from one graph node."""
+
+    graph = await _load_graph(database, settings, wiki_base_id)
+    name = _require_graph_node(graph, node_id)
+    facts = GraphFactTraverser(max_depth=max_depth).traverse(graph, [name])
+    if not facts:
+        return GraphNodeSummaryResponse(
+            id=node_id,
+            name=name,
+            max_depth=max_depth,
+            fact_count=0,
+            summary="No facts are available to summarize within this depth.",
+        )
+
+    context = "\n".join(
+        f"[F{index}] {fact.subject} {fact.relation} {fact.object}."
+        for index, fact in enumerate(facts, start=1)
+    )
+    messages = [
+        ChatMessage(
+            role="user",
+            content=(
+                f"Summarize {name} in a concise paragraph using only the supplied graph facts. "
+                "Focus on the selected node and explain relevant nearby relationships."
+            ),
+        )
+    ]
+    try:
+        generated = await generation.generate(messages, context)
+    except (httpx.HTTPError, ValueError) as error:
+        raise ServiceError(
+            "generation_unavailable",
+            "A node summary could not be generated right now.",
+            status.HTTP_503_SERVICE_UNAVAILABLE,
+        ) from error
+
+    return GraphNodeSummaryResponse(
+        id=node_id,
+        name=name,
+        max_depth=max_depth,
+        fact_count=len(facts),
+        summary=generated.text,
+    )
 
 
 async def _load_graph(database, settings, wiki_base_id: UUID):
