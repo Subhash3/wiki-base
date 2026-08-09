@@ -31,8 +31,19 @@
           <div id="node-info" class="widget-content"></div>
         </section>
         <section class="widget">
+          <p class="eyebrow">Summary</p>
+          <h2>About the node</h2>
+          <div id="node-summary" class="widget-content"></div>
+        </section>
+        <section class="widget">
           <p class="eyebrow">Knowledge graph</p>
           <h2>Facts about the node</h2>
+          <label class="depth-control" for="facts-max-depth">
+            <span>Max depth</span>
+            <input id="facts-max-depth" type="range" min="0" max="3" value="1" step="1" />
+            <output id="facts-max-depth-value" for="facts-max-depth">1</output>
+          </label>
+          <p id="facts-result-count" class="facts-result-count" aria-live="polite"></p>
           <div id="node-facts" class="widget-content"></div>
         </section>
       </aside>

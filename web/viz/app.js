@@ -11,7 +11,11 @@ const stats = document.querySelector("#stats");
 const nodePanel = document.querySelector("#node-panel");
 const nodeName = document.querySelector("#node-name");
 const nodeInfo = document.querySelector("#node-info");
+const nodeSummary = document.querySelector("#node-summary");
 const nodeFacts = document.querySelector("#node-facts");
+const factsMaxDepth = document.querySelector("#facts-max-depth");
+const factsMaxDepthValue = document.querySelector("#facts-max-depth-value");
+const factsResultCount = document.querySelector("#facts-result-count");
 const context = canvas.getContext("2d");
 
 let layout;
@@ -26,6 +30,9 @@ let panY = 0;
 let dragStart;
 let selectedNodeId;
 let nodeRequest = 0;
+let factsRequest = 0;
+let summaryRequest = 0;
+let factsReloadTimer;
 
 function showMessage(text, error = false) {
   message.textContent = text;
@@ -322,31 +329,33 @@ function finishDrag() {
 
 async function selectNode(node) {
   selectedNodeId = node.id;
+  clearTimeout(factsReloadTimer);
   draw();
   nodePanel.hidden = false;
   nodeName.textContent = node.name;
   nodeInfo.innerHTML = '<p class="loading">Loading node information…</p>';
+  nodeSummary.innerHTML = '<p class="loading">Generating summary…</p>';
   nodeFacts.innerHTML = '<p class="loading">Loading facts…</p>';
   const request = ++nodeRequest;
+  loadSelectedNodeFacts();
+  loadSelectedNodeSummary();
   try {
-    const [info, facts] = await Promise.all([
-      readJson(await fetch(`${API_BASE_URL}/wiki-bases/${select.value}/graph/nodes/${node.id}`)),
-      readJson(await fetch(`${API_BASE_URL}/wiki-bases/${select.value}/graph/nodes/${node.id}/facts`)),
-    ]);
+    const info = await readJson(await fetch(`${API_BASE_URL}/wiki-bases/${select.value}/graph/nodes/${node.id}`));
     if (request !== nodeRequest) return;
     renderNodeInfo(info);
-    renderNodeFacts(facts);
   } catch (error) {
     if (request !== nodeRequest) return;
     const text = escapeHtml(error instanceof Error ? error.message : "Could not load node details.");
     nodeInfo.innerHTML = `<p class="widget-error">${text}</p>`;
-    nodeFacts.innerHTML = `<p class="widget-error">${text}</p>`;
   }
 }
 
 function clearNodeSelection() {
   selectedNodeId = undefined;
+  clearTimeout(factsReloadTimer);
   nodeRequest += 1;
+  factsRequest += 1;
+  summaryRequest += 1;
   nodePanel.hidden = true;
   draw();
 }
@@ -360,22 +369,71 @@ function renderNodeInfo(info) {
   nodeInfo.innerHTML = `
     <div class="metrics">
       <div class="metric"><strong>${info.link_count}</strong><span>Links</span></div>
-      <div class="metric"><strong>${info.fact_count}</strong><span>Facts</span></div>
+      <div class="metric"><strong>${info.fact_count}</strong><span>Direct facts</span></div>
       <div class="metric"><strong>${info.document_count}</strong><span>Documents</span></div>
     </div>
     <strong>Source documents</strong>${documents}
   `;
 }
 
-function renderNodeFacts(result) {
+function renderNodeFacts(result, depth) {
+  const count = result.facts.length;
+  factsResultCount.textContent = `${count} ${count === 1 ? "fact" : "facts"} within depth ${depth}`;
   if (!result.facts.length) {
-    nodeFacts.innerHTML = '<p class="empty-widget">No direct facts found.</p>';
+    nodeFacts.innerHTML = '<p class="empty-widget">No facts found within this depth.</p>';
     return;
   }
   nodeFacts.innerHTML = `<ul class="fact-list">${result.facts.map((fact) => `
     <li><strong>${escapeHtml(fact.subject)}</strong> ${escapeHtml(fact.relation)} <strong>${escapeHtml(fact.object)}</strong>
-      <small>${fact.document_names.length ? escapeHtml(fact.document_names.join(", ")) : "No document name"} · ${fact.evidence_count} ${fact.evidence_count === 1 ? "evidence" : "evidence items"}</small>
+      <small>Depth ${fact.depth} · ${fact.document_names.length ? escapeHtml(fact.document_names.join(", ")) : "No document name"} · ${fact.evidence_count} ${fact.evidence_count === 1 ? "evidence" : "evidence items"}</small>
     </li>`).join("")}</ul>`;
+}
+
+factsMaxDepth.addEventListener("input", () => {
+  if (factsMaxDepth.value === "0") factsMaxDepth.value = "1";
+  factsMaxDepthValue.value = factsMaxDepth.value;
+  factsRequest += 1;
+  summaryRequest += 1;
+  clearTimeout(factsReloadTimer);
+  factsReloadTimer = setTimeout(() => {
+    loadSelectedNodeFacts();
+    loadSelectedNodeSummary();
+  }, 150);
+});
+
+async function loadSelectedNodeFacts() {
+  if (!selectedNodeId || !select.value) return;
+  factsResultCount.textContent = "Loading facts…";
+  nodeFacts.innerHTML = '<p class="loading">Loading facts…</p>';
+  const request = ++factsRequest;
+  const depth = factsMaxDepth.value;
+  try {
+    const url = `${API_BASE_URL}/wiki-bases/${select.value}/graph/nodes/${selectedNodeId}/facts?max_depth=${depth}`;
+    const facts = await readJson(await fetch(url));
+    if (request === factsRequest) renderNodeFacts(facts, depth);
+  } catch (error) {
+    if (request !== factsRequest) return;
+    const text = escapeHtml(error instanceof Error ? error.message : "Could not load facts.");
+    factsResultCount.textContent = "";
+    nodeFacts.innerHTML = `<p class="widget-error">${text}</p>`;
+  }
+}
+
+async function loadSelectedNodeSummary() {
+  if (!selectedNodeId || !select.value) return;
+  nodeSummary.innerHTML = '<p class="loading">Generating summary…</p>';
+  const request = ++summaryRequest;
+  const depth = factsMaxDepth.value;
+  try {
+    const url = `${API_BASE_URL}/wiki-bases/${select.value}/graph/nodes/${selectedNodeId}/summarize-node?maxDepth=${depth}`;
+    const result = await readJson(await fetch(url));
+    if (request !== summaryRequest) return;
+    nodeSummary.innerHTML = `<p class="node-summary-text">${escapeHtml(result.summary)}</p>`;
+  } catch (error) {
+    if (request !== summaryRequest) return;
+    const text = escapeHtml(error instanceof Error ? error.message : "Could not generate a summary.");
+    nodeSummary.innerHTML = `<p class="widget-error">${text}</p>`;
+  }
 }
 
 function escapeHtml(value) {
